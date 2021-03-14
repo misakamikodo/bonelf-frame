@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>bonelf-frame</artifactId>
+        <groupId>com.bonelf</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>bonelf-frame-support</artifactId>
+    <packaging>pom</packaging>
+    <description>微服务 support</description>
+    <!--FIXME ${bonelf.cloud.services}yml读取失败，application-common.yml读取失败-->
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <support.version>${project.version}</support.version>
+    </properties>
+
+    <modules>
+        <module>bonelf-support-feign</module>
+        <module>bonelf-support-feign-domain</module>
+        <module>bonelf-support-provider</module>
+        <module>bonelf-support-provider-domain</module>
+        <module>bonelf-support-main</module>
+    </modules>
+
+    <dependencies>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-support-feign</artifactId>
+                <version>${support.version}</version>
+            </dependency>
+            <!--domain 理论上应该不需要这些，哪里配置不对-->
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-support-feign-domain</artifactId>
+                <version>${support.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-support-provider</artifactId>
+                <version>${support.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-support-provider-domain</artifactId>
+                <version>${support.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-support-main</artifactId>
+                <version>${support.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-support-app</artifactId>
+                <version>${support.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

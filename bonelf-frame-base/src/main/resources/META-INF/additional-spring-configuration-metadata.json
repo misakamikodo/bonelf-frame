@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "bonelf.swagger.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否开启swagger."
+    },
+    {
+      "name": "spring.cloud.stream.rocketmq.binder.namesrv-addr",
+      "type": "java.lang.String",
+      "description": "补充streamer无法识别的配置定义."
+    },
+    {
+      "name": "bonelf.mode",
+      "type": "com.bonelf.frame.base.property.enums.ProjectMode",
+      "description": "Description for bonelf.mode."
+    },
+    {
+      "name": "bonelf.cache.strategy",
+      "type": "com.bonelf.frame.base.property.enums.CacheType",
+      "description": "Description for bonelf.cache.strategy."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+common：spring公用基本配置
+third：第三方配置
+
+建议在部署在服务器上的（如prod、uat）添加
+server:
+  tomcat:
+    # 防止linux上传过时，目录被删除
+    basedir: /home/tomcat/spring/temp
+
+若这里直接新建application.yml，会直接使用项目中的application.yml而不是使用项目的application.yml配置覆盖common中的配置

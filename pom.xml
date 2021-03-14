@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2021. Bonelf.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.5.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>bonelf-frame</artifactId>
+    <groupId>com.bonelf</groupId>
+    <name>bonelf-frame</name>
+    <version>1.0.0</version>
+    <description>框架包</description>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>bonelf-cicada</module>
+        <module>bonelf-frame-core</module>
+        <module>bonelf-frame-base</module>
+        <module>bonelf-frame-web</module>
+        <module>bonelf-frame-gateway</module>
+        <module>bonelf-frame-cloud</module>
+        <module>bonelf-frame-mq</module>
+        <module>bonelf-frame-websocket</module>
+        <module>bonelf-frame-auth</module>
+        <module>bonelf-frame-support</module>
+        <!--<module>bonelf-support</module>-->
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <project.encoding>UTF-8</project.encoding>
+        <!--最新2.2.3.ReLEASE, 2.2.0 兼容 Hoxton.RELEASE-->
+        <spring-cloud-alibaba.version>2.2.0.RELEASE</spring-cloud-alibaba.version>
+        <springboot.version>2.2.5.RELEASE</springboot.version>
+
+        <bonelf-cicada.version>1.0.0</bonelf-cicada.version>
+        <bonelf-frame-base.version>1.0.0</bonelf-frame-base.version>
+        <bonelf-frame-web.version>1.0.0</bonelf-frame-web.version>
+        <bonelf-frame-gateway.version>1.0.0</bonelf-frame-gateway.version>
+        <bonelf-frame-mq.version>1.0.0</bonelf-frame-mq.version>
+        <bonelf-frame-core.version>1.0.0</bonelf-frame-core.version>
+        <bonelf-frame-cloud.version>1.0.0</bonelf-frame-cloud.version>
+        <bonelf-frame-websocket.version>1.0.0</bonelf-frame-websocket.version>
+
+        <swagger.version>3.0.0</swagger.version>
+        <swagger2-bootstrap-ui.version>1.9.3</swagger2-bootstrap-ui.version>
+        <swagger-modal.version>1.5.22</swagger-modal.version>
+        <!--最新RELEASE 或 1.1.1.RELEASE 已过时-->
+        <oauth-jwt.version>1.0.10.RELEASE</oauth-jwt.version>
+        <!--最新2.5.0.RELEASE 已过时-->
+        <oauth.version>2.3.6.RELEASE</oauth.version>
+        <mybatis-plus.version>3.4.0</mybatis-plus.version>
+        <!--discard long time none received connection-->
+        <!--<druid.version>1.2.1</druid.version>-->
+        <druid.version>1.1.22</druid.version>
+        <dynamic-datasource.version>2.5.4</dynamic-datasource.version>
+        <websocket-netty.version>0.9.5</websocket-netty.version>
+        <swagger2-ui.version>1.9.3</swagger2-ui.version>
+        <wechatmini-sdk.version>3.9.6.B</wechatmini-sdk.version>
+        <aliyun-sdk.version>4.5.14</aliyun-sdk.version>
+        <mail.version>1.4.7</mail.version>
+        <commons-lang.version>2.6</commons-lang.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-cicada</artifactId>
+                <version>${bonelf-cicada.version}</version>
+            </dependency>
+            <!--核心包-->
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-frame-core</artifactId>
+                <version>${bonelf-frame-core.version}</version>
+            </dependency>
+            <!--基本配置包-->
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-frame-base</artifactId>
+                <version>${bonelf-frame-base.version}</version>
+            </dependency>
+            <!--配置包-->
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-frame-web</artifactId>
+                <version>${bonelf-frame-web.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-frame-mq</artifactId>
+                <version>${bonelf-frame-mq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-frame-cloud</artifactId>
+                <version>${bonelf-frame-cloud.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-frame-gateway</artifactId>
+                <version>${bonelf-frame-gateway.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-frame-websocket</artifactId>
+                <version>${bonelf-frame-websocket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-json</artifactId>
+                <version>${springboot.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <!--Cloud-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Hoxton.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--alibaba依赖-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <!--<dependency>-->
+            <!--    <groupId>io.springfox</groupId>-->
+            <!--    <artifactId>springfox-swagger2</artifactId>-->
+            <!--    <version>${swagger.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+            <!--    <groupId>io.springfox</groupId>-->
+            <!--    <artifactId>springfox-swagger-ui</artifactId>-->
+            <!--    <version>${swagger.version}</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>swagger-bootstrap-ui</artifactId>
+                <version>${swagger2-bootstrap-ui.version}</version>
+            </dependency>
+            <!--jwt-->
+            <!--<dependency>-->
+            <!--    <groupId>io.jsonwebtoken</groupId>-->
+            <!--    <artifactId>jjwt</artifactId>-->
+            <!--    <version>${jwt.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+            <!--    <groupId>org.apache.shiro</groupId>-->
+            <!--    <artifactId>shiro-core</artifactId>-->
+            <!--    <version>${shiro-core.version}</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-modal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>${swagger-modal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-jwt</artifactId>
+                <version>${oauth-jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security.oauth</groupId>
+                <artifactId>spring-security-oauth2</artifactId>
+                <version>${oauth.version}</version>
+            </dependency>
+            <!-- 数据库 Begin -->
+            <!-- 动态数据源  sharding-jdbc也不错-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${dynamic-datasource.version}</version>
+            </dependency>
+            <!-- druid -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!-- mybatis-plus -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <!-- 数据库 End -->
+            <!--WXApi-->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-miniapp</artifactId>
+                <version>${wechatmini-sdk.version}</version>
+            </dependency>
+            <!--阿里云的短信服务SDK-->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun-sdk.version}</version>
+            </dependency>
+            <!--MAIL-->
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>${mail.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${commons-lang.version}</version>
+                <scope>compile</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+    <build>
+        <plugins>
+            <!--因为cicada是独立的包，所以需要再添加这个，不然每次启动JavaCompile会变成1.5-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

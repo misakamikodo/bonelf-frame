@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>bonelf-frame</artifactId>
+        <groupId>com.bonelf</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>bonelf-frame-web</artifactId>
+
+    <dependencies>
+        <!--基本配置包-->
+        <dependency>
+            <groupId>com.bonelf</groupId>
+            <artifactId>bonelf-frame-base</artifactId>
+            <!--指定需要额外引入-->
+            <!--<scope>provided</scope>-->
+        </dependency>
+        <!-- Spring Begin -->
+        <!--SpringBoot依赖 common使用这个依赖表示了common是服务（service） web项目公用的（gateway不是）-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- Spring End -->
+        <!--oauth2认证-->
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+        <!-- 数据库 Begin -->
+        <!-- 动态数据源  sharding-jdbc也不错-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- mybatis-plus -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+        <!-- 数据库 End -->
+    </dependencies>
+
+
+</project>

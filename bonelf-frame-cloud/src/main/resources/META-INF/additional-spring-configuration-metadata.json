@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "bonelf.cloud.services",
+      "type": "java.lang.String[]",
+      "description": "微服务的所有服务."
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+server:
+  tomcat:
+    # 防止linux上传过时，目录被删除
+    basedir: /home/tomcat/spring/temp

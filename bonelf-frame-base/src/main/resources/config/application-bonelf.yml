@@ -1,0 +1,48 @@
+server:
+  servlet:
+    # cloud配置前请对应看 frame-GateWay 的 GlobalAccessFilter
+    context-path: /bonelf
+    encoding:
+      charset: utf-8
+#  tomcat:
+#    # 防止linux上传过时，目录被删除
+#    basedir: /home/tomcat/spring/temp
+
+spring:
+  profiles:
+    include:
+      - third
+
+logging:
+  #  默认
+  config: classpath:logback-spring.xml
+  level:
+    org:
+      mybatis: debug
+
+bonelf:
+  base-url: http://127.0.0.1
+  app-name: bonelf经验总结项目
+  oauth2:
+    jwt:
+      # 可指定classpath:
+      keystore: /tls/example.p12
+      password: =bonelf=
+      alias: bonelf
+    no-auth-path:
+      # 下载页面
+      - /download.html
+      - /test/**
+      - /noAuth/**
+      # 验证码 verificationCode
+      - /vcode/**
+      # 二维码
+      - /qrcode/**
+
+  swagger:
+    enable: true
+  # 缓存
+  cache:
+    # 设置spring缓存方式 默认ecache
+    strategy: redis
+

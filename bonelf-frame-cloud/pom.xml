@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>bonelf-frame</artifactId>
+        <groupId>com.bonelf</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>bonelf-frame-cloud</artifactId>
+
+    <dependencies>
+        <!--基本配置包-->
+        <dependency>
+            <groupId>com.bonelf</groupId>
+            <artifactId>bonelf-frame-base</artifactId>
+            <!--指定需要额外引入-->
+            <!--<scope>provided</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>com.bonelf</groupId>
+            <artifactId>bonelf-frame-mq</artifactId>
+        </dependency>
+        <!-- Spring Begin -->
+        <!--nacos依赖-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!--feign请求依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <!-- 熔断、降级 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+        <!--<dependency>-->
+        <!--    <groupId>org.springframework.cloud</groupId>-->
+        <!--    <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>-->
+        <!--</dependency>-->
+        <!-- Spring End -->
+    </dependencies>
+
+
+</project>

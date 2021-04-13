@@ -6,7 +6,6 @@
         <artifactId>bonelf-frame</artifactId>
         <groupId>com.bonelf</groupId>
         <version>1.0.0</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>bonelf-cicada</artifactId>
@@ -38,6 +37,10 @@
             <artifactId>commons-codec</artifactId>
             <version>1.14</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
     </dependencies>
 

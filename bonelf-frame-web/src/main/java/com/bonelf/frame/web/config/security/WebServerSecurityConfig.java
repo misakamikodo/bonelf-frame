@@ -9,6 +9,7 @@
 package com.bonelf.frame.web.config.security;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,13 +18,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 /**
  * <p>
  * 签权服务
+ * FIXME 有用？
  * </p>
  * @author bonelf
  * @since 2020/11/17 15:37
  */
 @Slf4j
-@Configuration
-@EnableWebSecurity
+// @Configuration
+// @EnableWebSecurity
 public class WebServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override

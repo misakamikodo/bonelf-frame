@@ -12,8 +12,8 @@ import org.springframework.web.client.RestTemplate;
 /**
  * 微服务相关bean注入
  */
-@EnableFeignClients(basePackages = {"com.bonelf.support.feign"})
-@ComponentScan(basePackages = {"com.bonelf.frame.cloud"})
+@EnableFeignClients(basePackages = {"com.bonelf.**.feign"})
+@ComponentScan(basePackages = {"com.bonelf.frame.cloud","com.bonelf.**.feign"})
 @Configuration
 // @EnableCircuitBreaker
 // @EnableDiscoveryClient

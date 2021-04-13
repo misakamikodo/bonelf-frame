@@ -33,7 +33,6 @@
         <module>bonelf-frame-websocket</module>
         <module>bonelf-frame-auth</module>
         <module>bonelf-frame-support</module>
-        <!--<module>bonelf-support</module>-->
     </modules>
 
     <properties>

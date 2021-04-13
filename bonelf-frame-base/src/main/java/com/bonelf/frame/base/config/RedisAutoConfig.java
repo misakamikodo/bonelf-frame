@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -29,6 +30,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -115,12 +117,15 @@ public class RedisAutoConfig extends CachingConfigurerSupport {
 	/**
 	 * <p>
 	 * 自定义redisTemplate Bean，防止hmget和hincr一起用的报错
+	 * 重命名myRedisTemplate 使用 Primary指定优先级，是哪个gateway不知原因的redisTemplate已被定义错误（明明spring中已经使用@ConditionalOnMissingBean）
 	 * </p>
 	 * @see org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
 	 * @author bonelf
 	 * @since 2020/8/31 16:54
 	 */
-	@Bean("redisTemplate")
+	@Bean("myRedisTemplate")
+	@Primary
+	// @ConditionalOnMissingBean
 	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory factory, RedisSerializer<?> redisSerializer) {
 		RedisTemplate<Object, Object> template = new RedisTemplate<>();
 		template.setConnectionFactory(factory);

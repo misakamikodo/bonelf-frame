@@ -4,14 +4,14 @@
 
 package com.bonelf.frame.mq.bus.impl;
 
-import com.bonelf.frame.mq.property.RocketmqProperties;
 import com.bonelf.frame.base.util.JsonUtil;
-import com.bonelf.frame.base.util.SpringContextUtils;
 import com.bonelf.frame.mq.bus.MqProducerService;
+import com.bonelf.frame.mq.property.RocketmqProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.support.RocketMQHeaders;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
@@ -30,13 +30,15 @@ import javax.annotation.PostConstruct;
 public class MqProducerServiceImpl implements MqProducerService {
 	private MessageChannel output;
 	@Autowired
+	private ApplicationContext applicationContext;
+	@Autowired
 	private RocketmqProperties rocketmqProperties;
 
 	@PostConstruct
 	public void initChannel() {
 		if (rocketmqProperties.getEnable()) {
 			try {
-				this.output = SpringContextUtils.getBean("output", MessageChannel.class);
+				this.output = applicationContext.getBean("output", MessageChannel.class);
 			} catch (BeansException e) {
 				log.warn("no bean of output is registered!");
 			}

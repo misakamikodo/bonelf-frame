@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.bonelf.frame.web.config.WebMvcConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.bonelf.frame.web.config.WebConfigs

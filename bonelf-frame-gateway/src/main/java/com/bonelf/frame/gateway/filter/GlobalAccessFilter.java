@@ -3,10 +3,9 @@ package com.bonelf.frame.gateway.filter;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.bonelf.frame.base.property.BonelfProperties;
 import com.bonelf.frame.cloud.constant.AuthFeignConstant;
 import com.bonelf.frame.core.domain.Result;
-import com.bonelf.frame.base.property.BonelfProperties;
-import com.bonelf.frame.gateway.constant.OAuth2Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -22,7 +21,9 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR;
@@ -40,16 +41,24 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.a
 public class GlobalAccessFilter implements GlobalFilter, Ordered {
 	@Value("${server.servlet.context-path:}")
 	private String ctxPath;
+
 	//@Value("#{'${bonelf.no-auth-url:}'.split(',')}")
-	//private List<String> noAuthUrl;
-	private final List<String> noAuthUrl;
+	private final List<String> noAuthPath;
 
 	public GlobalAccessFilter(BonelfProperties bonelfProperty) {
-		List<String> noAuthUrl = new ArrayList<>();
+		List<String> noAuthPath = new ArrayList<>();
 		for (String s : bonelfProperty.getNoAuthPath()) {
-			noAuthUrl.addAll(CollectionUtil.toList(s.split(StrUtil.COMMA)));
+			noAuthPath.addAll(CollectionUtil.toList(s.split(StrUtil.COMMA)));
 		}
-		this.noAuthUrl = noAuthUrl;
+		this.noAuthPath = noAuthPath;
+	}
+
+
+	public static void main(String[] args) {
+		long stripPrefix = StrUtil.count("/bonelf", "/") + 1L;
+		System.out.println(
+				"/bonelf" + "/" + Arrays.stream(StringUtils.tokenizeToStringArray("/bonelf/test/noAuth/xxx", "/")).skip(stripPrefix).collect(Collectors.joining("/"))
+		);
 	}
 
 	@Override
@@ -65,14 +74,15 @@ public class GlobalAccessFilter implements GlobalFilter, Ordered {
 		String rawPath = exchange.getRequest().getURI().getRawPath();
 		//这段代码要求所有子服务不配置context-path 若配置和gateway一样的context-path 删除StringUtil.appearTimes(ctxPath, "/")
 		long stripPrefix = StrUtil.count(ctxPath, "/") + 1L;
-		String newPath = ctxPath + "/" + Arrays.stream(StringUtils.tokenizeToStringArray(rawPath, "/")).skip(stripPrefix).collect(Collectors.joining("/"));
+		String newPath = ctxPath + "/" + Arrays.stream(StringUtils.tokenizeToStringArray(rawPath, "/"))
+				.skip(stripPrefix).collect(Collectors.joining("/"));
 		//不需要网关签权的url
-		if (CollectionUtil.isEmpty(noAuthUrl) || !CollectionUtil.contains(noAuthUrl, newPath.replaceFirst(ctxPath, ""))) {
+		if (CollectionUtil.isEmpty(noAuthPath) || !CollectionUtil.contains(noAuthPath, newPath.replaceFirst(ctxPath, ""))) {
 			// 如果请求未携带token信息, 直接跳出
-			if (StringUtils.isEmpty(authentication) || !authentication.startsWith(OAuth2Constant.TOKEN_PREFIX)) {
-				log.debug("url:{},method:{},headers:{}, 请求未携带token信息", url, method, request.getHeaders());
-				return unauthorized(exchange);
-			}
+			// if (StringUtils.isEmpty(authentication) || !authentication.startsWith(OAuth2Constant.TOKEN_PREFIX)) {
+			// 	log.debug("url:{},method:{},headers:{}, 请求未携带token信息", url, method, request.getHeaders());
+			// 	return unauthorized(exchange);
+			// }
 			//过了Auth服务直接完成权限校验，其他服务不必再鉴权 FIXME 签权Sign
 			//if (!authService.hasPermission(authentication, url, method)) {
 			//	return unauthorized(exchange);
@@ -83,7 +93,7 @@ public class GlobalAccessFilter implements GlobalFilter, Ordered {
 		addOriginalRequestUrl(exchange, exchange.getRequest().getURI());
 		ServerHttpRequest newRequest = exchange.getRequest().mutate()
 				.path(newPath)
-				//将现在的request，添加当前身份 (标识，可以存放redis加强严谨性) （网上原作是在下面，我修改的）
+				//将现在的request，添加当前身份 (标识，可以存放redis加强严谨性) XXX 添加调用方名称
 				.header(AuthFeignConstant.AUTH_HEADER, "-")
 				.build();
 		exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newRequest.getURI());

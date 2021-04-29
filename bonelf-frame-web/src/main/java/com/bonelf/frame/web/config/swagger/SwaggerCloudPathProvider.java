@@ -10,14 +10,14 @@ public class SwaggerCloudPathProvider extends DefaultPathProvider {
 	@Value("${server.servlet.context-path:}")
 	private String ctxPath;
 	@Value("${spring.application.name:}")
-	private String serviceName;
+	private String appName;
 
 	@Override
 	public String getOperationPath(String operationPath) {
 		//UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath("/");
 		//String uri = Paths.removeAdjacentForwardSlashes(uriComponentsBuilder.path(operationPath).build().toString());
 		String uri = super.getOperationPath(operationPath);
-		String suffixPath = ctxPath + "/" + StringUtil.crossbarCase2CamelCase(serviceName);
+		String suffixPath = ctxPath + "/" + StringUtil.crossbarCase2CamelCase(appName);
 		return uri.startsWith(ctxPath + "/api") ? uri : uri.replaceFirst(ctxPath, suffixPath);
 	}
 }

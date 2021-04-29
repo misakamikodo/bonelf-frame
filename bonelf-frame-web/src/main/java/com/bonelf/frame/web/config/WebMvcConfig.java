@@ -7,14 +7,11 @@ import com.bonelf.frame.web.core.interceptor.DebugInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.jackson.JsonComponentModule;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -31,7 +28,6 @@ import java.util.List;
  * //@Autowired
  * //private Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
  **/
-@ComponentScan(basePackages = {"com.bonelf.frame.web"})
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 	/**
@@ -57,7 +53,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	/**
 	 * 消息转换器 配置
-	 * @param converters 转化你
+	 * @param converters 转化器
 	 */
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

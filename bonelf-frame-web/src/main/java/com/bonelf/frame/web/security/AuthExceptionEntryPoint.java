@@ -1,8 +1,8 @@
 package com.bonelf.frame.web.security;
 
-import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
-import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.base.util.JsonUtil;
+import com.bonelf.frame.core.domain.Result;
+import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,9 +19,9 @@ import java.io.IOException;
 /**
  * <p>
  * 异常封装
+ * @author bonelf
  * @see AuthenticationEntryPoint
  * </p>
- * @author bonelf
  * @since 2020/11/21 11:53
  */
 @Slf4j
@@ -32,9 +32,9 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
 						 AuthenticationException authException) throws ServletException {
 		//Throwable cause = authException.getCause();
 		response.setStatus(HttpStatus.OK.value());
-			response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
-			Result<?> result;
-			try {
+		response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+		Result<?> result;
+		try {
 			if (authException instanceof InsufficientAuthenticationException) {
 				log.warn("用户凭据非法:{}", authException.getMessage());
 				result = Result.error(CommonBizExceptionEnum.INVALID_TOKEN);

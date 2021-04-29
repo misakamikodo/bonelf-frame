@@ -13,21 +13,22 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.NonNull;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /**
  * <p>
  * 控制器返回数据
+ * annotation和basePackages同时定义取了并集，所以不使用 annotations = {RestController.class, ResponseBody.class},
+ * 为了跳过/v2/api-docs类似三方接口（XXX 可以尝试仅处理/api 开头的url）
  * TODO 字典解析移到这，profile为prod关闭devMessage
+ *
  * </p>
  * @author bonelf
  * @since 2021/1/13 14:55
  */
 @RestControllerAdvice(
-		annotations = {RestController.class, ResponseBody.class}
+		basePackages = "com.bonelf.**.controller"
 )
 public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 

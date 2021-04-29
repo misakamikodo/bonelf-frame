@@ -9,15 +9,22 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>bonelf-frame-web</artifactId>
+    <artifactId>bonelf-frame-cloud-web</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
 
     <dependencies>
         <!--基本配置包-->
         <dependency>
             <groupId>com.bonelf</groupId>
-            <artifactId>bonelf-frame-base</artifactId>
-            <!--指定需要额外引入-->
-            <!--<scope>provided</scope>-->
+            <artifactId>bonelf-frame-cloud</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.bonelf</groupId>
+            <artifactId>bonelf-frame-web</artifactId>
         </dependency>
         <!-- Spring Begin -->
         <!--SpringBoot依赖 common使用这个依赖表示了common是服务（service） web项目公用的（gateway不是）-->
@@ -32,23 +39,6 @@
             <artifactId>spring-security-oauth2</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!-- 数据库 Begin -->
-        <!-- 动态数据源  sharding-jdbc也不错-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-        </dependency>
-        <!-- druid -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>
-        <!-- mybatis-plus -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-        <!-- 数据库 End -->
     </dependencies>
 
 

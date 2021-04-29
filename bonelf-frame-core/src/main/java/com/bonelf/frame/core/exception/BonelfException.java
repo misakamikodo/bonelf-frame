@@ -31,6 +31,10 @@ public class BonelfException extends RuntimeException {
 			exception = new BonelfException();
 		}
 
+		public Builder(String msg) {
+			exception = new BonelfException(msg);
+		}
+
 		/*===========================枚举构造===========================*/
 
 		public Builder enums(AbstractBaseExceptionEnum exception) {
@@ -75,8 +79,12 @@ public class BonelfException extends RuntimeException {
 	public static Builder builder() {
 		return new Builder();
 	}
+
+	public static Builder builder(String msg) {
+		return new Builder(msg);
+	}
 	
-	/*======================================================*/
+	/*===========================END===========================*/
 	
 
 	private BonelfException() {
@@ -104,5 +112,17 @@ public class BonelfException extends RuntimeException {
 		super(String.format(exception.getMessage(), (Object[])format));
 		this.code = exception.getCode();
 		this.errorMessage = String.format(exception.getMessage(), (Object[])format);
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public String getDevMessage() {
+		return devMessage;
 	}
 }

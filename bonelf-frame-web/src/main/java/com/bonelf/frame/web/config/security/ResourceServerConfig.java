@@ -11,6 +11,7 @@ package com.bonelf.frame.web.config.security;
 import com.bonelf.frame.base.property.oauth2.Oauth2Properties;
 import com.bonelf.frame.web.security.AuthExceptionEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -34,6 +35,7 @@ import java.security.KeyPair;
  * @author bonelf
  * @since 2020/11/19 17:36
  */
+@ConditionalOnMissingBean(ResourceServerConfigurerAdapter.class)
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
@@ -58,11 +60,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 				//.antMatcher("/login").anonymous()
 				//.and()
 				.authorizeRequests()
-				//Feign请求全部不需要认证
-				// .requestMatchers(request -> {
-				// 	String head = request.getHeader(AuthFeignConstant.AUTH_HEADER);
-				// 	return head != null && head.startsWith(AuthFeignConstant.FEIGN_REQ_FLAG_PREFIX);
-				// }).permitAll()
 				.mvcMatchers(oauth2Properties.getNoAuthPath()).permitAll()
 				// FIXME: 2020/12/1
 				.mvcMatchers("/*").permitAll()

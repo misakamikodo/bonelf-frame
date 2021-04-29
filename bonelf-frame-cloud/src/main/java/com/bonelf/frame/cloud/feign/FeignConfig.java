@@ -11,6 +11,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+
+/**
+ * 给feign请求添加请求头
+ * @author bonelf
+ * @date 2021/4/20 17:53
+ */
 @Slf4j
 @Configuration
 public class FeignConfig implements RequestInterceptor {
@@ -22,7 +28,8 @@ public class FeignConfig implements RequestInterceptor {
 			HttpServletRequest request = attributes.getRequest();
 			String header = request.getHeader(AuthFeignConstant.AUTH_HEADER);
 
-			log.debug(" Authorization-UserName :" + header);
+			// TODO 看是否可以添加从什么服务来的
+			log.debug(AuthFeignConstant.AUTH_HEADER + ":" + header);
 			requestTemplate.header(AuthFeignConstant.AUTH_HEADER, AuthFeignConstant.FEIGN_REQ_FLAG_PREFIX + (StrUtil.isEmpty(header) ? "" : " ") + header);
 		}
 	}

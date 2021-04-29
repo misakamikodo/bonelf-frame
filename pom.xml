@@ -33,6 +33,7 @@
         <module>bonelf-frame-websocket</module>
         <module>bonelf-frame-auth</module>
         <module>bonelf-frame-support</module>
+        <module>bonelf-frame-cloud-web</module>
     </modules>
 
     <properties>
@@ -44,14 +45,16 @@
         <spring-cloud-alibaba.version>2.2.0.RELEASE</spring-cloud-alibaba.version>
         <springboot.version>2.2.5.RELEASE</springboot.version>
 
-        <bonelf-cicada.version>1.0.0</bonelf-cicada.version>
-        <bonelf-frame-base.version>1.0.0</bonelf-frame-base.version>
-        <bonelf-frame-web.version>1.0.0</bonelf-frame-web.version>
-        <bonelf-frame-gateway.version>1.0.0</bonelf-frame-gateway.version>
-        <bonelf-frame-mq.version>1.0.0</bonelf-frame-mq.version>
-        <bonelf-frame-core.version>1.0.0</bonelf-frame-core.version>
-        <bonelf-frame-cloud.version>1.0.0</bonelf-frame-cloud.version>
-        <bonelf-frame-websocket.version>1.0.0</bonelf-frame-websocket.version>
+        <frame.version>${project.version}</frame.version>
+        <bonelf-cicada.version>${frame.version}</bonelf-cicada.version>
+        <bonelf-frame-base.version>${frame.version}</bonelf-frame-base.version>
+        <bonelf-frame-web.version>${frame.version}</bonelf-frame-web.version>
+        <bonelf-frame-cloud-web.version>${frame.version}</bonelf-frame-cloud-web.version>
+        <bonelf-frame-gateway.version>${frame.version}</bonelf-frame-gateway.version>
+        <bonelf-frame-mq.version>${frame.version}</bonelf-frame-mq.version>
+        <bonelf-frame-core.version>${frame.version}</bonelf-frame-core.version>
+        <bonelf-frame-cloud.version>${frame.version}</bonelf-frame-cloud.version>
+        <bonelf-frame-websocket.version>${frame.version}</bonelf-frame-websocket.version>
 
         <swagger.version>3.0.0</swagger.version>
         <swagger2-bootstrap-ui.version>1.9.3</swagger2-bootstrap-ui.version>
@@ -97,6 +100,11 @@
                 <groupId>com.bonelf</groupId>
                 <artifactId>bonelf-frame-web</artifactId>
                 <version>${bonelf-frame-web.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-frame-cloud-web</artifactId>
+                <version>${bonelf-frame-cloud-web.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.bonelf</groupId>

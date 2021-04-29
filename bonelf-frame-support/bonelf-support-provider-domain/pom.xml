@@ -14,8 +14,12 @@
     <dependencies>
         <dependency>
             <groupId>com.bonelf</groupId>
-            <artifactId>bonelf-common-core</artifactId>
-            <scope>compile</scope>
+            <artifactId>bonelf-frame-core</artifactId>
+        </dependency>
+        <!-- provider domain end -->
+        <dependency>
+            <groupId>com.bonelf</groupId>
+            <artifactId>bonelf-frame-mq</artifactId>
         </dependency>
     </dependencies>
 

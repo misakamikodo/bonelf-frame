@@ -1,10 +1,10 @@
 package com.bonelf.frame.cloud.service.impl;
 
 import com.bonelf.frame.base.property.enums.ProjectMode;
+import com.bonelf.frame.base.service.DbDictService;
 import com.bonelf.frame.core.constant.BonelfConstant;
 import com.bonelf.frame.core.constant.CommonCacheConstant;
 import com.bonelf.frame.core.domain.Result;
-import com.bonelf.frame.base.service.DbDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.CacheConfig;
@@ -39,6 +39,7 @@ public class FeignDbDictServiceImpl implements DbDictService {
 	 * @param value
 	 * @return
 	 */
+	@Override
 	@Cacheable(value = CommonCacheConstant.DB_DICT, condition = "!'-'.equals(#result)")
 	public String queryDictTextByKey(String code, String value) {
 		// Result<String> result = supportFeignClient.queryDictTextByKey(code, value);
@@ -46,6 +47,7 @@ public class FeignDbDictServiceImpl implements DbDictService {
 		return result != null && result.getSuccess() ? result.getResult() : "-";
 	}
 
+	@Override
 	public String queryDictTextByKeyNoCache(String code, String value) {
 		// Result<String> result = supportFeignClient.queryDictTextByKey(code, value);
 		Result<String> result = Result.ok("-");

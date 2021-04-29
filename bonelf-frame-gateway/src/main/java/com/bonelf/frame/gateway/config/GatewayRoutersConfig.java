@@ -12,19 +12,20 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 
 /**
  * 路由配置信息
+ * @author bonelf
+ * @date 13点19分
  */
 @Slf4j
 @Configuration
-//@AllArgsConstructor
 public class GatewayRoutersConfig {
-    @Autowired
-    private CircuitFallbackHandler circuitFallbackHandler;
+	@Autowired
+	private CircuitFallbackHandler circuitFallbackHandler;
 
-    @Bean
-    public RouterFunction<?> routerFunction() {
-        return RouterFunctions.route(
-                RequestPredicates.path("/fallback").and(RequestPredicates.accept(MediaType.TEXT_PLAIN)), circuitFallbackHandler);
+	@Bean
+	public RouterFunction<?> routerFunction() {
+		return RouterFunctions.route(
+				RequestPredicates.path("/fallback").and(RequestPredicates.accept(MediaType.TEXT_PLAIN)), circuitFallbackHandler);
 
-    }
+	}
 
 }

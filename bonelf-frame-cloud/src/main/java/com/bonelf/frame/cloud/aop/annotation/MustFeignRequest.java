@@ -1,4 +1,4 @@
-package com.bonelf.frame.base.aop.annotation;
+package com.bonelf.frame.cloud.aop.annotation;
 
 import java.lang.annotation.*;
 

@@ -31,6 +31,7 @@ bonelf:
       alias: bonelf
     no-auth-path:
       # 下载页面
+      - /v2/api-docs
       - /download.html
       - /test/**
       - /noAuth/**

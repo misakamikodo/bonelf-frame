@@ -27,9 +27,10 @@ import java.util.List;
  * web服务配置
  * //@Autowired
  * //private Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
+ * @author bonelf
  **/
 @Configuration
-public class WebMvcConfig implements WebMvcConfigurer {
+public abstract class AbstractWebMvcConfig implements WebMvcConfigurer {
 	/**
 	 * JsonComponentModule已在JacksonAutoConfiguration中注入 idea报没bean 先不管
 	 */
@@ -73,8 +74,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	 * 这样Jackson2ObjectMapperBuilder Bean没改变
 	 * 覆盖了 jacksonObjectMapper（@ConditionalOnMissingBean）
 	 * 如果不注入自定义的 那么ObjectMapper Bean并没有变，即不是RestObjectMapper；
-	 * @see org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration (line 105)
 	 * @return
+	 * @see org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration (line 105)
 	 */
 	@Bean("restObjectMapper")
 	// @ConditionalOnBean(JsonComponentModule.class)
@@ -89,8 +90,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	 * {@link org.springframework.http.converter.json.Jackson2ObjectMapperBuilder spring创建ObjectMapper构造器}
 	 * XXX 但注入自定义的ObjectMapper jacksonObjectMapper 又不想使用writerWithDefaultPrettyPrinter，所以又需要new一个最好
 	 * XXX new一个没registerModule(jsonComponentModule)会使得通过yml jackson配置和@JsonComponent配置（读取于{@link org.springframework.boot.jackson.JsonComponentModule spring jacksonmodule配置}）的jackson配置失效
-	 * @see org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration
 	 * @return 转换器
+	 * @see org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration
 	 */
 	@Bean
 	public MappingJackson2HttpMessageConverter jacksonHttpMessageConverter() {

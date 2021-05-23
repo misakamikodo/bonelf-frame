@@ -12,15 +12,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 服务提供 服务 feign
+ * @author bonelf
+ * @since 2020/11/17 15:37
  */
 @FeignClient(contextId = "supportFeignClient", value = "support",
 		configuration = FeignConfig.class, fallbackFactory = SupportFeignFallbackFactory.class)
 public interface SupportFeignClient {
 
-	@PostMapping("/websocket/v1/sendMessage")
+	@PostMapping("/bonelf/websocket/v1/sendMessage")
 	Result<String> sendMessage(@RequestBody SocketRespMessage message);
 
-	@GetMapping("/sys/dbdict/v1/getByCode")
+	@GetMapping("/bonelf/sys/dbdict/v1/getByCode")
 	Result<String> queryDictTextByKey(@RequestParam("code") String code, @RequestParam("value") String value);
 
 	/**
@@ -33,15 +35,18 @@ public interface SupportFeignClient {
 	 * @param businessType 短信类型 {@link com.bonelf.support.feign.domain.constant.VerifyCodeTypeEnum}
 	 * @return 验证码
 	 */
-	@PostMapping(value = "/sms/v1/sendVerify")
+	@PostMapping(value = "/bonelf/sms/v1/sendVerify")
 	Result<String> sendVerify(@RequestParam("phone") String phone, @RequestParam("businessType") String businessType);
 
 	/**
 	 * 获取验证码
 	 * @param phone 手机号
-	 * @param businessType 短信类型 {@link com.bonelf.support.feign.domain.constant.VerifyCodeTypeEnum}
+	 * @param businessType {@link com.bonelf.support.feign.domain.constant.VerifyCodeTypeEnum 短信类型}
 	 * @return 验证码
 	 */
-	@GetMapping(value = "/sms/v1/getVerify")
-	Result<String> getVerify(@RequestParam("phone") String phone, @RequestParam("businessType") String businessType);
+	@GetMapping(value = "/bonelf/sms/v1/getVerify")
+	Result<String> getVerifyPhone(@RequestParam("phone") String phone, @RequestParam("businessType") String businessType);
+
+	@GetMapping(value = "/bonelf/sms/v1/getVerify")
+	Result<String> getVerifyMail(@RequestParam("mail") String mail, @RequestParam("businessType") String businessType);
 }

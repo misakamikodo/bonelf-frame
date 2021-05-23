@@ -17,6 +17,7 @@ import java.time.Duration;
 /**
  * <p>
  * 支付配置
+ * <a href="https://github.com/binarywang/weixin-java-miniapp-demo">github page</a>
  * </p>
  * @author bonelf
  * @since 2020/9/9 14:38

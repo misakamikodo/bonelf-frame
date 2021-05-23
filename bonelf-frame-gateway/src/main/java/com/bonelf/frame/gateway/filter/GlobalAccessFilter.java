@@ -91,10 +91,11 @@ public class GlobalAccessFilter implements GlobalFilter, Ordered {
 
 		// 1. 重写StripPrefix(获取真实的URL)
 		addOriginalRequestUrl(exchange, exchange.getRequest().getURI());
+		String originAuthHeader = exchange.getRequest().getHeaders().getFirst(AuthFeignConstant.AUTH_HEADER);
 		ServerHttpRequest newRequest = exchange.getRequest().mutate()
 				.path(newPath)
 				//将现在的request，添加当前身份 (标识，可以存放redis加强严谨性) XXX 添加调用方名称
-				.header(AuthFeignConstant.AUTH_HEADER, "-")
+				.header(AuthFeignConstant.AUTH_HEADER, originAuthHeader == null ? "-" : originAuthHeader)
 				.build();
 		exchange.getAttributes().put(GATEWAY_REQUEST_URL_ATTR, newRequest.getURI());
 		//.header("claims信息", authService.getJwt(authentication).getClaims());

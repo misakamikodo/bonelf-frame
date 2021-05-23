@@ -12,6 +12,16 @@ public class Oauth2Properties {
 	 * Oauth2JwtProperty
 	 */
 	private Oauth2JwtProperties jwt = new Oauth2JwtProperties();
+
+	/**
+	 * clientId
+	 */
+	private String clientId;
+
+	/**
+	 * clientSecret
+	 */
+	private String clientSecret;
 	/**
 	 * 不需要认证的api
 	 */

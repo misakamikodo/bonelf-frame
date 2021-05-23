@@ -1,9 +1,9 @@
 package com.bonelf.support.web.controller;
 
 import com.bonelf.cicada.util.EnumUtil;
+import com.bonelf.frame.base.util.redis.RedisUtil;
 import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
-import com.bonelf.frame.base.util.redis.RedisUtil;
 import com.bonelf.support.constant.CacheConstant;
 import com.bonelf.support.constant.VerifyCodeTypeEnum;
 import com.bonelf.support.constant.exception.SupportExceptionEnum;
@@ -40,13 +40,13 @@ public class SmsController {
 	public Result<String> sendVerify(@Validated @RequestBody VerifyCodeDTO accountLoginDto) {
 		// FIXME: 2020/11/2 投入使用后删除此返回值 移动到Support服务
 		if (accountLoginDto.getMail() != null) {
-			String code = smsService.sendVerify(accountLoginDto.getMail(),
-					(VerifyCodeTypeEnum)EnumUtil.getByCode(accountLoginDto.getBusinessType(),
+			String code = mailService.sendVerify(accountLoginDto.getMail(),
+					EnumUtil.getByCode(accountLoginDto.getBusinessType(),
 							VerifyCodeTypeEnum.class));
 			return Result.ok(code);
 		} else if (accountLoginDto.getPhone() != null) {
-			String code = mailService.sendVerify(accountLoginDto.getPhone(),
-					(VerifyCodeTypeEnum)EnumUtil.getByCode(accountLoginDto.getBusinessType(),
+			String code = smsService.sendVerify(accountLoginDto.getPhone(),
+					EnumUtil.getByCode(accountLoginDto.getBusinessType(),
 							VerifyCodeTypeEnum.class));
 			return Result.ok(code);
 		} else {

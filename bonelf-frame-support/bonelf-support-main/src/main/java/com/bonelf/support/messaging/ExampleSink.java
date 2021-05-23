@@ -10,7 +10,7 @@ import org.springframework.messaging.SubscribableChannel;
 
 /**
  * sink可以配置多个表示发送到其他服务
- * FIXME 放开 extend和@import
+ * 放开 extend和@import
  */
 public interface ExampleSink extends Sink {
 	/**

@@ -10,11 +10,23 @@ package com.bonelf.frame.cloud.config.security;
 
 import com.bonelf.frame.base.property.oauth2.Oauth2Properties;
 import com.bonelf.frame.cloud.constant.AuthFeignConstant;
+import com.bonelf.frame.web.security.AuthExceptionEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.util.StringUtils;
+
+import java.security.KeyPair;
 
 /**
  * <p>
@@ -30,10 +42,19 @@ public class CloudResourceServerConfig extends ResourceServerConfigurerAdapter {
 	private Oauth2Properties oauth2Properties;
 
 	@Override
+	public void configure(ResourceServerSecurityConfigurer resourceServerSecurityConfigurer) {
+		resourceServerSecurityConfigurer
+				.tokenStore(tokenStore())
+				.authenticationEntryPoint(authExceptionEntryPoint())
+				.resourceId("WEBS");
+	}
+
+	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		//super.configure(http);
 		http.exceptionHandling()
-				//.accessDeniedHandler(authExceptionHandler())
+				// .accessDeniedHandler(new AuthExceptionHandler())
+				// .authenticationEntryPoint(new AuthExceptionEntryPoint())
 				.and()
 				.csrf().disable()
 				//.antMatcher("/login").anonymous()
@@ -45,8 +66,37 @@ public class CloudResourceServerConfig extends ResourceServerConfigurerAdapter {
 					return head != null && head.startsWith(AuthFeignConstant.FEIGN_REQ_FLAG_PREFIX);
 				}).permitAll()
 				.mvcMatchers(oauth2Properties.getNoAuthPath()).permitAll()
-				// FIXME: 2020/12/1
-				.mvcMatchers("/*").permitAll()
-				.anyRequest().authenticated();
+				// .mvcMatchers("/*").permitAll()
+				.anyRequest().authenticated()
+				// .and()
+				// .formLogin().loginPage("/login")
+				// .failureHandler(null)
+		;
+	}
+
+	@Bean
+	public AuthenticationEntryPoint authExceptionEntryPoint() {
+		return new AuthExceptionEntryPoint();
+	}
+
+	public TokenStore tokenStore() {
+		return new JwtTokenStore(accessTokenConverter());
+	}
+
+	public JwtAccessTokenConverter accessTokenConverter() {
+		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+		//1:
+		//converter.setSigningKey(oauth2Property.getJwt().getSigningKey());
+		//出现 Cannot convert access token to JSON （实际上为NPE，verifier为空）考虑设置
+		//converter.setVerifier(new RsaVerifier("---Begin--???---End---"));
+		//2:
+		if (!StringUtils.hasText(oauth2Properties.getJwt().getKeystore())) {
+			throw new RuntimeException("keystore is not set");
+		}
+		KeyPair keyPair = new KeyStoreKeyFactory(
+				new ClassPathResource(oauth2Properties.getJwt().getKeystore()), oauth2Properties.getJwt().getPassword().toCharArray())
+				.getKeyPair(oauth2Properties.getJwt().getAlias());
+		converter.setKeyPair(keyPair);
+		return converter;
 	}
 }

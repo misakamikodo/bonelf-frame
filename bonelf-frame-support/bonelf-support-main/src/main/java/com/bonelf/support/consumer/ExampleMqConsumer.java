@@ -10,7 +10,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
 
 /**
- * FIXME mq启用后 打开@StreamListener注释
+ * mq启用后 打开@StreamListener注释
  */
 @Slf4j
 @Component

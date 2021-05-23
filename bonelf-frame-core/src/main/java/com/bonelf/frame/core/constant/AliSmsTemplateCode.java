@@ -11,6 +11,6 @@ public interface AliSmsTemplateCode {
 	/**
 	 * 验证码
 	 */
-	String VERIFY = "SMS_195270387";
+	String VERIFY = "SMS_184210270";
 
 }

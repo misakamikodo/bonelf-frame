@@ -61,8 +61,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 				//.and()
 				.authorizeRequests()
 				.mvcMatchers(oauth2Properties.getNoAuthPath()).permitAll()
-				// FIXME: 2020/12/1
-				.mvcMatchers("/*").permitAll()
+				// .mvcMatchers("/*").permitAll()
 				.anyRequest().authenticated();
 	}
 

@@ -24,6 +24,8 @@ bonelf:
   base-url: http://127.0.0.1
   app-name: bonelf经验总结项目
   oauth2:
+    client-id: app_client
+    client-secret: app_secret
     jwt:
       # 可指定classpath:
       keystore: /tls/example.p12
@@ -47,3 +49,7 @@ bonelf:
     # 设置spring缓存方式 默认ecache
     strategy: redis
 
+  mail:
+    password: ccy297115649
+    smtp: smtp.ym.163.com
+    username: me@chenchengyuan.com

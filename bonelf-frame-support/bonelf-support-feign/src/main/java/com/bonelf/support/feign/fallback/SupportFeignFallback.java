@@ -32,13 +32,18 @@ public class SupportFeignFallback implements SupportFeignClient {
 
 	@Override
 	public Result<String> sendVerify(String phone, String businessType) {
-		// FIXME: 2020/11/19 取消返回结果
-		return Result.ok("980826");
+		// return Result.ok("980826");
+		return Result.error("发送失败");
 	}
 
 	@Override
-	public Result<String> getVerify(String phone, String businessType) {
-		// FIXME: 2020/11/19 超时报错返回error
-		return Result.ok("980826");
+	public Result<String> getVerifyPhone(String phone, String businessType) {
+		// return Result.ok("980826");
+		return Result.error("校验失败");
+	}
+
+	@Override
+	public Result<String> getVerifyMail(String mail, String businessType) {
+		return Result.error("校验失败");
 	}
 }

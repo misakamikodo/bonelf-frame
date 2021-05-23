@@ -33,6 +33,7 @@ public class BonelfException extends RuntimeException {
 
 		public Builder(String msg) {
 			exception = new BonelfException(msg);
+			exception.errorMessage = msg;
 		}
 
 		/*===========================枚举构造===========================*/
@@ -88,6 +89,7 @@ public class BonelfException extends RuntimeException {
 	
 
 	private BonelfException() {
+		super("system exception");
 	}
 
 	public BonelfException(Exception e) {

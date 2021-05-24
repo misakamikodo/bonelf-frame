@@ -9,7 +9,8 @@
 package com.bonelf.frame.cloud.config.security;
 
 import com.bonelf.frame.base.property.oauth2.Oauth2Properties;
-import com.bonelf.frame.cloud.constant.AuthFeignConstant;
+import com.bonelf.frame.cloud.security.constant.AuthFeignConstant;
+import com.bonelf.frame.cloud.security.converter.JwtWithUserInfoAccessTokenConverter;
 import com.bonelf.frame.web.security.AuthExceptionEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ import java.security.KeyPair;
 /**
  * <p>
  * 令牌认证 拿到access_token后调用接口的配置
+ * TODO 可以考虑abstract 如果后续扩展
  * </p>
  * @author bonelf
  * @since 2020/11/19 17:36
@@ -85,6 +87,7 @@ public class CloudResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+		converter.setAccessTokenConverter(new JwtWithUserInfoAccessTokenConverter());
 		//1:
 		//converter.setSigningKey(oauth2Property.getJwt().getSigningKey());
 		//出现 Cannot convert access token to JSON （实际上为NPE，verifier为空）考虑设置

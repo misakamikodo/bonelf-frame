@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.bonelf.frame.cloud.constant;
+package com.bonelf.frame.cloud.security.constant;
 
 /**
  * <p>

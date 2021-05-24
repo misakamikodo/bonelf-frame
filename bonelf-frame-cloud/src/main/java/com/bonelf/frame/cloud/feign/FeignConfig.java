@@ -1,7 +1,7 @@
 package com.bonelf.frame.cloud.feign;
 
 import cn.hutool.core.util.StrUtil;
-import com.bonelf.frame.cloud.constant.AuthFeignConstant;
+import com.bonelf.frame.cloud.security.constant.AuthFeignConstant;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;

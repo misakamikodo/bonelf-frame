@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.bonelf.frame.base.property.BonelfProperties;
-import com.bonelf.frame.cloud.constant.AuthFeignConstant;
+import com.bonelf.frame.cloud.security.constant.AuthFeignConstant;
 import com.bonelf.frame.core.domain.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

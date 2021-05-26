@@ -6,11 +6,13 @@ package com.bonelf.support.websocket;
 
 import cn.hutool.json.JSONObject;
 import com.bonelf.cicada.util.EnumUtil;
+import com.bonelf.frame.base.util.JsonUtil;
 import com.bonelf.frame.core.websocket.SocketMessage;
 import com.bonelf.frame.core.websocket.SocketRespMessage;
-import com.bonelf.frame.base.util.JsonUtil;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
 import com.bonelf.frame.websocket.property.enums.TopicType;
+import com.bonelf.frame.websocket.property.enums.WebsocketType;
+import com.bonelf.support.websocket.netty.NettyWebsocketMap;
 import com.bonelf.support.websocket.norm.NormWebsocketMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.lang.Nullable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -34,8 +37,12 @@ import java.util.Collection;
 public class SocketMessageService implements MessageListener {
 	@Autowired
 	private RedisTemplate<Object, Object> redisTemplate;
-	@Autowired
+	@Autowired(required = false)
 	private NormWebsocketMap normWebsocketMap;
+	@Autowired(required = false)
+	private NettyWebsocketMap nettyWebsocketMap;
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	@Autowired
 	private WebsocketProperties websocketProperties;
 
@@ -44,9 +51,9 @@ public class SocketMessageService implements MessageListener {
 	 * 所以我试着使用redis里的deserialize方法解析body 的 byte。非常成功。
 	 * 如果使用了FastJson 注意开启 ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
 	 * MessageListenerAdapter 的实现是使用的RedisSerializer的deserialize body数据 可以尝试
-	 * {@link org.springframework.data.redis.listener.adapter.MessageListenerAdapter#extractMessage(Message)}
+	 * {@link org.springframework.data.redis.listener.adapter.MessageListenerAdapter extractMessage(Message)}
 	 * @param respMsg class:DefaultMessage body 传递的数据
-	 * @param bytes pattern（convertedChannel）可以使用stringSerializer.deserialize 查看内容
+	 * @param bytes   pattern（convertedChannel）可以使用stringSerializer.deserialize 查看内容
 	 */
 	@Override
 	public void onMessage(Message respMsg, @Nullable byte[] bytes) {
@@ -89,11 +96,11 @@ public class SocketMessageService implements MessageListener {
 
 	/**
 	 * 发送消息
-	 * @param userId 对象
+	 * @param userId  对象
 	 * @param message
 	 */
 	public void sendMessage(String userId, SocketMessage<?> message) {
-		sendMessage(userId, JsonUtil.toJson(message));
+		sendMessage(userId, message.getCmdId(), JsonUtil.toJson(message));
 	}
 
 	/**
@@ -103,7 +110,7 @@ public class SocketMessageService implements MessageListener {
 	 */
 	public void sendMessage(Collection<String> userIds, SocketMessage<?> message) {
 		for (String userId : userIds) {
-			sendMessage(userId, JsonUtil.toJson(message));
+			sendMessage(userId, message.getCmdId(), JsonUtil.toJson(message));
 		}
 	}
 
@@ -112,25 +119,41 @@ public class SocketMessageService implements MessageListener {
 	 * @param message
 	 */
 	public void sendAllMessage(SocketMessage<?> message) {
-		normWebsocketMap.getSocketSessionMap().forEach((key, value) -> {
-			try {
-				value.sendMessage(new TextMessage(JsonUtil.toJson(message)));
-			} catch (IOException e) {
-				log.error("消息发送失败");
-				e.printStackTrace();
-			}
-		});
+		if (normWebsocketMap != null && websocketProperties.getType() == WebsocketType.norm) {
+			normWebsocketMap.getSocketSessionMap().forEach((key, value) -> {
+				try {
+					value.sendMessage(new TextMessage(JsonUtil.toJson(message)));
+				} catch (IOException e) {
+					log.error("消息发送失败");
+					e.printStackTrace();
+				}
+			});
+		} else if (nettyWebsocketMap != null && websocketProperties.getType() == WebsocketType.netty) {
+			nettyWebsocketMap.getSocketSessionMap().forEach((key, value) -> {
+				value.writeAndFlush(JsonUtil.toJson(message));
+			});
+		} else if (websocketProperties.getType() == WebsocketType.stomp) {
+			messagingTemplate.convertAndSend("/topic/cmd/" + message.getCmdId(), message);
+		}
 	}
 
-	private void sendMessage(String userId, String message) {
-		WebSocketSession session = normWebsocketMap.getSocketSessionMap().get(userId);
-		if (session != null && session.isOpen()) {
-			try {
-				session.sendMessage(new TextMessage(message));
-			} catch (IOException e) {
-				log.error("消息发送失败");
-				e.printStackTrace();
+	private void sendMessage(String userId, Integer cmdId, String message) {
+		if (normWebsocketMap != null && websocketProperties.getType() == WebsocketType.norm) {
+			WebSocketSession session = normWebsocketMap.getSocketSessionMap().get(userId);
+			if (session != null && session.isOpen()) {
+				try {
+					session.sendMessage(new TextMessage(message));
+				} catch (IOException e) {
+					log.error("消息发送失败");
+					e.printStackTrace();
+				}
 			}
+		} else if (nettyWebsocketMap != null && websocketProperties.getType() == WebsocketType.netty) {
+			nettyWebsocketMap.getSocketSessionMap().forEach((key, value) -> {
+				value.writeAndFlush(JsonUtil.toJson(message));
+			});
+		} else if (websocketProperties.getType() == WebsocketType.stomp) {
+			messagingTemplate.convertAndSend("/topic/user/" + userId + "/" + cmdId, message);
 		}
 	}
 }

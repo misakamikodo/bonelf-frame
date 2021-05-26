@@ -48,13 +48,16 @@ public class WebsocketProperties {
 	 * 使用 Mq 通过订阅websocketTopic主题下的tag(@StreamListener)来实现主动接收，
 	 * 使用 stomp 则通过 @MessageMapping 来实现主动接收，推荐使用stomp结合Mq的方式
 	 */
+	@Deprecated
 	private String[] channels;
 
 	/**
 	 * 命令-渠道 关系
 	 */
+	@Deprecated
 	private Map<String, String[]> cmdChannels;
 
+	@Deprecated
 	@JsonIgnore
 	private transient Map<String, Map<String, Object>> cmdIdTopicMap;
 

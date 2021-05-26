@@ -32,7 +32,7 @@ public class Md5CryptUtil {
      * @param salt
      * @return
      */
-    public static String encrypt(String pwd, String salt) {
+    public static String encrypt(CharSequence pwd, String salt) {
         return DigestUtils.md5Hex(pwd + salt);
     }
 

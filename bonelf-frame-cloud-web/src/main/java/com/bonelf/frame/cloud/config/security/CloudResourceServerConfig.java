@@ -67,6 +67,7 @@ public class CloudResourceServerConfig extends ResourceServerConfigurerAdapter {
 					String head = request.getHeader(AuthFeignConstant.AUTH_HEADER);
 					return head != null && head.startsWith(AuthFeignConstant.FEIGN_REQ_FLAG_PREFIX);
 				}).permitAll()
+				.requestMatchers(request -> true).permitAll()
 				.mvcMatchers(oauth2Properties.getNoAuthPath()).permitAll()
 				// .mvcMatchers("/*").permitAll()
 				.anyRequest().authenticated()

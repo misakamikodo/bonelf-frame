@@ -2,7 +2,6 @@ package com.bonelf.frame.websocket.config;
 
 import com.bonelf.frame.websocket.interceptor.StompWebsocketInterceptor;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
@@ -35,15 +34,13 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
 		stompEndpointRegistry
 				//端点名称
-				.addEndpoint("/noAuth/ws")
+				.addEndpoint("/ws")
 				// 握手处理，主要是连接的时候认证获取其他数据验证等
 				//.setHandshakeHandler()
 				// 拦截处理，和http拦截类似
 				.addInterceptors(new StompWebsocketInterceptor())
-
 				.setAllowedOrigins("*") //跨域
 				.withSockJS(); //使用sockJS
-
 	}
 
 	/**
@@ -58,7 +55,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 		registry.enableSimpleBroker("/topic", "/queue");
 		//客户端名称前缀
 		registry.setApplicationDestinationPrefixes("/app");
-		//用户名称前
+		//用户名称前缀
 		registry.setUserDestinationPrefix("/user");
 	}
 }

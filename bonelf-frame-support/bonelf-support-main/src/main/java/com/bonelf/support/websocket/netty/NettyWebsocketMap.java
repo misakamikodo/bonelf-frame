@@ -1,5 +1,6 @@
 package com.bonelf.support.websocket.netty;
 
+import com.bonelf.frame.websocket.config.NettyWebsocketConfig;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * https://www.cnblogs.com/liangshu/p/12459657.html
  **/
 @Component
+@ConditionalOnBean(NettyWebsocketConfig.class)
 @Slf4j
 @ToString
 public class NettyWebsocketMap {

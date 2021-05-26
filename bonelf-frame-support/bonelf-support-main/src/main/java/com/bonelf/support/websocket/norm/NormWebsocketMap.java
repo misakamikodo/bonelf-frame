@@ -1,9 +1,11 @@
 package com.bonelf.support.websocket.norm;
 
+import com.bonelf.frame.websocket.config.NormWebSocketConfig;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -14,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * WebsocketMap初始化存放地址
  **/
 @Component
+@ConditionalOnBean(NormWebSocketConfig.class)
 @Slf4j
 @Data
 public class NormWebsocketMap {

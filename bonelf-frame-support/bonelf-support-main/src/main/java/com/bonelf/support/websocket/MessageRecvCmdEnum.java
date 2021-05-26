@@ -9,7 +9,6 @@ import lombok.Getter;
  * mq则只需要通过@StreamListener接受消息即可；
  * 不会涉及消息cmd类型
  */
-@Deprecated
 @Getter
 public enum MessageRecvCmdEnum implements CodeValueEnum<Integer> {
 	/**
@@ -28,6 +27,7 @@ public enum MessageRecvCmdEnum implements CodeValueEnum<Integer> {
 	TEST(2, "普通测试"),
 	;
 	private final Integer code;
+
 	private final String value;
 
 	MessageRecvCmdEnum(Integer code, String desc) {

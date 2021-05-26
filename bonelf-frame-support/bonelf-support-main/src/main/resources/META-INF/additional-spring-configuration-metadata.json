@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "bonelf.websocket.type",
+      "type": "com.bonelf.frame.websocket.property.enums.WebsocketType",
+      "description": "websocket类型."
+    }
+  ]
+}

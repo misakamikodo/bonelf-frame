@@ -1,14 +1,14 @@
 package com.bonelf.support.websocket.norm;
 
 import cn.hutool.json.JSONException;
+import com.bonelf.frame.base.util.JsonUtil;
+import com.bonelf.frame.base.util.redis.RedisUtil;
 import com.bonelf.frame.core.constant.AuthConstant;
 import com.bonelf.frame.core.websocket.SocketMessage;
 import com.bonelf.frame.core.websocket.SocketRespMessage;
 import com.bonelf.frame.core.websocket.constant.MessageSendCmdEnum;
 import com.bonelf.frame.core.websocket.constant.OnlineStatusEnum;
-import com.bonelf.frame.base.util.JsonUtil;
-import com.bonelf.frame.base.util.redis.RedisUtil;
-// import com.bonelf.frame.mq.bus.MqProducerService;
+import com.bonelf.frame.websocket.config.NormWebSocketConfig;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
 import com.bonelf.support.constant.CacheConstant;
 import com.bonelf.support.websocket.MessageRecvCmdEnum;
@@ -16,6 +16,7 @@ import com.bonelf.support.websocket.ServiceMsgHandler;
 import com.bonelf.support.websocket.SocketMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -32,6 +33,7 @@ import java.util.List;
  * 可通过nginx配置转发
  **/
 @Slf4j
+@ConditionalOnBean(NormWebSocketConfig.class)
 @Component
 public class NormWebSocketHandler implements WebSocketHandler {
 	@Autowired

@@ -14,6 +14,7 @@ import com.bonelf.support.constant.CacheConstant;
 import com.bonelf.support.websocket.MessageRecvCmdEnum;
 import com.bonelf.support.websocket.ServiceMsgHandler;
 import com.bonelf.support.websocket.SocketMessageService;
+import com.bonelf.support.websocket.factory.BnfWsHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -35,7 +36,7 @@ import java.util.List;
 @Slf4j
 @ConditionalOnBean(NormWebSocketConfig.class)
 @Component
-public class NormWebSocketHandler implements WebSocketHandler {
+public class NormWebSocketHandler implements WebSocketHandler, BnfWsHandler {
 	@Autowired
 	private RedisUtil redisUtil;
 	@Autowired
@@ -84,12 +85,12 @@ public class NormWebSocketHandler implements WebSocketHandler {
 	 * @param message
 	 */
 	private void sendMsg2AllChannel(String userId, SocketMessage<?> message) {
-		for (String topicName : websocketProperties.getChannels()) {
+		for (String tagValue : websocketProperties.getChannels()) {
 			SocketRespMessage msg = SocketRespMessage.builder()
 					.fromUid(userId)
 					.socketMessage(message)
 					.build();
-			serviceMsgHandler.sendMessage2Service(msg, topicName);
+			serviceMsgHandler.sendMessage2Service(msg, tagValue);
 		}
 	}
 
@@ -145,8 +146,10 @@ public class NormWebSocketHandler implements WebSocketHandler {
 		}
 		respMessage.setSocketMessage(socketMessage);
 		respMessage.setFromUid(userId);
-		for (String topicName : websocketProperties.getCmdChannels().get(String.valueOf(socketMessage.getCmdId()))) {
-			serviceMsgHandler.sendMessage2Service(respMessage, topicName);
+		if (socketMessage != null) {
+			for (String tagValue : websocketProperties.getCmdChannels().get(String.valueOf(socketMessage.getCmdId()))) {
+				serviceMsgHandler.sendMessage2Service(respMessage, tagValue);
+			}
 		}
 	}
 

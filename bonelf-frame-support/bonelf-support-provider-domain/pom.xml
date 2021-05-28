@@ -16,11 +16,6 @@
             <groupId>com.bonelf</groupId>
             <artifactId>bonelf-frame-core</artifactId>
         </dependency>
-        <!-- provider domain end -->
-        <dependency>
-            <groupId>com.bonelf</groupId>
-            <artifactId>bonelf-frame-mq</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

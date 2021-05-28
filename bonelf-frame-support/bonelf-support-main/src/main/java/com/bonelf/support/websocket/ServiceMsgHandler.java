@@ -1,18 +1,27 @@
 package com.bonelf.support.websocket;
 
-import com.bonelf.frame.core.websocket.SocketRespMessage;
 import com.bonelf.frame.base.util.SpringContextUtils;
+import com.bonelf.frame.core.websocket.SocketRespMessage;
+import com.bonelf.frame.mq.bus.MqProducerService;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashSet;
-import java.util.Set;
 
+/**
+ * 服务消息分发器
+ * @author ccy
+ * @date 2021/5/28 11:16
+ */
+@Slf4j
 @Component
 public class ServiceMsgHandler {
+	@Autowired
+	private MqProducerService mqProducerService;
 	@Autowired
 	private WebsocketProperties websocketProperties;
 	@Autowired
@@ -21,22 +30,28 @@ public class ServiceMsgHandler {
 	/**
 	 * 像各服务发送消息
 	 * @param msg
-	 * @param topicName
+	 * @param tagValue 即服务名
 	 */
-	public void sendMessage2Service(SocketRespMessage msg, String topicName) {
-		switch (websocketProperties.getTopicType()){
+	public void sendMessage2Service(SocketRespMessage msg, String tagValue) {
+		switch (websocketProperties.getTopicType()) {
 			case redis:
-				redisTemplate.convertAndSend(topicName, msg);
+				redisTemplate.convertAndSend(tagValue, msg);
 				break;
 			case mq:
-				// mqProducerService.send(websocketProperties.getMqTopic()", topicName,
-				// 		msg);
+				// 发送websocket主题供订阅 tagName是主题名，各服务获取自己主题的消息。获取到消息后通过cmdId判断业务
+				mqProducerService.send(websocketProperties.getMqTagPrefix() + tagValue, msg);
 				break;
 			case feign:
-				for (Class<?> clazz : this.getFeignClientBeanClassByTopicName(topicName)) {
-					Object bean = SpringContextUtils.getBean(clazz);
+				Object bean = null;
+				try {
+					bean = SpringContextUtils.getBean(tagValue);
+				} catch (BeansException e) {
+					log.warn("找不到bean", e);
+				}
+				if (bean != null) {
 					try {
-						clazz.getMethod("websocketMessage", SocketRespMessage.class).invoke(bean, msg);
+						// 这个需要在pom中引入feign包
+						bean.getClass().getMethod("websocketMessage", SocketRespMessage.class).invoke(bean, msg);
 					} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 						throw new RuntimeException("please add websocket feign method first");
 					}
@@ -44,25 +59,5 @@ public class ServiceMsgHandler {
 				break;
 			default:
 		}
-	}
-
-	/**
-	 * TODO 根据主题获取所有Bean类，这里要引入所有会用到的feign包，所以不妥，推荐使用mq，这里保留方法
-	 * stomp 请在@MessageMapping中执行实现feign，mq的话stomp已实现{@link ??}
-	 * @param topicName
-	 * @return
-	 */
-	private Class<?>[] getFeignClientBeanClassByTopicName(String topicName) {
-		String[] channels = websocketProperties.getCmdChannels().get(topicName);
-		// 根据channels获取所有bean
-		Set<Class<?>> result = new HashSet<>();
-		for (String channel : channels) {
-			switch (channel){
-				case "demo":
-					break;
-				default:
-			}
-		}
-		return result.toArray(new Class<?>[0]);
 	}
 }

@@ -22,9 +22,8 @@
     <modules>
         <module>bonelf-support-feign</module>
         <module>bonelf-support-feign-domain</module>
-        <module>bonelf-support-provider</module>
-        <module>bonelf-support-provider-domain</module>
         <module>bonelf-support-main</module>
+        <module>bonelf-support-provider-domain</module>
     </modules>
 
     <dependencies>
@@ -45,22 +44,12 @@
             </dependency>
             <dependency>
                 <groupId>com.bonelf</groupId>
-                <artifactId>bonelf-support-provider</artifactId>
-                <version>${support.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bonelf</groupId>
                 <artifactId>bonelf-support-provider-domain</artifactId>
                 <version>${support.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.bonelf</groupId>
                 <artifactId>bonelf-support-main</artifactId>
-                <version>${support.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bonelf</groupId>
-                <artifactId>bonelf-support-app</artifactId>
                 <version>${support.version}</version>
             </dependency>
         </dependencies>

@@ -2,6 +2,7 @@ package com.bonelf.support.websocket.norm;
 
 import com.bonelf.frame.websocket.config.NormWebSocketConfig;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
+import com.bonelf.support.websocket.factory.BnfWsMap;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @ConditionalOnBean(NormWebSocketConfig.class)
 @Slf4j
 @Data
-public class NormWebsocketMap {
+public class NormWebsocketMap implements BnfWsMap {
 	@Autowired
 	private WebsocketProperties websocketProperties;
 	/**

@@ -47,6 +47,7 @@ public class SocketMessageService implements MessageListener {
 	private WebsocketProperties websocketProperties;
 
 	/**
+	 * 作为redis发布订阅接受消息
 	 * 网上都是传递String 但是我发现如果传递对象接受也能使用JSON.parseObject解析，并且toString方法和在redis存对象时内容一样
 	 * 所以我试着使用redis里的deserialize方法解析body 的 byte。非常成功。
 	 * 如果使用了FastJson 注意开启 ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
@@ -137,6 +138,12 @@ public class SocketMessageService implements MessageListener {
 		}
 	}
 
+	/**
+	 * 发送消息
+	 * @param userId 用户ID
+	 * @param cmdId 指令ID
+	 * @param message 字符串消息
+	 */
 	private void sendMessage(String userId, Integer cmdId, String message) {
 		if (normWebsocketMap != null && websocketProperties.getType() == WebsocketType.norm) {
 			WebSocketSession session = normWebsocketMap.getSocketSessionMap().get(userId);
@@ -149,9 +156,7 @@ public class SocketMessageService implements MessageListener {
 				}
 			}
 		} else if (nettyWebsocketMap != null && websocketProperties.getType() == WebsocketType.netty) {
-			nettyWebsocketMap.getSocketSessionMap().forEach((key, value) -> {
-				value.writeAndFlush(JsonUtil.toJson(message));
-			});
+			nettyWebsocketMap.getSocketSessionMap().get(userId).writeAndFlush(JsonUtil.toJson(message));
 		} else if (websocketProperties.getType() == WebsocketType.stomp) {
 			messagingTemplate.convertAndSend("/topic/user/" + userId + "/" + cmdId, message);
 		}

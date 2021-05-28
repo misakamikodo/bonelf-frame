@@ -14,6 +14,7 @@ import com.bonelf.support.constant.CacheConstant;
 import com.bonelf.support.websocket.MessageRecvCmdEnum;
 import com.bonelf.support.websocket.ServiceMsgHandler;
 import com.bonelf.support.websocket.SocketMessageService;
+import com.bonelf.support.websocket.factory.BnfWsHandler;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -37,7 +38,7 @@ import org.springframework.util.StringUtils;
 @ConditionalOnBean(NettyWebsocketConfig.class)
 @ChannelHandler.Sharable
 @Component
-public class NettyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
+public class NettyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame> implements BnfWsHandler {
 	@Autowired
 	private RedisUtil redisUtil;
 	@Autowired
@@ -167,8 +168,8 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<WebSocket
 		}
 		respMessage.setSocketMessage(socketMessage);
 		respMessage.setFromUid(userId);
-		for (String topicName : websocketProperties.getCmdChannels().get(String.valueOf(socketMessage.getCmdId()))) {
-			serviceMsgHandler.sendMessage2Service(respMessage, topicName);
+		for (String tagValue : websocketProperties.getCmdChannels().get(String.valueOf(socketMessage.getCmdId()))) {
+			serviceMsgHandler.sendMessage2Service(respMessage, tagValue);
 		}
 	}
 
@@ -178,12 +179,12 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<WebSocket
 	 * @param message
 	 */
 	private void sendMsg2AllChannel(String userId, SocketMessage<?> message) {
-		for (String topicName : websocketProperties.getChannels()) {
+		for (String tagValue : websocketProperties.getChannels()) {
 			SocketRespMessage msg = SocketRespMessage.builder()
 					.fromUid(userId)
 					.socketMessage(message)
 					.build();
-			serviceMsgHandler.sendMessage2Service(msg, topicName);
+			serviceMsgHandler.sendMessage2Service(msg, tagValue);
 		}
 	}
 

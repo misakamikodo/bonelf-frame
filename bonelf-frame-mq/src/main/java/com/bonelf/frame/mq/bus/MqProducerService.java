@@ -22,7 +22,14 @@ public interface MqProducerService {
 	 */
 	<T> boolean send(String tag, T message);
 
-	// <T> boolean send(ChannelEnum channel, String tag, T message);
-
+	/**
+	 * 发送消息
+	 * @param topic 自定义主题
+	 * @param tag 消息标签
+	 * @param message 消息
+	 * @param <T>
+	 * @return
+	 */
+	@Deprecated
 	<T> boolean send(String topic, String tag, T message);
 }

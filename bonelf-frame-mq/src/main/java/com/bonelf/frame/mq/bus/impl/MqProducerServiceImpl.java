@@ -6,17 +6,13 @@ package com.bonelf.frame.mq.bus.impl;
 
 import com.bonelf.frame.base.util.JsonUtil;
 import com.bonelf.frame.mq.bus.MqProducerService;
-import com.bonelf.frame.mq.property.RocketmqProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.support.RocketMQHeaders;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 /**
  * <p>
@@ -28,23 +24,9 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Service
 public class MqProducerServiceImpl implements MqProducerService {
+	@Autowired(required = false)
+	@Qualifier("output")
 	private MessageChannel output;
-	@Autowired
-	private ApplicationContext applicationContext;
-	@Autowired
-	private RocketmqProperties rocketmqProperties;
-
-	@PostConstruct
-	public void initChannel() {
-		if (rocketmqProperties.getEnable()) {
-			try {
-				this.output = applicationContext.getBean("output", MessageChannel.class);
-			} catch (BeansException e) {
-				log.warn("no bean of output is registered!");
-			}
-		}
-	}
-
 
 	private <T> boolean init(String topic, String tag, T message) {
 		if (output == null) {
@@ -54,6 +36,15 @@ public class MqProducerServiceImpl implements MqProducerService {
 		return true;
 	}
 
+	/**
+	 * 无效
+	 * @param topic 自定义主题
+	 * @param tag 消息标签
+	 * @param message 消息
+	 * @param <T>
+	 * @return
+	 */
+	@Deprecated
 	@Override
 	public <T> boolean send(String topic, String tag, T message) {
 		if (!init(topic, tag, message)) {

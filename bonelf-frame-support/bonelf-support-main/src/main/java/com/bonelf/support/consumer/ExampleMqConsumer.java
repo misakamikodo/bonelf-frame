@@ -4,9 +4,7 @@
 
 package com.bonelf.support.consumer;
 
-import com.bonelf.support.messaging.ExampleSink;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,8 +20,8 @@ public class ExampleMqConsumer {
 	 * 我使用Tag筛选Topic，condition筛选head
 	 * @param message
 	 */
-	@StreamListener(value = ExampleSink.INPUT, condition = "headers['rocketmq_TAGS']=='TestTag'")
-	public void receiveInput(String message) {
-		log.info("Receive input: " + message);
-	}
+	// @StreamListener(value = ExampleSink.INPUT, condition = "headers['rocketmq_TAGS']=='TestTag'")
+	// public void receiveInput(String message) {
+	// 	log.info("Receive input: " + message);
+	// }
 }

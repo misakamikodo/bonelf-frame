@@ -40,7 +40,7 @@ public class WebsocketProperties {
 	/**
 	 * mq topicType 主题
 	 */
-	private String mqTopic = "websocketTopic";
+	private String mqTagPrefix = "websocket-";
 
 	/**
 	 * 所有渠道
@@ -88,12 +88,12 @@ public class WebsocketProperties {
 		});
 	}
 
-	public String getMqTopic() {
-		return mqTopic;
+	public String getMqTagPrefix() {
+		return mqTagPrefix;
 	}
 
-	public void setMqTopic(String mqTopic) {
-		this.mqTopic = mqTopic;
+	public void setMqTagPrefix(String mqTagPrefix) {
+		this.mqTagPrefix = mqTagPrefix;
 	}
 
 	public Map<String, String[]> getCmdChannels() {

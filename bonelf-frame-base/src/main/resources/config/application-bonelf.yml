@@ -32,9 +32,11 @@ bonelf:
       password: =bonelf=
       alias: bonelf
     no-auth-path:
-      # 下载页面
+      # swagger
       - /v2/api-docs
+      # 下载页面
       - /download.html
+      # 测试
       - /test/**
       - /noAuth/**
       # 验证码 verificationCode

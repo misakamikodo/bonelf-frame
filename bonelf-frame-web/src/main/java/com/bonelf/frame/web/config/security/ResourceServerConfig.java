@@ -12,11 +12,13 @@ import com.bonelf.frame.base.property.oauth2.Oauth2Properties;
 import com.bonelf.frame.web.security.AuthExceptionEntryPoint;
 import com.bonelf.frame.web.security.converter.JwtWithUserInfoAccessTokenConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -42,6 +44,9 @@ import java.security.KeyPair;
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Autowired
 	private Oauth2Properties oauth2Properties;
+	@Autowired(required = false)
+	@Qualifier("idUserDetailsService")
+	private UserDetailsService userDetailsService;
 
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resourceServerSecurityConfigurer) {
@@ -97,7 +102,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setAccessTokenConverter(new JwtWithUserInfoAccessTokenConverter());
+		converter.setAccessTokenConverter(new JwtWithUserInfoAccessTokenConverter(userDetailsService));
 		//1:
 		//converter.setSigningKey(oauth2Property.getJwt().getSigningKey());
 		//出现 Cannot convert access token to JSON （实际上为NPE，verifier为空）考虑设置

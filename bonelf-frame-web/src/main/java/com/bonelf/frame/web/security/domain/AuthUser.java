@@ -37,6 +37,11 @@ public class AuthUser extends org.springframework.security.core.userdetails.User
 		this.idType = idType;
 	}
 
+	public AuthUser(String username, UniqueIdType idType, String password, Collection<? extends GrantedAuthority> authorities) {
+		super(username, password, authorities);
+		this.idType = idType;
+	}
+
 	public AuthUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, authorities);
 	}

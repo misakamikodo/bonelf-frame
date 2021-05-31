@@ -56,8 +56,10 @@ public class JwtWithUserInfoAccessTokenConverter extends DefaultAccessTokenConve
 				if (!response.containsKey("user_id")) {
 					response.put("user_id", String.valueOf(user.getUserId()));
 				}
-				response.put("uniqueId", user.getUsername());
-				response.put("id_type", user.getIdType().name());
+				if (userDetailsService == null) {
+					response.put("uniqueId", user.getUsername());
+					response.put("id_type", user.getIdType().name());
+				}
 				// 改成userDetailService获取
 				// response.put("authorities", user.getAuthorities());
 			}
@@ -78,6 +80,7 @@ public class JwtWithUserInfoAccessTokenConverter extends DefaultAccessTokenConve
 				if (userDetailsService != null) {
 					principal = userDetailsService.loadUserByUsername(String.valueOf(map.get("user_id")));
 				} else {
+					// 这样没有权限校验，上面注释的是把权限写到token，这样token内容太庞大，不太好
 					principal = new AuthUser((String)map.get("username"),
 							UniqueIdType.valueOf((String)map.get("id_type")),
 							"N/A");

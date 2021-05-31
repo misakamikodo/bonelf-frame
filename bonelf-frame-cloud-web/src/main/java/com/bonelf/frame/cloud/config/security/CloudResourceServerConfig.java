@@ -10,8 +10,8 @@ package com.bonelf.frame.cloud.config.security;
 
 import com.bonelf.frame.base.property.oauth2.Oauth2Properties;
 import com.bonelf.frame.cloud.security.constant.AuthFeignConstant;
-import com.bonelf.frame.cloud.security.converter.JwtWithUserInfoAccessTokenConverter;
 import com.bonelf.frame.web.security.AuthExceptionEntryPoint;
+import com.bonelf.frame.web.security.converter.JwtWithUserInfoAccessTokenConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,7 +67,7 @@ public class CloudResourceServerConfig extends ResourceServerConfigurerAdapter {
 					String head = request.getHeader(AuthFeignConstant.AUTH_HEADER);
 					return head != null && head.startsWith(AuthFeignConstant.FEIGN_REQ_FLAG_PREFIX);
 				}).permitAll()
-				.requestMatchers(request -> true).permitAll()
+				// .requestMatchers(request -> true).permitAll()
 				.mvcMatchers(oauth2Properties.getNoAuthPath()).permitAll()
 				// .mvcMatchers("/*").permitAll()
 				.anyRequest().authenticated()

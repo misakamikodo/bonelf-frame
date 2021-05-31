@@ -1,4 +1,4 @@
-package com.bonelf.frame.cloud.security.constant;
+package com.bonelf.frame.core.constant;
 
 /**
  * 用户表唯一键

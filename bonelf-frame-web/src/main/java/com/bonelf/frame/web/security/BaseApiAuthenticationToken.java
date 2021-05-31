@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.bonelf.frame.cloud.security.token;
+package com.bonelf.frame.web.security;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +21,7 @@ import org.springframework.security.core.Authentication;
 public abstract class BaseApiAuthenticationToken extends UsernamePasswordAuthenticationToken {
     /**
      * 在下面添加自定义内容 (认证通过后添加)
-     * @see com.bonelf.auth.core.oauth2.converter.CustomTokenEnhancer
+     * 认证服务：com.bonelf.auth.core.oauth2.converter.CustomTokenEnhancer
      */
     private Object userId;
 

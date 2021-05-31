@@ -10,6 +10,7 @@ package com.bonelf.frame.web.config.security;
 
 import com.bonelf.frame.base.property.oauth2.Oauth2Properties;
 import com.bonelf.frame.web.security.AuthExceptionEntryPoint;
+import com.bonelf.frame.web.security.converter.JwtWithUserInfoAccessTokenConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -96,6 +97,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+		converter.setAccessTokenConverter(new JwtWithUserInfoAccessTokenConverter());
 		//1:
 		//converter.setSigningKey(oauth2Property.getJwt().getSigningKey());
 		//出现 Cannot convert access token to JSON （实际上为NPE，verifier为空）考虑设置

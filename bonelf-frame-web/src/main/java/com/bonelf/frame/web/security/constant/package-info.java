@@ -5,4 +5,4 @@
  * @author bonelf
  * @since 2020/10/4 23:02
  */
-package com.bonelf.frame.cloud.security.constant;
+package com.bonelf.frame.web.security.constant;

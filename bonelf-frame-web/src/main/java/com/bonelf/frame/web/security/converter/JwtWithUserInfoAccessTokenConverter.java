@@ -1,8 +1,8 @@
-package com.bonelf.frame.cloud.security.converter;
+package com.bonelf.frame.web.security.converter;
 
-import com.bonelf.frame.cloud.security.constant.UniqueIdType;
-import com.bonelf.frame.cloud.security.domain.AuthUser;
-import com.bonelf.frame.cloud.security.token.BaseApiAuthenticationToken;
+import com.bonelf.frame.core.constant.UniqueIdType;
+import com.bonelf.frame.web.security.BaseApiAuthenticationToken;
+import com.bonelf.frame.web.security.domain.AuthUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
@@ -36,7 +36,10 @@ public class JwtWithUserInfoAccessTokenConverter extends DefaultAccessTokenConve
 				response.put("user_id", String.valueOf(((BaseApiAuthenticationToken)authentication).getUserId()));
 			}
 			if (authentication.getPrincipal() instanceof AuthUser) {
-				AuthUser user = (AuthUser) authentication.getPrincipal();
+				AuthUser user = (AuthUser)authentication.getPrincipal();
+				if (!response.containsKey("user_id")) {
+					response.put("user_id", String.valueOf(user.getUserId()));
+				}
 				response.put("uniqueId", user.getUsername());
 				response.put("id_type", user.getIdType().name());
 			}
@@ -48,7 +51,7 @@ public class JwtWithUserInfoAccessTokenConverter extends DefaultAccessTokenConve
 			//不从数据库加载，直接从jwt中恢复用户信息;
 			if (map.containsKey("user_id")) {
 				AuthUser principal = new AuthUser((String)map.get("username"), UniqueIdType.valueOf((String)map.get("id_type")), "N/A");
-				principal.setUserId(Long.parseLong((String)map.get("user_id")));
+				principal.setUserId((Long)map.get("user_id"));
 				return new UsernamePasswordAuthenticationToken(principal, principal, principal.getAuthorities());
 			}
 			return null;

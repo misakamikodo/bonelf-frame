@@ -1,6 +1,6 @@
-package com.bonelf.frame.cloud.security.domain;
+package com.bonelf.frame.web.security.domain;
 
-import com.bonelf.frame.cloud.security.constant.UniqueIdType;
+import com.bonelf.frame.core.constant.UniqueIdType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.Authentication;

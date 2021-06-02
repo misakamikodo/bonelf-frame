@@ -34,7 +34,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
 		stompEndpointRegistry
 				//端点名称
-				.addEndpoint("/ws")
+				.addEndpoint("/wst")
 				// 握手处理，主要是连接的时候认证获取其他数据验证等
 				//.setHandshakeHandler()
 				// 拦截处理，和http拦截类似

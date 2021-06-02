@@ -21,9 +21,13 @@ public interface AuthConstant {
 	 */
 	String RESP_HEADER = "NewAuthorization";
 	/**
-	 * websocket认证头
+	 * websocket协议头
 	 */
 	String WEBSOCKET_HEADER = "Sec-WebSocket-Protocol";
+	/**
+	 * websocket认证参数（）
+	 */
+	String WEBSOCKET_AUTH_PARAM = "authorization";
 	/**
 	 * token前缀
 	 */

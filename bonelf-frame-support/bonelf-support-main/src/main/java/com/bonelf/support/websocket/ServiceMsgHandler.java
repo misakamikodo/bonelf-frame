@@ -2,8 +2,10 @@ package com.bonelf.support.websocket;
 
 import com.bonelf.frame.base.util.SpringContextUtils;
 import com.bonelf.frame.core.websocket.SocketRespMessage;
+import com.bonelf.frame.core.websocket.constant.MessageRecvCmdEnum;
 import com.bonelf.frame.mq.bus.MqProducerService;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
+import com.bonelf.support.constant.CacheConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,10 @@ public class ServiceMsgHandler {
 	 * @param tagValue 即服务名
 	 */
 	public void sendMessage2Service(SocketRespMessage msg, String tagValue) {
+		if (MessageRecvCmdEnum.CACHE_MSG_RCVED.getCode().equals(msg.getSocketMessage().getCmdId())){
+			redisTemplate.delete(String.format(CacheConstant.SOCKET_MSG, msg.getFromUid()));
+			return;
+		}
 		switch (websocketProperties.getTopicType()) {
 			case redis:
 				redisTemplate.convertAndSend(tagValue, msg);

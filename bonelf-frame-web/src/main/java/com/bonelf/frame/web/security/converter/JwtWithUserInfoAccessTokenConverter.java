@@ -90,6 +90,7 @@ public class JwtWithUserInfoAccessTokenConverter extends DefaultAccessTokenConve
 					authUser.setUserId((Long)map.get("user_id"));
 					return new UsernamePasswordAuthenticationToken(authUser, authUser, authUser.getAuthorities());
 				}
+				// default
 				return new UsernamePasswordAuthenticationToken(principal, principal, principal.getAuthorities());
 			}
 			return null;

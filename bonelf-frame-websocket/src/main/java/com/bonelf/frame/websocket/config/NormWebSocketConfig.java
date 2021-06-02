@@ -28,7 +28,7 @@ public class NormWebSocketConfig implements WebSocketConfigurer {
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		///{userId}
-		registry.addHandler(webSocketHandler, "/")
+		registry.addHandler(webSocketHandler, "/wst")
 				.setAllowedOrigins("*").addInterceptors(webSocketInterceptor());
 	}
 

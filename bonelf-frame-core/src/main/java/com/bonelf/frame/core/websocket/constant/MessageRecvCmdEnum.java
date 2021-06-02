@@ -1,4 +1,4 @@
-package com.bonelf.support.websocket;
+package com.bonelf.frame.core.websocket.constant;
 
 
 import com.bonelf.cicada.enums.CodeValueEnum;
@@ -25,6 +25,16 @@ public enum MessageRecvCmdEnum implements CodeValueEnum<Integer> {
 	 * 普通测试
 	 */
 	TEST(2, "普通测试"),
+
+	/**
+	 * 身份认证
+	 */
+	AUTH(3, "身份认证"),
+
+	/**
+	 * 缓存消息收到
+	 */
+	CACHE_MSG_RCVED(4, "缓存消息收到"),
 	;
 	private final Integer code;
 

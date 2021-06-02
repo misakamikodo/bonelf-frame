@@ -9,11 +9,15 @@ import com.bonelf.cicada.util.EnumUtil;
 import com.bonelf.frame.base.util.JsonUtil;
 import com.bonelf.frame.core.websocket.SocketMessage;
 import com.bonelf.frame.core.websocket.SocketRespMessage;
+import com.bonelf.frame.core.websocket.constant.MessageRecvCmdEnum;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
 import com.bonelf.frame.websocket.property.enums.TopicType;
 import com.bonelf.frame.websocket.property.enums.WebsocketType;
+import com.bonelf.support.constant.CacheConstant;
 import com.bonelf.support.websocket.netty.NettyWebsocketMap;
 import com.bonelf.support.websocket.norm.NormWebsocketMap;
+import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
@@ -27,6 +31,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 使用redis订阅来接收消息并发布，SpringBootWebsocket写法
@@ -41,7 +46,7 @@ public class SocketMessageService implements MessageListener {
 	private NormWebsocketMap normWebsocketMap;
 	@Autowired(required = false)
 	private NettyWebsocketMap nettyWebsocketMap;
-	@Autowired
+	@Autowired(required = false)
 	private SimpMessagingTemplate messagingTemplate;
 	@Autowired
 	private WebsocketProperties websocketProperties;
@@ -131,9 +136,9 @@ public class SocketMessageService implements MessageListener {
 			});
 		} else if (nettyWebsocketMap != null && websocketProperties.getType() == WebsocketType.netty) {
 			nettyWebsocketMap.getSocketSessionMap().forEach((key, value) -> {
-				value.writeAndFlush(JsonUtil.toJson(message));
+				value.writeAndFlush(new TextWebSocketFrame(JsonUtil.toJson(message)));
 			});
-		} else if (websocketProperties.getType() == WebsocketType.stomp) {
+		} else if (messagingTemplate != null && websocketProperties.getType() == WebsocketType.stomp) {
 			messagingTemplate.convertAndSend("/topic/cmd/" + message.getCmdId(), message);
 		}
 	}
@@ -154,11 +159,28 @@ public class SocketMessageService implements MessageListener {
 					log.error("消息发送失败");
 					e.printStackTrace();
 				}
+			} else {
+				cacheUserMsg(userId, message);
 			}
 		} else if (nettyWebsocketMap != null && websocketProperties.getType() == WebsocketType.netty) {
-			nettyWebsocketMap.getSocketSessionMap().get(userId).writeAndFlush(JsonUtil.toJson(message));
+			Channel ctx = nettyWebsocketMap.getSocketSessionMap().get(userId);
+			if (ctx != null && ctx.isOpen()) {
+				ctx.writeAndFlush(new TextWebSocketFrame(message));
+			} else {
+				cacheUserMsg(userId, message);
+			}
 		} else if (websocketProperties.getType() == WebsocketType.stomp) {
 			messagingTemplate.convertAndSend("/topic/user/" + userId + "/" + cmdId, message);
 		}
+	}
+
+	/**
+	 * 缓存用户消息
+	 * @param userId
+	 * @param message
+	 */
+	private void cacheUserMsg(String userId, String message) {
+		redisTemplate.opsForList().leftPush(String.format(CacheConstant.SOCKET_MSG, userId), message);
+		redisTemplate.expire(String.format(CacheConstant.SOCKET_MSG, userId), CacheConstant.SOCKET_MSG_TIME, TimeUnit.DAYS);
 	}
 }

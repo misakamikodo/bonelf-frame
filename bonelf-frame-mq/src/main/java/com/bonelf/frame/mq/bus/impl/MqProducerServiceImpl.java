@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 /**
  * <p>
  * 消息发送
+ * 自己的服务名称作为topic
+ * 发送的内容类型作为tag
  * </p>
  * @author Chenyuan
  * @since 2021/1/3 18:00

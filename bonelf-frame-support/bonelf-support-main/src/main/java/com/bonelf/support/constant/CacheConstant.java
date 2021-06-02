@@ -41,4 +41,12 @@ public interface CacheConstant {
 	 */
 	long QR_CODE_EXPIRE_TIME = 30 * 60L;
 	long QR_CODE_MAX_EXPIRE_TIME = 30 * 24 * 60 * 60L;
+	/**
+	 * 用户缓存消息
+	 */
+	String SOCKET_MSG = BonelfConstant.PROJECT_NAME + ":socketmsg:%s";
+	/**
+	 * 用户缓存消息:15天
+	 */
+	long SOCKET_MSG_TIME = 15;
 }

@@ -65,11 +65,11 @@ public class NettyWebsocketServer {
 	 * 单例静态内部类
 	 */
 	public static class SingletionNettyWebsocketServer {
-		static final NettyWebsocketServer instance = new NettyWebsocketServer();
+		static final NettyWebsocketServer INSTANCE = new NettyWebsocketServer();
 	}
 
 	public static NettyWebsocketServer getInstance() {
-		return SingletionNettyWebsocketServer.instance;
+		return SingletionNettyWebsocketServer.INSTANCE;
 	}
 
 	public void run() throws InterruptedException {
@@ -87,35 +87,38 @@ public class NettyWebsocketServer {
 					.channel(NioServerSocketChannel.class)
 					// 绑定监听端口
 					.localAddress(nettyWebsocketProperties.getPort())
-					.childHandler(new ChannelInitializer<SocketChannel>() { // 绑定客户端连接时候触发操作
+					// 绑定客户端连接时候触发操作
+					.childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						protected void initChannel(SocketChannel ch) throws Exception {
 							if (nettyWebsocketProperties.getSsl().getPath() != null) {
-								SSLContext sslContext = createSSLContext(nettyWebsocketProperties.getSsl().getType(), nettyWebsocketProperties.getSsl().getPath(), nettyWebsocketProperties.getSsl().getPassword());
-								//SSLEngine 此类允许使用ssl安全套接层协议进行安全通信
+								SSLContext sslContext = createSSLContext(nettyWebsocketProperties.getSsl().getType(),
+										nettyWebsocketProperties.getSsl().getPath(),
+										nettyWebsocketProperties.getSsl().getPassword());
+								// SSLEngine 此类允许使用ssl安全套接层协议进行安全通信
 								SSLEngine engine = sslContext.createSSLEngine();
 								engine.setUseClientMode(false);
 								engine.setNeedClientAuth(false);
 								ch.pipeline().addLast(new SslHandler(engine));
 							}
 
-							//websocket协议本身是基于http协议的，所以这边也要使用http解编码器
+							// websocket协议本身是基于http协议的，所以这边也要使用http解编码器
 							ch.pipeline().addLast(new HttpServerCodec());
-							//以块的方式来写的处理器
+							// 以块的方式来写的处理器
 							ch.pipeline().addLast(new ChunkedWriteHandler());
-							//解析Http POST请求 所以注册后也支持Feign请求 在handler中处理
+							// 解析Http POST请求 所以注册后也支持Feign请求 在handler中处理
 							ch.pipeline().addLast(new HttpObjectAggregator(8192));
 							ch.pipeline().addLast(new WebSocketServerProtocolHandler(nettyWebsocketProperties.getContextPath(),
 									nettyWebsocketProperties.getSubprotocols(),
 									nettyWebsocketProperties.getAllowExtensions(),
-									nettyWebsocketProperties.getMaxFrameSize()));
+									nettyWebsocketProperties.getMaxFrameSize(), false, true));
 							ch.pipeline().addLast(webSocketServerHandler);
-							//ch.pipeline().addLast(new WebSocketServerProtocolHandler(NettyWebsocketProperty.getContextPath()));
+							// ch.pipeline().addLast(new WebSocketServerProtocolHandler(NettyWebsocketProperty.getContextPath()));
 						}
 					});
 			// 服务器异步创建绑定
 			ChannelFuture cf = sb.bind().sync();
-			log.debug("NettyWebsocketServer listening：" + cf.channel().localAddress());
+			log.info("NettyWebsocketServer listening：" + cf.channel().localAddress());
 			// 关闭服务器通道
 			cf.channel().closeFuture().sync();
 		} finally {

@@ -6,9 +6,9 @@ import com.bonelf.frame.websocket.netty.NettyWebsocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
 
 /**
  * <p>
@@ -18,6 +18,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
  * @since 2020/10/18 16:16
  */
 @Slf4j
+@Component
 @ConditionalOnBean(NettyWebsocketConfig.class)
 public class ApplicationStartEventListener implements ApplicationListener<ContextRefreshedEvent> {
 	@Autowired

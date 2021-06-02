@@ -67,13 +67,17 @@ public class CloudResourceServerConfig extends ResourceServerConfigurerAdapter {
 				//.antMatcher("/login").anonymous()
 				//.and()
 				.authorizeRequests()
+				// websocket 放权（握手是独立验证）
+				.antMatchers("/wst").permitAll()
 				// Feign请求全部不需要认证
 				.requestMatchers(request -> {
 					String head = request.getHeader(AuthFeignConstant.AUTH_HEADER);
 					return head != null && head.startsWith(AuthFeignConstant.FEIGN_REQ_FLAG_PREFIX);
 				}).permitAll()
+				// 测试全部放权用
 				// .requestMatchers(request -> true).permitAll()
 				.mvcMatchers(oauth2Properties.getNoAuthPath()).permitAll()
+				// 测试全部放权用
 				// .mvcMatchers("/*").permitAll()
 				.anyRequest().authenticated()
 				// .and()
@@ -87,6 +91,7 @@ public class CloudResourceServerConfig extends ResourceServerConfigurerAdapter {
 		return new AuthExceptionEntryPoint();
 	}
 
+	@Bean
 	public TokenStore tokenStore() {
 		return new JwtTokenStore(accessTokenConverter());
 	}

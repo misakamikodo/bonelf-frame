@@ -1,8 +1,10 @@
 package com.bonelf.frame.websocket.controller;
 
 import cn.hutool.json.JSONUtil;
+import com.bonelf.frame.websocket.config.StompWebSocketConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
+@ConditionalOnBean(StompWebSocketConfig.class)
 @RequestMapping("/noAuth/websocket")
 public class StompGreetingController {
 	@Autowired

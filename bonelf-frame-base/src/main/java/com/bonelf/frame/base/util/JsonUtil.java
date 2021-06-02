@@ -39,10 +39,13 @@ public class JsonUtil {
 	/**
 	 * 将对象序列化成json字符串
 	 * @param value javaBean
-	 * @param <T> T 泛型标记
+	 * @param <T>   T 泛型标记
 	 * @return jsonString json字符串
 	 */
 	public static <T> String toJson(T value) {
+		if (value == null) {
+			return "";
+		}
 		try {
 			return getInstance().writeValueAsString(value);
 		} catch (Exception e) {
@@ -66,9 +69,9 @@ public class JsonUtil {
 
 	/**
 	 * 将json反序列化成对象
-	 * @param content content
+	 * @param content   content
 	 * @param valueType class
-	 * @param <T> T 泛型标记
+	 * @param <T>       T 泛型标记
 	 * @return Bean
 	 */
 	public static <T> T parse(String content, Class<T> valueType) {
@@ -82,9 +85,9 @@ public class JsonUtil {
 
 	/**
 	 * 将json反序列化成对象
-	 * @param content content
+	 * @param content       content
 	 * @param typeReference 泛型类型
-	 * @param <T> T 泛型标记
+	 * @param <T>           T 泛型标记
 	 * @return Bean
 	 */
 	public static <T> T parse(String content, TypeReference<T> typeReference) {
@@ -97,9 +100,9 @@ public class JsonUtil {
 
 	/**
 	 * 将json byte 数组反序列化成对象
-	 * @param bytes json bytes
+	 * @param bytes     json bytes
 	 * @param valueType class
-	 * @param <T> T 泛型标记
+	 * @param <T>       T 泛型标记
 	 * @return Bean
 	 */
 	public static <T> T parse(byte[] bytes, Class<T> valueType) {
@@ -113,9 +116,9 @@ public class JsonUtil {
 
 	/**
 	 * 将json反序列化成对象
-	 * @param bytes bytes
+	 * @param bytes         bytes
 	 * @param typeReference 泛型类型
-	 * @param <T> T 泛型标记
+	 * @param <T>           T 泛型标记
 	 * @return Bean
 	 */
 	public static <T> T parse(byte[] bytes, TypeReference<T> typeReference) {
@@ -128,9 +131,9 @@ public class JsonUtil {
 
 	/**
 	 * 将json反序列化成对象
-	 * @param in InputStream
+	 * @param in        InputStream
 	 * @param valueType class
-	 * @param <T> T 泛型标记
+	 * @param <T>       T 泛型标记
 	 * @return Bean
 	 */
 	public static <T> T parse(InputStream in, Class<T> valueType) {
@@ -143,9 +146,9 @@ public class JsonUtil {
 
 	/**
 	 * 将json反序列化成对象
-	 * @param in InputStream
+	 * @param in            InputStream
 	 * @param typeReference 泛型类型
-	 * @param <T> T 泛型标记
+	 * @param <T>           T 泛型标记
 	 * @return Bean
 	 */
 	public static <T> T parse(InputStream in, TypeReference<T> typeReference) {
@@ -158,9 +161,9 @@ public class JsonUtil {
 
 	/**
 	 * 将json反序列化成List对象
-	 * @param content content
+	 * @param content      content
 	 * @param valueTypeRef class
-	 * @param <T> T 泛型标记
+	 * @param <T>          T 泛型标记
 	 * @return List
 	 */
 	public static <T> List<T> parseArray(String content, Class<T> valueTypeRef) {

@@ -15,7 +15,7 @@ public class NettyWebsocketProperties {
 	/**
 	 * websocket的path
 	 */
-	private String contextPath = "/bonelf";
+	private String contextPath = "/bonelf/wst";
 	/**
 	 * 子协议
 	 */

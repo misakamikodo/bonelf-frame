@@ -1,7 +1,7 @@
 package com.bonelf.support.web.controller;
 
-import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.base.util.redis.RedisUtil;
+import com.bonelf.frame.core.domain.Result;
 import com.bonelf.support.constant.CacheConstant;
 import com.google.code.kaptcha.Producer;
 import io.swagger.annotations.Api;
@@ -32,7 +32,7 @@ import java.util.Map;
  **/
 @Slf4j
 @Controller
-@Api(value = "验证码API", tags = {"验证码"})
+@Api(value = "验证码API", tags = {"图形验证码"})
 @ApiIgnore
 @RequestMapping("/verificationCode")
 public class VerificationCodeController {

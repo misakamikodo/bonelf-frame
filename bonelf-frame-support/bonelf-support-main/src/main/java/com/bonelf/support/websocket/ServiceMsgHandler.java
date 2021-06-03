@@ -1,18 +1,23 @@
 package com.bonelf.support.websocket;
 
-import com.bonelf.frame.base.util.SpringContextUtils;
+import com.bonelf.frame.cloud.security.constant.AuthFeignConstant;
+import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.core.websocket.SocketRespMessage;
 import com.bonelf.frame.core.websocket.constant.MessageRecvCmdEnum;
 import com.bonelf.frame.mq.bus.MqProducerService;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
 import com.bonelf.support.constant.CacheConstant;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
-import java.lang.reflect.InvocationTargetException;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 服务消息分发器
@@ -28,6 +33,10 @@ public class ServiceMsgHandler {
 	private WebsocketProperties websocketProperties;
 	@Autowired
 	private RedisTemplate<Object, Object> redisTemplate;
+	@Autowired
+	private RestTemplate restTemplate;
+	@Value("${server.servlet.context-path:}")
+	private String ctxPath;
 
 	/**
 	 * 像各服务发送消息
@@ -35,7 +44,7 @@ public class ServiceMsgHandler {
 	 * @param tagValue 即服务名
 	 */
 	public void sendMessage2Service(SocketRespMessage msg, String tagValue) {
-		if (MessageRecvCmdEnum.CACHE_MSG_RCVED.getCode().equals(msg.getSocketMessage().getCmdId())){
+		if (MessageRecvCmdEnum.CACHE_MSG_RCVED.getCode().equals(msg.getSocketMessage().getCmdId())) {
 			redisTemplate.delete(String.format(CacheConstant.SOCKET_MSG, msg.getFromUid()));
 			return;
 		}
@@ -48,19 +57,16 @@ public class ServiceMsgHandler {
 				mqProducerService.send(websocketProperties.getMqTagPrefix() + tagValue, msg);
 				break;
 			case feign:
-				Object bean = null;
+				String url = "http://" + tagValue + ctxPath + "/" + tagValue+ "/websocketMessage";
+				HttpHeaders headers = new HttpHeaders();
+				headers.set(AuthFeignConstant.AUTH_HEADER, AuthFeignConstant.FEIGN_REQ_FLAG_PREFIX + " -");
+				headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+				HttpEntity<SocketRespMessage> request = new HttpEntity<>(msg, headers);
+				ResponseEntity<Result> response;
 				try {
-					bean = SpringContextUtils.getBean(tagValue);
-				} catch (BeansException e) {
-					log.warn("找不到bean", e);
-				}
-				if (bean != null) {
-					try {
-						// 这个需要在pom中引入feign包
-						bean.getClass().getMethod("websocketMessage", SocketRespMessage.class).invoke(bean, msg);
-					} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-						throw new RuntimeException("please add websocket feign method first");
-					}
+					response = restTemplate.postForEntity(url, request, Result.class);
+				} catch (RestClientException e) {
+					log.error("消息转发失败", e);
 				}
 				break;
 			default:

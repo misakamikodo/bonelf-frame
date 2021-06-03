@@ -53,13 +53,12 @@ public class GlobalAccessFilter implements GlobalFilter, Ordered {
 		this.noAuthPath = noAuthPath;
 	}
 
-
-	public static void main(String[] args) {
-		long stripPrefix = StrUtil.count("/bonelf", "/") + 1L;
-		System.out.println(
-				"/bonelf" + "/" + Arrays.stream(StringUtils.tokenizeToStringArray("/bonelf/test/noAuth/xxx", "/")).skip(stripPrefix).collect(Collectors.joining("/"))
-		);
-	}
+	// public static void main(String[] args) {
+	// 	long stripPrefix = StrUtil.count("/bonelf", "/") + 1L;
+	// 	System.out.println(
+	// 			"/bonelf" + "/" + Arrays.stream(StringUtils.tokenizeToStringArray("/bonelf/test/noAuth/xxx", "/")).skip(stripPrefix).collect(Collectors.joining("/"))
+	// 	);
+	// }
 
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

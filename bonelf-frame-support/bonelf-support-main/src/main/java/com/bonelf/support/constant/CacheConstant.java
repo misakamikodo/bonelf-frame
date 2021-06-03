@@ -35,7 +35,7 @@ public interface CacheConstant {
 	/**
 	 * 时效二维码数据缓存 uniqueId
 	 */
-	String QR_CODE_PREFIX = BonelfConstant.PROJECT_NAME + ":qrcode:%s:%s";
+	String QR_CODE_PREFIX = BonelfConstant.PROJECT_NAME + ":qrcode:%s";
 	/**
 	 * 时效二维码过期时间 s
 	 */

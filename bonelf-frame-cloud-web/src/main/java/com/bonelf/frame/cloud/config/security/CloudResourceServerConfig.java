@@ -76,7 +76,7 @@ public class CloudResourceServerConfig extends ResourceServerConfigurerAdapter {
 				}).permitAll()
 				// 测试全部放权用
 				// .requestMatchers(request -> true).permitAll()
-				.mvcMatchers(oauth2Properties.getNoAuthPath()).permitAll()
+				.antMatchers(oauth2Properties.getNoAuthPath()).permitAll()
 				// 测试全部放权用
 				// .mvcMatchers("/*").permitAll()
 				.anyRequest().authenticated()

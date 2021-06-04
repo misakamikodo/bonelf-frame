@@ -1,17 +1,20 @@
 package com.bonelf.support.web.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.bonelf.cicada.util.CipherCryptUtil;
-import com.bonelf.cicada.util.Md5CryptUtil;
 import com.bonelf.frame.base.property.BonelfProperties;
 import com.bonelf.frame.base.util.JsonUtil;
 import com.bonelf.frame.base.util.redis.RedisUtil;
 import com.bonelf.frame.cloud.security.constant.AuthFeignConstant;
 import com.bonelf.frame.core.constant.AuthConstant;
 import com.bonelf.frame.core.domain.Result;
+import com.bonelf.frame.core.exception.BonelfException;
+import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
 import com.bonelf.support.constant.CacheConstant;
 import com.bonelf.support.constant.QrCodeConstant;
 import com.bonelf.support.constant.exception.SupportExceptionEnum;
+import com.bonelf.support.property.QrCodeProperties;
 import com.bonelf.support.web.domain.dto.QrCodeShowDTO;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -24,11 +27,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.annotations.ApiIgnore;
@@ -38,6 +44,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 二维码接口
@@ -57,7 +64,7 @@ public class QrCodeController {
 	@Value("${server.servlet.context-path:}")
 	private String ctxPath;
 	@Autowired
-	private TokenStore tokenStore;
+	private QrCodeProperties qrCodeProperties;
 	@Autowired
 	private RestTemplate restTemplate;
 
@@ -76,7 +83,7 @@ public class QrCodeController {
 	@GetMapping("/base64")
 	@ResponseBody
 	@ApiOperation(value = "获取Base64二维码")
-	public Result<Map<String, Object>> base64(HttpServletResponse response, QrCodeShowDTO qrCodeShowDto) throws Exception {
+	public Result<Map<String, Object>> base64(QrCodeShowDTO qrCodeShowDto) throws Exception {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		BitMatrix bitMatrix = getBitMatrix(qrCodeShowDto);
 		MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
@@ -90,14 +97,17 @@ public class QrCodeController {
 
 	@GetMapping("/data/{code}")
 	@ApiOperation(value = "获取二维码数据")
-	public void getData(@RequestHeader(value = AuthConstant.HEADER, required = false) String token,
-						HttpServletResponse response,
-						@ApiParam(value = "编码", required = true) @PathVariable("code") String code) throws Exception {
+	public void getData(HttpServletResponse response,
+						@PathVariable("code") String ticket,
+						@ApiParam(value = "编码", required = true) HashMap<String, Object> params) throws Exception {
+		String noLimitUri = qrCodeProperties.getTicketUri().get(ticket);
+		String limitUri = qrCodeProperties.getLimitTicketUri().get(ticket);
+		String uri = limitUri == null ? noLimitUri : limitUri;
 		// 如果框架自带了认证失败跳转到登录页或者下载页，这里就不需要
 		try {
-			if (token == null || tokenStore
-					.readAccessToken(token.replace(AuthConstant.TOKEN_PREFIX, ""))
-					.isExpired()) {
+			if (uri == null || (qrCodeProperties.getPermitUrls()
+					.stream().noneMatch(url -> url.contains(uri)) &&
+					SecurityContextHolder.getContext().getAuthentication() == null)) {
 				// 重定向到项目网页首页或下载页面
 				response.sendRedirect(ctxPath + "/download.html");
 			}
@@ -106,25 +116,21 @@ public class QrCodeController {
 			response.sendRedirect(ctxPath + "/download.html");
 		}
 		response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8");
-		String key = String.format(CacheConstant.QR_CODE_PREFIX, code);
-		Object obj = redisUtil.get(key);
-		if (obj == null) {
-			String uri = null;
-			try {
-				uri = CipherCryptUtil.decrypt(code,
-						AuthConstant.FRONTEND_PASSWORD_CRYPTO, AuthConstant.FRONTEND_SALT_CRYPTO);
-			} catch (Exception e) {
-				// 解密失败是MD5 有效期加密 返回二维码失效
-				obj = Result.error(SupportExceptionEnum.QRCODE_EXPIRE);
-			}
-			if (uri != null) {
-				obj = reqByUri(uri);
+		Object result;
+		if (limitUri != null) {
+			String key = String.format(CacheConstant.QR_CODE_PREFIX, ticket);
+			Object redisData = redisUtil.get(key);
+			if (redisData == null) {
+				result = Result.error(SupportExceptionEnum.QRCODE_EXPIRE);
+			} else {
+				redisUtil.del(key);
+				result = reqByUri(uri, params);
 			}
 		} else {
 			// 如果二维码扫了一次就过期则删除redis，不是请注释
-			redisUtil.del(key);
+			result = reqByUri(uri, params);
 		}
-		response.getWriter().print(JsonUtil.toJson(obj));
+		response.getWriter().print(JsonUtil.toJson(result));
 	}
 
 	/**
@@ -134,20 +140,25 @@ public class QrCodeController {
 	 * @throws Exception
 	 */
 	private BitMatrix getBitMatrix(QrCodeShowDTO qrCodeShowDto) throws Exception {
-		String uri = CipherCryptUtil.decrypt(qrCodeShowDto.getTicket(),
-				AuthConstant.FRONTEND_PASSWORD_CRYPTO, AuthConstant.FRONTEND_SALT_CRYPTO);
-		Result<?> result = reqByUri(uri);
+		String ticket = qrCodeShowDto.getTicket();
+		String noLimitUri = qrCodeProperties.getTicketUri().get(ticket);
+		String limitUri = qrCodeProperties.getLimitTicketUri().get(ticket);
+		String uri = limitUri == null ? noLimitUri : limitUri;
+		if (uri == null) {
+			throw new BonelfException(SupportExceptionEnum.TICKET_ERR);
+		}
+		// 仅请求数据，不允许附带参数
+		// Result<?> result = reqByUri(uri, null);
 		QRCodeWriter qrCodeWriter = new QRCodeWriter();
-		String code;
-		if (qrCodeShowDto.getExpireTime() != null) {
-			code = Md5CryptUtil.encrypt(qrCodeShowDto.getTicket(), AuthConstant.DATABASE_SALT_MD5);
-			String key = String.format(CacheConstant.QR_CODE_PREFIX, code);
-			redisUtil.set(key, result, Math.min(qrCodeShowDto.getExpireTime(), CacheConstant.QR_CODE_MAX_EXPIRE_TIME));
-		} else {
-			code = qrCodeShowDto.getTicket();
+		if (limitUri != null) {
+			// 保证key唯一，需要ticket queryParam带上唯一参数
+			String key = String.format(CacheConstant.QR_CODE_PREFIX, ticket);
+			redisUtil.set(key, "result",
+					Math.min(Optional.ofNullable(qrCodeShowDto.getExpireTime()).orElse(0L),
+							CacheConstant.QR_CODE_MAX_EXPIRE_TIME));
 		}
 		return qrCodeWriter.encode(
-				bonelfProperties.getBaseUrl() + ctxPath + "/support/qrcode/data/" + code,
+				bonelfProperties.getBaseUrl() + ctxPath + "/support/qrcode/data/" + ticket,
 				BarcodeFormat.QR_CODE, Math.min(qrCodeShowDto.getWidth(), QrCodeConstant.QR_CODE_MAX_WIDTH),
 				Math.min(qrCodeShowDto.getHeight(), QrCodeConstant.QR_CODE_MAX_HEIGHT));
 	}
@@ -156,19 +167,33 @@ public class QrCodeController {
 	/**
 	 * 请求数据
 	 * @param uri
+	 * @param extraParams
 	 * @return
 	 */
-	private Result<?> reqByUri(String uri) {
-		String[] args = uri.split("/");
-		String url = "http://" + args[0] + ctxPath + "/" + uri;
+	private Result<?> reqByUri(String uri, Map<String, Object> extraParams) {
+		if (StrUtil.isBlank(uri)) {
+			return Result.error(SupportExceptionEnum.QRCODE_INVALID);
+		}
+		String[] args = uri.split(":");
+		if (args.length != 2) {
+			log.error("配置错误");
+			throw new BonelfException(CommonBizExceptionEnum.SERVER_ERROR);
+		}
+		// 可能需要uri不是support服务
+		String url = "http://" + args[0] + ctxPath + "/" + args[1];
 		HttpHeaders headers = new HttpHeaders();
 		headers.set(AuthFeignConstant.AUTH_HEADER, AuthFeignConstant.FEIGN_REQ_FLAG_PREFIX + " -");
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+		if (extraParams != null) {
+			for (Map.Entry<String, Object> entry : extraParams.entrySet()) {
+				params.add(entry.getKey(), entry.getValue());
+			}
+		}
 		HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
 		Result<?> result = Result.error();
 		try {
 			// 带请求头的getForEntity
-			ResponseEntity<Result> resp = restTemplate.exchange(url, HttpMethod.GET, request, Result.class);
+			ResponseEntity<Result> resp = restTemplate.exchange(url, HttpMethod.POST, request, Result.class);
 			result = resp.getBody();
 		} catch (RestClientException e) {
 			log.error("数据获取失败", e);

@@ -57,7 +57,7 @@ public class ServiceMsgHandler {
 				mqProducerService.send(websocketProperties.getMqTagPrefix() + tagValue, msg);
 				break;
 			case feign:
-				String url = "http://" + tagValue + ctxPath + "/" + tagValue+ "/websocketMessage";
+				String url = "http://" + tagValue + ctxPath + "/websocketMessage";
 				HttpHeaders headers = new HttpHeaders();
 				headers.set(AuthFeignConstant.AUTH_HEADER, AuthFeignConstant.FEIGN_REQ_FLAG_PREFIX + " -");
 				headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

@@ -25,5 +25,5 @@ public class Oauth2Properties {
 	/**
 	 * 不需要认证的api
 	 */
-	private String[] noAuthPath = new String[]{};
+	private String[] permitPath = new String[]{};
 }

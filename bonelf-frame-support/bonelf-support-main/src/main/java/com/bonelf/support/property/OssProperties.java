@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "ali.oss")
+@ConfigurationProperties(prefix = "third.ali.oss")
 public class OssProperties {
 	/**
 	 * id

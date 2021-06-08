@@ -68,7 +68,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 				.authorizeRequests()
 				// websocket 放权（握手是独立验证）
 				.antMatchers("/wst").permitAll()
-				.antMatchers(oauth2Properties.getNoAuthPath()).permitAll()
+				.antMatchers(oauth2Properties.getPermitPath()).permitAll()
 				// .mvcMatchers("/*").permitAll()
 				.anyRequest().authenticated();
 	}

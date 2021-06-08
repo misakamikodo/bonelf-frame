@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  **/
 @Data
 @Component
-@ConfigurationProperties(prefix = "ali.sms")
+@ConfigurationProperties(prefix = "third.ali.sms")
 public class AliSmsProperties {
 
     private String regionId = "cn-hangzhou";

@@ -12,7 +12,7 @@ import java.util.Map;
 @Data
 @Component
 @ConfigurationProperties(prefix = "bonelf.qrcode")
-public class QrCodeProperties {
+public class BonelfQrCodeProperties {
 	/**
 	 * 永久有效的请求
 	 */

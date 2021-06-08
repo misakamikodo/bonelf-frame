@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "kaptcha")
-public class KaptchaProperties {
+@ConfigurationProperties(prefix = "bonelf.kaptcha")
+public class BonelfKaptchaProperties {
 
 	private Integer width = 200;
 

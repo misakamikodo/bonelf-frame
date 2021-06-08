@@ -1,6 +1,7 @@
 package com.bonelf.support.web.controller;
 
 import com.bonelf.frame.core.domain.Result;
+import com.bonelf.support.property.BonelfUploadProperties;
 import com.bonelf.support.web.service.FileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +31,8 @@ import java.util.Map;
 public class UploadController {
 	@Autowired
 	private FileService fileService;
+	@Autowired
+	private BonelfUploadProperties bonelfUploadProperties;
 
 	@ApiOperation("上传文件到服务器")
 	@RequestMapping(value = "/v1/file", method = RequestMethod.POST)
@@ -39,28 +42,24 @@ public class UploadController {
 			log.error("upload | 上传失败: 文件大小超过10M，文件大小为：{}", file.getSize());
 			return Result.error("上传失败: 文件大小不能超过10M!");
 		}
-		String imgUrl = fileService.uploadFile(file);
-		Map<String, Object> resp = new HashMap<>(1);
-		resp.put("imgUrl", imgUrl);
-		return Result.ok(resp);
-	}
-
-	/**
-	 * 上传文件到OSS
-	 * @param file
-	 * @return
-	 */
-	@ApiOperation("上传文件到服务器")
-	@RequestMapping(value = "/v1/ossFile", method = RequestMethod.POST)
-	public Result<?> uploadOssFile(@RequestParam MultipartFile file) throws IOException {
-		//上传文件大小为1000条数据
-		if (file.getSize() > 1024 * 1024 * 10) {
-			log.error("upload | 上传失败: 文件大小超过10M，文件大小为：{}", file.getSize());
-			return Result.error("上传失败: 文件大小不能超过10M!");
+		String url = null;
+		switch (bonelfUploadProperties.getType()) {
+			case local:
+				url = fileService.uploadFile(file);
+				break;
+			case minio:
+				url = fileService.uploadMinioFile(file);
+				break;
+			case aliOss:
+				url = fileService.uploadOssFile(file);
+				break;
+			case ftp:
+				url = fileService.uploadFtpFile(file);
+				break;
+			default:
 		}
-		String imgUrl = fileService.uploadOssFile(file);
 		Map<String, Object> resp = new HashMap<>(1);
-		resp.put("imgUrl", imgUrl);
- 		return Result.ok(resp);
+		resp.put("url", url);
+		return Result.ok(resp);
 	}
 }

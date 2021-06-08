@@ -13,10 +13,12 @@ import java.util.List;
 public class BonelfProperties {
 	/**
 	 * 项目网址
+	 * minio、oss替换为服务的地址
 	 */
 	private String baseUrl = "http://127.0.0.1:9999";
 
 	private String appName = "bonelf经验总结项目";
 
-	private List<String> noAuthPath = new UnmodifiableArrayList<String>(new String[]{}, 0);
+	@Deprecated
+	private List<String> permitPath = new UnmodifiableArrayList<String>(new String[]{}, 0);
 }

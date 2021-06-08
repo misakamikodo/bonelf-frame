@@ -137,6 +137,7 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
 
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (SchedulerException e) {
+			e.printStackTrace();
 			throw new BonelfException("创建定时任务失败");
 		} catch (RuntimeException e) {
 			throw new BonelfException(e.getMessage());

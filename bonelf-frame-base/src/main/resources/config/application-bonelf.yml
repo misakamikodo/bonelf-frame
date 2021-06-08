@@ -21,7 +21,7 @@ logging:
       mybatis: debug
 
 bonelf:
-  base-url: http://127.0.0.1
+  base-url: http://127.0.0.1:9999
   app-name: bonelf经验总结项目
   oauth2:
     client-id: app_client

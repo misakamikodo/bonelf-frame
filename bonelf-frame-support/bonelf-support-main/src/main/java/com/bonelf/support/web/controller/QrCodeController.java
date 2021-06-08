@@ -14,7 +14,7 @@ import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
 import com.bonelf.support.constant.CacheConstant;
 import com.bonelf.support.constant.QrCodeConstant;
 import com.bonelf.support.constant.exception.SupportExceptionEnum;
-import com.bonelf.support.property.QrCodeProperties;
+import com.bonelf.support.property.BonelfQrCodeProperties;
 import com.bonelf.support.web.domain.dto.QrCodeShowDTO;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -64,7 +64,7 @@ public class QrCodeController {
 	@Value("${server.servlet.context-path:}")
 	private String ctxPath;
 	@Autowired
-	private QrCodeProperties qrCodeProperties;
+	private BonelfQrCodeProperties qrCodeProperties;
 	@Autowired
 	private RestTemplate restTemplate;
 

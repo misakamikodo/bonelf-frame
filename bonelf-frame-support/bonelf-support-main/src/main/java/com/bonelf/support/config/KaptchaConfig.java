@@ -8,7 +8,7 @@
 
 package com.bonelf.support.config;
 
-import com.bonelf.support.property.KaptchaProperties;
+import com.bonelf.support.property.BonelfKaptchaProperties;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.Properties;
 @Configuration
 public class KaptchaConfig {
 	@Autowired
-	private KaptchaProperties kaptchaProperties;
+	private BonelfKaptchaProperties kaptchaProperties;
 
 	/**
 	 * 验证码生成相关

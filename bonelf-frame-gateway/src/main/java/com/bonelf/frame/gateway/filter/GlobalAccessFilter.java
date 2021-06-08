@@ -43,14 +43,14 @@ public class GlobalAccessFilter implements GlobalFilter, Ordered {
 	private String ctxPath;
 
 	//@Value("#{'${bonelf.no-auth-url:}'.split(',')}")
-	private final List<String> noAuthPath;
+	private final List<String> permitPath;
 
 	public GlobalAccessFilter(BonelfProperties bonelfProperty) {
-		List<String> noAuthPath = new ArrayList<>();
-		for (String s : bonelfProperty.getNoAuthPath()) {
-			noAuthPath.addAll(CollectionUtil.toList(s.split(StrUtil.COMMA)));
+		List<String> permitPath = new ArrayList<>();
+		for (String s : bonelfProperty.getPermitPath()) {
+			permitPath.addAll(CollectionUtil.toList(s.split(StrUtil.COMMA)));
 		}
-		this.noAuthPath = noAuthPath;
+		this.permitPath = permitPath;
 	}
 
 	// public static void main(String[] args) {
@@ -75,17 +75,17 @@ public class GlobalAccessFilter implements GlobalFilter, Ordered {
 		long stripPrefix = StrUtil.count(ctxPath, "/") + 1L;
 		String newPath = ctxPath + "/" + Arrays.stream(StringUtils.tokenizeToStringArray(rawPath, "/"))
 				.skip(stripPrefix).collect(Collectors.joining("/"));
-		//不需要网关签权的url
-		if (CollectionUtil.isEmpty(noAuthPath) || !CollectionUtil.contains(noAuthPath, newPath.replaceFirst(ctxPath, ""))) {
+		//不需要网关签权的url XXX 没法引入 AntPathRequestMatcher(pattern, method)
+		if (CollectionUtil.isEmpty(permitPath) || !CollectionUtil.contains(permitPath, newPath.replaceFirst(ctxPath, ""))) {
 			// 如果请求未携带token信息, 直接跳出
 			// if (StringUtils.isEmpty(authentication) || !authentication.startsWith(OAuth2Constant.TOKEN_PREFIX)) {
 			// 	log.debug("url:{},method:{},headers:{}, 请求未携带token信息", url, method, request.getHeaders());
 			// 	return unauthorized(exchange);
 			// }
-			//过了Auth服务直接完成权限校验，其他服务不必再鉴权 FIXME 签权Sign
-			//if (!authService.hasPermission(authentication, url, method)) {
+			// 过了Auth服务直接完成权限校验，其他服务不必再鉴权 FIXME 签权Sign
+			// if (!authService.hasPermission(authentication, url, method)) {
 			//	return unauthorized(exchange);
-			//}
+			// }
 		}
 
 		// 1. 重写StripPrefix(获取真实的URL)

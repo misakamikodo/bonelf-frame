@@ -21,7 +21,7 @@ public @interface EnumDict {
 	/**
 	 *  枚举类
 	 */
-	Class<? extends CodeValueEnum> value();
+	Class<? extends CodeValueEnum<?>> value();
 	/**
 	 * 在前端解析时返回对应枚举值 不设置代表不返回
 	 */

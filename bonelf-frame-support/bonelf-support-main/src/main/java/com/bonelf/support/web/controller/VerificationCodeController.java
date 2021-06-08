@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 验证码接口
@@ -34,7 +35,7 @@ import java.util.Map;
 @Controller
 @Api(value = "验证码API", tags = {"图形验证码"})
 @ApiIgnore
-@RequestMapping("/verificationCode")
+@RequestMapping("/vCode")
 public class VerificationCodeController {
 
 	@Autowired
@@ -44,21 +45,26 @@ public class VerificationCodeController {
 
 	/**
 	 * 获取验证码
+	 * @deprecated 无法获得到verifyToken
 	 */
-	@GetMapping("/getImage")
+	@Deprecated
+	@GetMapping("/show")
 	@ApiOperation(value = "获取验证码")
 	public void getImage(HttpServletResponse response,
 						 @ApiParam(value = "业务类型", required = true) @RequestParam String bizType,
-						 @ApiParam(value = "业务唯一编号，如账号", required = true) @RequestParam String bizCode) throws Exception {
+						 @ApiParam(value = "业务唯一编号，如账号", required = false) @RequestParam(required = false) String bizCode) throws Exception {
 		// create the text for the image
 		String capText = producer.createText();
 		// store the text in the session
 		//session.setAttribute(Constants.KAPTCHA_SESSION_KEY, capText);
 		// create the image with the text
 		BufferedImage bi = producer.createImage(capText);
-		//String verifyToken = UUID.randomUUID().toString().replaceAll("-", "");
+		if (bizCode == null) {
+			bizCode = UUID.randomUUID().toString().replaceAll("-", "");
+		}
+		String key = String.format(CacheConstant.VERIFY_CODE, bizType, bizCode);
 		// 缓存到Redis
-		redisUtil.set(String.format(CacheConstant.VERIFY_CODE, bizType, bizCode), capText, 5 * 60);
+		redisUtil.set(key, capText, 5 * 60);
 		//response.setHeader("verifyKey", verifyToken);
 		response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 		response.setHeader("Pragma", "No-cache");
@@ -70,12 +76,15 @@ public class VerificationCodeController {
 	/**
 	 * 获取图片Base64验证码
 	 */
-	@GetMapping("/getBase64Image")
+	@GetMapping("/base64")
 	@ResponseBody
 	@ApiOperation(value = "获取图片Base64验证码")
 	public Result<Map<String, Object>> getCode(HttpServletResponse response,
 											   @ApiParam(value = "业务类型", required = true) @RequestParam String bizType,
-											   @ApiParam(value = "业务唯一编号，如账号", required = true) @RequestParam String bizCode) throws Exception {
+											   @ApiParam(value = "业务唯一编号，如账号", required = false) @RequestParam(required = false) String bizCode) throws Exception {
+		if (bizCode == null) {
+			bizCode = UUID.randomUUID().toString().replaceAll("-", "");
+		}
 		// create the text for the image
 		String capText = producer.createText();
 		// store the text in the session
@@ -90,7 +99,7 @@ public class VerificationCodeController {
 		//String verifyToken = UUID.randomUUID().toString().replaceAll("-", "");
 		Map<String, Object> map = new HashMap<>(2);
 		map.put("image", "data:image/png;base64," + base64);
-		//map.put("key", bizCode);
+		map.put("key", bizCode);
 		// 缓存到Redis
 		redisUtil.set(String.format(CacheConstant.VERIFY_CODE, bizType, bizCode), capText, 5 * 60);
 		return Result.ok(map);

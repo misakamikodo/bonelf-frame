@@ -39,6 +39,11 @@
             <artifactId>spring-security-oauth2</artifactId>
 <!--            <scope>provided</scope>-->
         </dependency>
+        <dependency>
+            <groupId>com.bonelf</groupId>
+            <artifactId>bonelf-support-feign</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 

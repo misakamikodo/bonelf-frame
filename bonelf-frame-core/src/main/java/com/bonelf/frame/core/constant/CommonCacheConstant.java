@@ -1,5 +1,7 @@
 package com.bonelf.frame.core.constant;
 
+import java.time.Duration;
+
 /**
  * <p>
  * redis缓存常量
@@ -14,10 +16,14 @@ public interface CommonCacheConstant {
 	 * cacheable缓存空间1
 	 */
 	String CACHE_NAME_5_MINUTES = "cache-name1";
+
+	Duration CACHE_NAME_5_MINUTES_TIME = Duration.ofMinutes(5);
 	/**
 	 * cacheable缓存空间2
 	 */
 	String CACHE_NAME_7_DAY = "cache-name2";
+
+	Duration CACHE_NAME_7_DAY_TIME = Duration.ofDays(7);
 
 	/**
 	 * 重复提交aop + sessionId + servletPath
@@ -47,6 +53,7 @@ public interface CommonCacheConstant {
 	 * 字典缓存
 	 */
 	String DB_DICT = BonelfConstant.PROJECT_NAME + ":dbDict";
+	String TABLE_DICT = BonelfConstant.PROJECT_NAME + ":tableDict";
 
 	/*===========================common===========================*/
 	/**

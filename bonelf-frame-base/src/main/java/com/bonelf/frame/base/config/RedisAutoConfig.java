@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -39,7 +38,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import java.time.Duration;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -60,14 +59,17 @@ public class RedisAutoConfig extends CachingConfigurerSupport {
 	@Bean
 	@Override
 	public KeyGenerator keyGenerator() {
-		return (target, method, params) -> {
-			StringBuilder redisKey = new StringBuilder();
-			redisKey.append(target.getClass().getName()).append("#");
-			redisKey.append(method.getName());
-			if (params.length > 0) {
-				redisKey.append("-").append(Arrays.deepToString(params));
+		return new KeyGenerator() {
+			@Override
+			public Object generate(Object target, Method method, Object... params) {
+				StringBuilder redisKey = new StringBuilder();
+				redisKey.append(target.getClass().getName()).append("#");
+				redisKey.append(method.getName());
+				if (params.length > 0) {
+					redisKey.append("-").append(Arrays.deepToString(params));
+				}
+				return redisKey.toString();
 			}
-			return redisKey.toString();
 		};
 	}
 
@@ -77,7 +79,7 @@ public class RedisAutoConfig extends CachingConfigurerSupport {
 		RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
 		// 设置缓存的默认过期时间，也是使用Duration设置
 		// 过期时间5分钟
-		config = config.entryTtl(Duration.ofMinutes(5L));
+		config = config.entryTtl(CommonCacheConstant.CACHE_NAME_5_MINUTES_TIME);
 
 		// 设置一个初始化的缓存空间set集合
 		Set<String> cacheNames = new HashSet<>();
@@ -87,7 +89,8 @@ public class RedisAutoConfig extends CachingConfigurerSupport {
 		// 对每个缓存空间应用不同的配置
 		Map<String, RedisCacheConfiguration> configMap = new HashMap<>(10);
 		configMap.put(CommonCacheConstant.CACHE_NAME_5_MINUTES, config);
-		configMap.put(CommonCacheConstant.CACHE_NAME_7_DAY, config.entryTtl(Duration.ofSeconds(120)));
+		// 源码每次都是new 个config 所以不创建新config
+		configMap.put(CommonCacheConstant.CACHE_NAME_7_DAY, config.entryTtl(CommonCacheConstant.CACHE_NAME_7_DAY_TIME));
 
 		// 使用自定义的缓存配置初始化一个cacheManager
 		return RedisCacheManager.builder(factory)

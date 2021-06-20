@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonelf.frame.web.mapper.SqlMapper">
+    <select id="dynamicsQuery" resultType="java.util.Map">
+        ${paramSQL}
+    </select>
+    <insert id="dynamicsInsert">
+        ${paramSQL}
+    </insert>
+    <insert id="dynamicsUpdate">
+        ${paramSQL}
+    </insert>
+    <delete id="dynamicsDelete">
+        ${paramSQL}
+    </delete>
+</mapper>

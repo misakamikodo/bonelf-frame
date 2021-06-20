@@ -4,21 +4,18 @@ import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.bonelf.cicada.util.EnumUtil;
+import com.bonelf.frame.base.util.JsonUtil;
 import com.bonelf.frame.core.dict.DbDict;
 import com.bonelf.frame.core.dict.DictField;
 import com.bonelf.frame.core.dict.EnumDict;
-import com.bonelf.frame.base.service.DbDictService;
-import com.bonelf.frame.base.util.JsonUtil;
-import com.bonelf.cicada.util.EnumUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.bonelf.frame.web.service.DbDictService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -30,16 +27,15 @@ import java.util.Collection;
  * @date 2020-10-27
  */
 @Slf4j
-@Aspect
-@Component
+@Deprecated
+// @Aspect
+// @Component
 public class DictAspect {
 	/**
 	 * queryDictTextByKey的@Cacheable的Aop生效，否则也可以注入自己把方法写类里面，但是我不这么做
 	 */
 	@Autowired
 	private DbDictService dbDictService;
-	@Autowired
-	private ObjectMapper objectMapper;
 
 
 	// 定义切点Pointcut

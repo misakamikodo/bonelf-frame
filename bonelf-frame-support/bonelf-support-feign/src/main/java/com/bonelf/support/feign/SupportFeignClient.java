@@ -3,12 +3,13 @@ package com.bonelf.support.feign;
 import com.bonelf.frame.cloud.feign.FeignConfig;
 import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.core.websocket.SocketRespMessage;
+import com.bonelf.support.feign.domain.request.DictValueRequest;
+import com.bonelf.support.feign.domain.response.DictTextResponse;
 import com.bonelf.support.feign.factory.SupportFeignFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 /**
  * 服务提供 服务 feign
@@ -21,9 +22,6 @@ public interface SupportFeignClient {
 
 	@PostMapping("/bonelf/websocket/v1/sendMessage")
 	Result<String> sendMessage(@RequestBody SocketRespMessage message);
-
-	@GetMapping("/bonelf/sys/dbdict/v1/getByCode")
-	Result<String> queryDictTextByKey(@RequestParam("code") String code, @RequestParam("value") String value);
 
 	/**
 	 * 获取用户服务缓存中的验证码，不是生成验证码
@@ -49,4 +47,10 @@ public interface SupportFeignClient {
 
 	@GetMapping(value = "/bonelf/sms/v1/getVerify")
 	Result<String> getVerifyMail(@RequestParam("mail") String mail, @RequestParam("businessType") String businessType);
+
+	@GetMapping(value = "/bonelf/sys/dbdict/v1/getTextByValue")
+	Result<String> selectDictTextByItemValue(@RequestParam("dictId") String dictId, @RequestParam("itemValue") String itemValue);
+
+	@RequestMapping(value = "/bonelf/sys/dbdict/v1/getTextByValueBatch")
+	Result<Set<DictTextResponse>> selectDictTextByItemValueBatch(@RequestBody Set<DictValueRequest> query);
 }

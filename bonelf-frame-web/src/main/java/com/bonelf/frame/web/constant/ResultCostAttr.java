@@ -2,6 +2,7 @@ package com.bonelf.frame.web.constant;
 
 /**
  * cost request attribute
+ * 耗时切面参数
  * @author ccy
  * @date 2021/5/11 17:38
  */

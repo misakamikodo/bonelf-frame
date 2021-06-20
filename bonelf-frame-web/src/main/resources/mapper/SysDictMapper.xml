@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bonelf.support.web.mapper.DictMapper">
-  <resultMap id="BaseResultMap" type="com.bonelf.support.web.domain.entity.Dict">
-    <!--@Table sys_dict-->
+<mapper namespace="com.bonelf.frame.web.mapper.SysDictMapper">
+  <resultMap id="BaseResultMap" type="com.bonelf.frame.web.domain.entity.SysDict">
     <id column="dict_id" jdbcType="VARCHAR" property="dictId" />
     <result column="dict_name" jdbcType="VARCHAR" property="dictName" />
     <result column="dict_code" jdbcType="VARCHAR" property="dictCode" />
@@ -13,12 +12,4 @@
   <sql id="Base_Column_List">
     dict_id, dict_name, dict_code, description, create_time, update_time
   </sql>
-    <select id="selectDictTest" resultType="java.lang.String">
-      SELECT di.item_text
-      FROM sys_dict d
-      LEFT JOIN sys_dict_item di ON d.dict_id = di.dict_id
-      WHERE d.dict_code=#{code,jdbcType=VARCHAR} AND di.item_value=#{value,jdbcType=VARCHAR}
-      ORDER BY di.update_time DESC
-      LIMIT 1
-    </select>
 </mapper>

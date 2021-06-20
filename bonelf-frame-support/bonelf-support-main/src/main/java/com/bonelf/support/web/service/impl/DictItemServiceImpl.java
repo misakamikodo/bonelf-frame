@@ -1,12 +1,38 @@
 package com.bonelf.support.web.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bonelf.support.web.domain.entity.DictItem;
-import com.bonelf.support.web.mapper.DictItemMapper;
+import com.bonelf.frame.web.domain.bo.DictValueBO;
+import com.bonelf.frame.web.domain.entity.SysDictItem;
+import com.bonelf.frame.web.mapper.SysDictItemMapper;
+import com.bonelf.support.feign.domain.request.DictValueRequest;
+import com.bonelf.support.feign.domain.response.DictTextResponse;
 import com.bonelf.support.web.service.DictItemService;
 import org.springframework.stereotype.Service;
 
-@Service
-public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> implements DictItemService {
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Service
+public class DictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDictItem> implements DictItemService {
+
+	@Override
+	public String getTextByValue(String dictId, String itemValue) {
+		return baseMapper.selectDictTextByItemValue(dictId, itemValue);
+	}
+
+	@Override
+	public Set<DictTextResponse> getTextByValueBatch(Set<DictValueRequest> query) {
+		return baseMapper.selectDictTextByItemValueBatch(query.stream().map(item -> {
+			DictValueBO dictValue = new DictValueBO();
+			dictValue.setDictId(item.getDictId());
+			dictValue.setItemValue(item.getItemValue());
+			return dictValue;
+		}).collect(Collectors.toSet())).stream().map(item -> {
+			DictTextResponse res = new DictTextResponse();
+			res.setDictId(item.getDictId());
+			res.setItemValue(item.getItemValue());
+			res.setItemText(item.getItemText());
+			return res;
+		}).collect(Collectors.toSet());
+	}
 }

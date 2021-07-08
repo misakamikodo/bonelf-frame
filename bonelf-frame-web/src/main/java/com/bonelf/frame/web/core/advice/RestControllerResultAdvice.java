@@ -22,13 +22,16 @@ import com.bonelf.frame.web.constant.ResultCostAttr;
 import com.bonelf.frame.web.domain.SimplePageInfo;
 import com.bonelf.frame.web.domain.bo.DictValueBO;
 import com.bonelf.frame.web.mapper.SqlMapper;
+import com.bonelf.frame.web.mapper.SysDictItemMapper;
 import com.bonelf.frame.web.service.DbDictService;
+import com.bonelf.frame.web.service.impl.LocalDbDictServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.core.MethodParameter;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -64,27 +67,38 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 	/**
 	 * queryDictTextByKey的@Cacheable的Aop生效，否则也可以注入自己把方法写类里面，但是我不这么做
 	 */
+	@Autowired
+	private SysDictItemMapper sysDictItemMapper;
+	@Autowired
+	private RedisTemplate<Object, Object> redisTemplate;
+	@Autowired
+	private KeyGenerator keyGenerator;
+	/**
+	 * new LocalDbDictServiceImpl(sysDictItemMapper, redisTemplate, keyGenerator); 这种成员都是null
+	 */
+	@Autowired(required = false)
 	private DbDictService dbDictService;
 	@Autowired
 	private SqlMapper sqlMapper;
-	@Autowired
-	private ApplicationContext applicationContext;
 
 	@PostConstruct
 	public void initDbDictService() {
-		Map<String, DbDictService> dbDictServiceMap =
-				applicationContext.getBeansOfType(DbDictService.class);
-		if (dbDictServiceMap.size() > 1 || !dbDictServiceMap.containsKey("localDbDictServiceImpl")) {
-			// 使用feign定义
-			for (Map.Entry<String, DbDictService> entry : dbDictServiceMap.entrySet()) {
-				if (!"localDbDictServiceImpl".equals(entry.getKey())) {
-					this.dbDictService = entry.getValue();
-					break;
-				}
-			}
-		} else {
-			this.dbDictService = dbDictServiceMap.get("localDbDictServiceImpl");
+		if (dbDictService == null) {
+			dbDictService = new LocalDbDictServiceImpl(sysDictItemMapper, redisTemplate, keyGenerator);
 		}
+		// Map<String, DbDictService> dbDictServiceMap =
+		// 		applicationContext.getBeansOfType(DbDictService.class);
+		// if (dbDictServiceMap.size() > 1 || !dbDictServiceMap.containsKey("localDbDictServiceImpl")) {
+		// 	// 使用feign定义
+		// 	for (Map.Entry<String, DbDictService> entry : dbDictServiceMap.entrySet()) {
+		// 		if (!"localDbDictServiceImpl".equals(entry.getKey())) {
+		// 			this.dbDictService = entry.getValue();
+		// 			break;
+		// 		}
+		// 	}
+		// } else {
+		// 	this.dbDictService = dbDictServiceMap.get("localDbDictServiceImpl");
+		// }
 	}
 
 	@Override

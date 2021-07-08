@@ -9,12 +9,10 @@ import com.bonelf.frame.web.domain.bo.DictValueBO;
 import com.bonelf.frame.web.mapper.SysDictItemMapper;
 import com.bonelf.frame.web.service.DbDictService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,18 +29,19 @@ import java.util.stream.Collectors;
  * @since 2020/10/14 13:13
  */
 // @ConditionalOnProperty(prefix = BonelfConstant.PROJECT_NAME, value = "mode", havingValue = "singlePoint", matchIfMissing = true)
-// @Conditional(NoOtherDbDictServiceDefineCondition.class)
-// @Primary
 @CacheConfig(cacheNames = CommonCacheConstant.CACHE_NAME_7_DAY)
-@Service("localDbDictServiceImpl")
+// @Service("localDbDictServiceImpl")
 @Slf4j
 public class LocalDbDictServiceImpl implements DbDictService {
-	@Autowired
-	private SysDictItemMapper sysDictItemMapper;
-	@Autowired
-	private RedisTemplate<Object, Object> redisTemplate;
-	@Autowired
-	private KeyGenerator keyGenerator;
+	private final SysDictItemMapper sysDictItemMapper;
+	private final RedisTemplate<Object, Object> redisTemplate;
+	private final KeyGenerator keyGenerator;
+
+	public LocalDbDictServiceImpl(SysDictItemMapper sysDictItemMapper, RedisTemplate<Object, Object> redisTemplate, KeyGenerator keyGenerator) {
+		this.sysDictItemMapper = sysDictItemMapper;
+		this.redisTemplate = redisTemplate;
+		this.keyGenerator = keyGenerator;
+	}
 
 	/**
 	 * 实现缓存

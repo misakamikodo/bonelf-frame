@@ -14,6 +14,7 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <seata.version>1.4.0</seata.version>
     </properties>
 
     <dependencies>
@@ -25,6 +26,15 @@
         <dependency>
             <groupId>com.bonelf</groupId>
             <artifactId>bonelf-frame-web</artifactId>
+        </dependency>
+        <!-- 分布式事务 seata -->
+        <dependency>
+            <groupId>io.seata</groupId>
+            <artifactId>seata-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
         </dependency>
         <!-- Spring Begin -->
         <!--SpringBoot依赖 common使用这个依赖表示了common是服务（service） web项目公用的（gateway不是）-->

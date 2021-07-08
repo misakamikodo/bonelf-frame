@@ -24,7 +24,7 @@
             <artifactId>bonelf-frame-mq</artifactId>
         </dependency>
         <!-- Spring Begin -->
-        <!--nacos依赖-->
+        <!--服务注册中心 nacos -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
@@ -34,7 +34,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-        <!-- 熔断、降级 -->
+        <!-- 熔断、降级 sentinel -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>

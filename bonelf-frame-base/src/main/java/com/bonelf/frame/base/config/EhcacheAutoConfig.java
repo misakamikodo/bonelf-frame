@@ -20,12 +20,17 @@ import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
+
 /**
- * redis配置
+ * ehcache配置
  */
 @ConditionalOnProperty(prefix = "bonelf.cache", value = "strategy", havingValue = "ehcache")
 @EnableCaching
 @Configuration
 public class EhcacheAutoConfig extends CachingConfigurerSupport {
-
+	@PostConstruct
+	public void init(){
+		System.out.println("EhcacheAutoConfig Load");
+	}
 }

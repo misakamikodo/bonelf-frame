@@ -10,6 +10,7 @@ import io.seata.spring.boot.autoconfigure.properties.SeataProperties;
 import io.seata.spring.boot.autoconfigure.util.SpringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,7 @@ import javax.sql.DataSource;
  * @date 2021/7/8 10:49
  */
 @Configuration
+@ConditionalOnProperty(prefix = "seata", value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({SeataProperties.class})
 public class SeataAutoConfig {
 	@Autowired

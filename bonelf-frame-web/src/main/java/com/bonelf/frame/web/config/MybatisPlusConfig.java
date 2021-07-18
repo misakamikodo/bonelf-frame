@@ -1,7 +1,7 @@
 package com.bonelf.frame.web.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.bonelf.frame.web.config.handler.CustomMetaObjectHandler;
+import com.bonelf.frame.web.core.handler.CustomMetaObjectHandler;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;

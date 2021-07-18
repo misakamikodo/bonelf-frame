@@ -1,6 +1,6 @@
 package com.bonelf.frame.web.security.domain;
 
-import com.bonelf.frame.core.constant.UniqueIdType;
+import com.bonelf.frame.core.constant.UsernameType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.Authentication;
@@ -20,33 +20,31 @@ import java.util.Collection;
  * @see com.bonelf.auth.core.oauth2.granter.base.BaseApiAuthenticationProvider 将用户ID放到authentication中返回
  */
 public class AuthUser extends org.springframework.security.core.userdetails.User {
-	public static final String USERID_USERNAME_SPLIT = ":";
-
 	@Getter
 	@Setter
 	private Long userId;
 	@Getter
 	@Setter
-	private UniqueIdType idType;
+	private UsernameType usernameType;
 	// @Getter
 	// @Setter
 	// private String uniqueId;
 
-	public AuthUser(String username, UniqueIdType idType, String password) {
+	public AuthUser(String username, UsernameType idType, String password) {
 		super(username, password, new ArrayList<>());
-		this.idType = idType;
+		this.usernameType = idType;
 	}
 
-	public AuthUser(String username, UniqueIdType idType, String password, Collection<? extends GrantedAuthority> authorities) {
+	public AuthUser(String username, UsernameType idType, String password, Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, authorities);
-		this.idType = idType;
+		this.usernameType = idType;
 	}
 
 	public AuthUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, authorities);
 	}
 
-	public AuthUser(Long userId, UniqueIdType idType, String uniqueId,
+	public AuthUser(Long userId, UsernameType idType, String uniqueId,
 					String password, boolean enabled, boolean accountNonExpired,
 					boolean credentialsNonExpired, boolean accountNonLocked,
 					Collection<? extends GrantedAuthority> authorities) {
@@ -55,7 +53,7 @@ public class AuthUser extends org.springframework.security.core.userdetails.User
 				credentialsNonExpired, accountNonLocked,
 				authorities);
 		this.userId = userId;
-		this.idType = idType;
+		this.usernameType = idType;
 		// this.uniqueId = uniqueId;
 	}
 }

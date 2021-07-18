@@ -2,6 +2,7 @@ package com.bonelf.frame.web.config.swagger;
 
 import com.bonelf.frame.core.constant.AuthConstant;
 import com.bonelf.frame.core.constant.BonelfConstant;
+import com.bonelf.frame.web.core.swagger.SwaggerCloudPathProvider;
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

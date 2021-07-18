@@ -27,15 +27,6 @@
             <groupId>com.bonelf</groupId>
             <artifactId>bonelf-frame-web</artifactId>
         </dependency>
-        <!-- 分布式事务 seata -->
-        <dependency>
-            <groupId>io.seata</groupId>
-            <artifactId>seata-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
-        </dependency>
         <!-- Spring Begin -->
         <!--SpringBoot依赖 common使用这个依赖表示了common是服务（service） web项目公用的（gateway不是）-->
         <dependency>
@@ -47,11 +38,21 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-<!--            <scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>com.bonelf</groupId>
             <artifactId>bonelf-support-feign</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 分布式事务 seata -->
+        <dependency>
+            <groupId>io.seata</groupId>
+            <artifactId>seata-spring-boot-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

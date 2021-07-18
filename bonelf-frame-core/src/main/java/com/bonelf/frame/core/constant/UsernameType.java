@@ -5,7 +5,7 @@ package com.bonelf.frame.core.constant;
  * @author ccy
  * @date 2021/5/9 19:09
  */
-public enum UniqueIdType {
+public enum UsernameType {
 	/**
 	 *
 	 */

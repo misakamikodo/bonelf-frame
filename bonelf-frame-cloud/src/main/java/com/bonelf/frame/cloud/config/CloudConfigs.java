@@ -20,7 +20,9 @@ import java.util.List;
  * 微服务相关bean注入
  */
 @EnableFeignClients(basePackages = {"com.bonelf.**.feign"})
-@ComponentScan(basePackages = {"com.bonelf.frame.cloud", "com.bonelf.**.feign"})
+@ComponentScan(basePackages = {
+		"com.bonelf.**.feign"
+})
 @Configuration
 // @EnableCircuitBreaker
 // @EnableDiscoveryClient

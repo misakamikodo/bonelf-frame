@@ -67,7 +67,7 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 	/**
 	 * queryDictTextByKey的@Cacheable的Aop生效，否则也可以注入自己把方法写类里面，但是我不这么做
 	 */
-	@Autowired
+	@Autowired(required = false)
 	private SysDictItemMapper sysDictItemMapper;
 	@Autowired
 	private RedisTemplate<Object, Object> redisTemplate;
@@ -78,7 +78,7 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 	 */
 	@Autowired(required = false)
 	private DbDictService dbDictService;
-	@Autowired
+	@Autowired(required = false)
 	private SqlMapper sqlMapper;
 
 	@PostConstruct
@@ -237,7 +237,7 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 			DictValueBO item = new DictValueBO();
 			item.setItemValue(fieldValue);
 			item.setDictId(entry.dictId);
-			if(entry.cached){
+			if (entry.cached) {
 				cacheQuery.add(item);
 			} else {
 				noCacheQuery.add(item);
@@ -336,6 +336,9 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 	 * @return
 	 */
 	private String translateTableDictVal(Object fieldValue, TableDict tableDict, TableName tableName, boolean cached) {
+		if (sqlMapper == null) {
+			throw new UnsupportedOperationException("you can't use @TableDict this project, because mybatis is not enable");
+		}
 		String textValue;
 		Map<String, Object> result =
 				cached ? getTableDictValCache(fieldValue, tableDict, tableName) :

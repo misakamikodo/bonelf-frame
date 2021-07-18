@@ -48,10 +48,10 @@ bonelf:
     enable: true
   # 缓存
   cache:
-    # 设置spring缓存方式 默认ecache
+    # 设置spring缓存方式 默认 redis
     strategy: redis
 
   mail:
-    password: ccy297115649
+    password: XXX
     smtp: smtp.ym.163.com
     username: me@chenchengyuan.com

@@ -15,7 +15,7 @@ import java.util.Collection;
  * 见{@link org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider#authenticate(Authentication) 认证} 192
  * 需要设置 forcePrincipalAsString false
  * {@link org.springframework.security.authentication.AbstractAuthenticationToken#getName() 获取用户名}
- * @author ccy
+ * @author bonelf
  * @date 2021/5/21 10:27
  * @see com.bonelf.auth.core.oauth2.granter.base.BaseApiAuthenticationProvider 将用户ID放到authentication中返回
  */

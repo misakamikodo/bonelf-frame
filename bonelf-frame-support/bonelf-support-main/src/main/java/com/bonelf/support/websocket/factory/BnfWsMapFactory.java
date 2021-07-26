@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * WebsocketMap
- * @author ccy
+ * @author bonelf
  * @date 2021/5/28 10:42
  */
 @Slf4j

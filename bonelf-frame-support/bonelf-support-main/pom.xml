@@ -36,6 +36,36 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- 使用 loadBalance restTemplate调用-->
+        <dependency>
+            <groupId>com.bonelf</groupId>
+            <artifactId>bonelf-support-feign-domain</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.bonelf</groupId>
+            <artifactId>bonelf-support-provider-domain</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!--web 和 cloud 二选一 -->
+        <dependency>
+            <groupId>com.bonelf</groupId>
+            <artifactId>bonelf-frame-cloud-web</artifactId>
+            <scope>provided</scope>
+            <!-- 正式时需要注释mq-->
+            <!--<exclusions>-->
+            <!--    <exclusion>-->
+            <!--        <groupId>com.bonelf</groupId>-->
+            <!--        <artifactId>bonelf-frame-mq</artifactId>-->
+            <!--    </exclusion>-->
+            <!--</exclusions>-->
+        </dependency>
+        <!--web 和 cloud 二选一 -->
+        <dependency>
+            <groupId>com.bonelf</groupId>
+            <artifactId>bonelf-frame-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!-- 可以通过 检测文件扩展名，或者检测magic header 两种技术方式来实现mime类型的检测 -->
         <dependency>
             <groupId>eu.medsea.mimeutil</groupId>
@@ -55,25 +85,6 @@
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.bonelf</groupId>
-            <artifactId>bonelf-support-feign-domain</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.bonelf</groupId>
-            <artifactId>bonelf-support-provider-domain</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.bonelf</groupId>
-            <artifactId>bonelf-frame-cloud-web</artifactId>
-            <!-- 正式时需要注释mq-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>com.bonelf</groupId>-->
-<!--                    <artifactId>bonelf-frame-mq</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
         </dependency>
         <dependency>
             <groupId>com.bonelf</groupId>

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bonelf.frame.core.dict.EnumDict;
+import com.bonelf.frame.core.dict.enums.EnumDict;
 import com.bonelf.support.constant.QuartzStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

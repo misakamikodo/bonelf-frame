@@ -1,4 +1,4 @@
-package com.bonelf.frame.core.dict;
+package com.bonelf.frame.core.dict.enums;
 
 import com.bonelf.cicada.enums.CodeValueEnum;
 

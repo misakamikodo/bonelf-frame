@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 
 /**
  * web服务扫包配置
- * @author ccy
+ * @author bonelf
  * @date 2021/4/29 11:44
  */
 @Configuration

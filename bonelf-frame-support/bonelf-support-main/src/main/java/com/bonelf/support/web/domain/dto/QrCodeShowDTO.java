@@ -10,7 +10,7 @@ import lombok.Data;
 
 /**
  * 二维码展示
- * @author ccy
+ * @author bonelf
  * @date 2021/6/3 20:21
  */
 @Data

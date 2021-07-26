@@ -9,7 +9,7 @@ import org.springframework.lang.NonNull;
 /**
  * 没有其他bean
  * @deprecated bean的属性都变空了
- * @author ccy
+ * @author bonelf
  * @date 2021/6/15 23:05
  */
 @Deprecated

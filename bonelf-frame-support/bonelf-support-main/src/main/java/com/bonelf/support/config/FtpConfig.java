@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * FTP
- * @author ccy
+ * @author bonelf
  * @date 2021/6/7 16:01
  */
 @ConditionalOnProperty(prefix = "bonelf.upload", value = "type", havingValue = "ftp")

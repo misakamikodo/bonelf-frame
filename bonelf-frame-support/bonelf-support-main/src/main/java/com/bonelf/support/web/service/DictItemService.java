@@ -9,7 +9,7 @@ import java.util.Set;
 
 /**
  * 字典明细服务接口
- * @author ccy
+ * @author bonelf
  * @date 2021/6/16 9:30
  */
 public interface DictItemService extends IService<SysDictItem>{

@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * 字典查询
- * @author ccy
+ * @author bonelf
  * @date 2021/6/15 11:38
  */
 @Data

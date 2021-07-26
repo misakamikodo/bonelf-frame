@@ -21,13 +21,13 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * 服务消息分发器
- * @author ccy
+ * @author bonelf
  * @date 2021/5/28 11:16
  */
 @Slf4j
 @Component
 public class ServiceMsgHandler {
-	@Autowired
+	@Autowired(required = false)
 	private MqProducerService mqProducerService;
 	@Autowired
 	private WebsocketProperties websocketProperties;

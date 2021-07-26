@@ -2,7 +2,7 @@ package com.bonelf.frame.core.constant;
 
 /**
  * 用户表唯一键
- * @author ccy
+ * @author bonelf
  * @date 2021/5/9 19:09
  */
 public enum UsernameType {

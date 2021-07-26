@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * minio
- * @author ccy
+ * @author bonelf
  * @date 2021/6/7 15:51
  */
 @Data

@@ -31,7 +31,7 @@
         <module>bonelf-frame-cloud</module>
         <module>bonelf-frame-mq</module>
         <module>bonelf-frame-websocket</module>
-        <module>bonelf-frame-auth</module>
+        <!--<module>bonelf-frame-auth</module>-->
         <module>bonelf-frame-support</module>
         <module>bonelf-frame-cloud-web</module>
     </modules>

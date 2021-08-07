@@ -1,5 +1,6 @@
 package com.bonelf.support.web.domain.dto;
 
+import com.bonelf.frame.core.auth.constant.VerifyCodeTypeEnum;
 import com.bonelf.frame.core.constant.RegexpConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,7 +27,7 @@ public class VerifyCodeDTO {
 
 	/**
 	 * 验证码类型 mail image phone
-	 * @see com.bonelf.support.constant.VerifyCodeTypeEnum
+	 * @see VerifyCodeTypeEnum
 	 */
 	@ApiModelProperty("验证码类型")
 	private String businessType;

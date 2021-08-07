@@ -1,6 +1,6 @@
 package com.bonelf.support.config;
 
-import com.bonelf.support.websocket.SocketMessageService;
+import com.bonelf.support.websocket.service.impl.SocketMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

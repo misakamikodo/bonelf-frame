@@ -1,7 +1,7 @@
 package com.bonelf.support.web.service;
 
 
-import com.bonelf.support.constant.VerifyCodeTypeEnum;
+import com.bonelf.frame.core.auth.constant.VerifyCodeTypeEnum;
 
 public interface MailService {
 	/**

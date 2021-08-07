@@ -5,7 +5,7 @@ import com.bonelf.frame.base.util.redis.RedisUtil;
 import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
 import com.bonelf.support.constant.CacheConstant;
-import com.bonelf.support.constant.VerifyCodeTypeEnum;
+import com.bonelf.frame.core.auth.constant.VerifyCodeTypeEnum;
 import com.bonelf.support.constant.exception.SupportExceptionEnum;
 import com.bonelf.support.web.domain.dto.VerifyCodeDTO;
 import com.bonelf.support.web.service.MailService;

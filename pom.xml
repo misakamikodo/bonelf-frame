@@ -49,13 +49,14 @@
         <bonelf-cicada.version>${frame.version}</bonelf-cicada.version>
         <bonelf-frame-base.version>${frame.version}</bonelf-frame-base.version>
         <bonelf-frame-web.version>${frame.version}</bonelf-frame-web.version>
+        <bonelf-frame-auth.version>${frame.version}</bonelf-frame-auth.version>
         <bonelf-frame-cloud-web.version>${frame.version}</bonelf-frame-cloud-web.version>
         <bonelf-frame-gateway.version>${frame.version}</bonelf-frame-gateway.version>
         <bonelf-frame-mq.version>${frame.version}</bonelf-frame-mq.version>
         <bonelf-frame-core.version>${frame.version}</bonelf-frame-core.version>
         <bonelf-frame-cloud.version>${frame.version}</bonelf-frame-cloud.version>
         <bonelf-frame-websocket.version>${frame.version}</bonelf-frame-websocket.version>
-        <bonelf-support-feign.version>${frame.version}</bonelf-support-feign.version>
+        <bonelf-support.version>${frame.version}</bonelf-support.version>
 
         <swagger.version>3.0.0</swagger.version>
         <swagger2-bootstrap-ui.version>1.9.3</swagger2-bootstrap-ui.version>
@@ -104,6 +105,11 @@
             </dependency>
             <dependency>
                 <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-frame-auth</artifactId>
+                <version>${bonelf-frame-auth.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
                 <artifactId>bonelf-frame-cloud-web</artifactId>
                 <version>${bonelf-frame-cloud-web.version}</version>
             </dependency>
@@ -127,10 +133,32 @@
                 <artifactId>bonelf-frame-websocket</artifactId>
                 <version>${bonelf-frame-websocket.version}</version>
             </dependency>
+            <!--<dependency>-->
+            <!--    <groupId>com.bonelf</groupId>-->
+            <!--    <artifactId>bonelf-frame-support</artifactId>-->
+            <!--    <version>${bonelf-support.version}</version>-->
+            <!--    <type>pom</type>-->
+            <!--    <scope>import</scope>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>com.bonelf</groupId>
                 <artifactId>bonelf-support-feign</artifactId>
-                <version>${bonelf-support-feign.version}</version>
+                <version>${bonelf-support.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-support-main</artifactId>
+                <version>${bonelf-support.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-support-feign-domain</artifactId>
+                <version>${bonelf-support.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bonelf</groupId>
+                <artifactId>bonelf-support-provider-domain</artifactId>
+                <version>${bonelf-support.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>

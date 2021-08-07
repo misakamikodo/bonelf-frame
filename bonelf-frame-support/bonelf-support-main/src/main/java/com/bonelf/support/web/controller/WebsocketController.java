@@ -5,7 +5,7 @@ import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.core.websocket.SocketMessage;
 import com.bonelf.frame.core.websocket.SocketRespMessage;
 import com.bonelf.support.websocket.ServiceMsgHandler;
-import com.bonelf.support.websocket.SocketMessageService;
+import com.bonelf.support.websocket.service.impl.SocketMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;

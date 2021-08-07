@@ -8,6 +8,7 @@
 
 package com.bonelf.support.constant;
 
+import com.bonelf.frame.core.auth.constant.VerifyCodeTypeEnum;
 import com.bonelf.frame.core.constant.BonelfConstant;
 
 public interface CacheConstant {

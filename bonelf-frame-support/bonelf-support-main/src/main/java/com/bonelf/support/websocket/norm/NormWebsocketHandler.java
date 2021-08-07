@@ -16,7 +16,7 @@ import com.bonelf.frame.websocket.config.NormWebSocketConfig;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
 import com.bonelf.support.constant.CacheConstant;
 import com.bonelf.support.websocket.ServiceMsgHandler;
-import com.bonelf.support.websocket.SocketMessageService;
+import com.bonelf.support.websocket.service.impl.SocketMessageService;
 import com.bonelf.support.websocket.factory.BnfWsHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

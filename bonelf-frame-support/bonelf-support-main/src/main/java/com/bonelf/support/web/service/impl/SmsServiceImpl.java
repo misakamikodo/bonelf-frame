@@ -7,7 +7,7 @@ import com.bonelf.frame.base.util.redis.RedisUtil;
 import com.bonelf.frame.core.exception.BonelfException;
 import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
 import com.bonelf.support.constant.CacheConstant;
-import com.bonelf.support.constant.VerifyCodeTypeEnum;
+import com.bonelf.frame.core.auth.constant.VerifyCodeTypeEnum;
 import com.bonelf.support.web.service.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

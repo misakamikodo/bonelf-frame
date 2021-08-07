@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @Api(tags = {"示例接口"})
-@RestController
-@RequestMapping("/noAuth/example")
+@RestController("supportExampleController")
+@RequestMapping("/noAuth/support")
 public class ExampleController extends BaseController {
 
 	/**

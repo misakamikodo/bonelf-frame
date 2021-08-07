@@ -7,6 +7,7 @@ import com.bonelf.frame.core.websocket.constant.MessageRecvCmdEnum;
 import com.bonelf.frame.mq.bus.MqProducerService;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
 import com.bonelf.support.constant.CacheConstant;
+import com.bonelf.support.websocket.service.MqService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ServiceMsgHandler {
 	@Autowired(required = false)
-	private MqProducerService mqProducerService;
+	private MqService mqService;
 	@Autowired
 	private WebsocketProperties websocketProperties;
 	@Autowired
@@ -53,8 +54,11 @@ public class ServiceMsgHandler {
 				redisTemplate.convertAndSend(tagValue, msg);
 				break;
 			case mq:
+				if (mqService == null) {
+					throw new UnsupportedOperationException("mq not import");
+				}
 				// 发送websocket主题供订阅 tagName是主题名，各服务获取自己主题的消息。获取到消息后通过cmdId判断业务
-				mqProducerService.send(websocketProperties.getMqTagPrefix() + tagValue, msg);
+				mqService.send(websocketProperties.getMqTagPrefix() + tagValue, msg);
 				break;
 			case feign:
 				String url = "http://" + tagValue + ctxPath + "/websocketMessage";

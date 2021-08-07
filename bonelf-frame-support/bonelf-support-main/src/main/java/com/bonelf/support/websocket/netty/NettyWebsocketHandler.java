@@ -15,7 +15,7 @@ import com.bonelf.frame.websocket.config.NettyWebsocketConfig;
 import com.bonelf.frame.websocket.property.WebsocketProperties;
 import com.bonelf.support.constant.CacheConstant;
 import com.bonelf.support.websocket.ServiceMsgHandler;
-import com.bonelf.support.websocket.SocketMessageService;
+import com.bonelf.support.websocket.service.impl.SocketMessageService;
 import com.bonelf.support.websocket.factory.BnfWsHandler;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;

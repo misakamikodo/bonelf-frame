@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FunctionDict {
+public @interface FuncDict {
 	/**
 	 *  静态方法工具类
 	 */

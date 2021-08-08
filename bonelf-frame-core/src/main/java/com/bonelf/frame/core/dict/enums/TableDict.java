@@ -1,4 +1,4 @@
-package com.bonelf.frame.web.aop.annotation;
+package com.bonelf.frame.core.dict.enums;
 
 import com.bonelf.frame.web.domain.base.BaseEntity;
 

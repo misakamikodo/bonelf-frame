@@ -62,7 +62,6 @@ public class Result<T> implements Serializable {
 	private Long timestamp;
 	/**
 	 * 接口耗时
-	 * TODO aop/拦截器
 	 */
 	@ApiModelProperty(value = "接口调用耗时：ms")
 	private Long cost;

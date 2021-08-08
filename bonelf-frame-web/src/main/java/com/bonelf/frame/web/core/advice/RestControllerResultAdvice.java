@@ -13,11 +13,8 @@ import com.bonelf.cicada.util.EnumUtil;
 import com.bonelf.frame.base.util.JsonUtil;
 import com.bonelf.frame.base.util.SpringContextUtils;
 import com.bonelf.frame.core.constant.CommonCacheConstant;
-import com.bonelf.frame.core.dict.enums.DbDict;
-import com.bonelf.frame.core.dict.enums.DictField;
-import com.bonelf.frame.core.dict.enums.EnumDict;
+import com.bonelf.frame.core.dict.enums.*;
 import com.bonelf.frame.core.domain.Result;
-import com.bonelf.frame.web.aop.annotation.TableDict;
 import com.bonelf.frame.web.constant.ResultCostAttr;
 import com.bonelf.frame.web.domain.SimplePageInfo;
 import com.bonelf.frame.web.domain.bo.DictValueBO;
@@ -154,33 +151,51 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 		if (ArrayUtil.isEmpty(fields)) {
 			return;
 		}
-		List<DbDictFieldHolder> dictIdFieldList = new ArrayList<>();
+		List<BatchDictFieldHolder> remoteFields = new ArrayList<>();
+		List<BatchDictFieldHolder> tableFields = new ArrayList<>();
+		List<BatchDictFieldHolder> dbDictFields = new ArrayList<>();
 		for (Field field : fields) {
 			Object fieldValue = ReflectUtil.getFieldValue(record, field.getName());
 			if (fieldValue == null) {
 				continue;
 			}
 			// 对每个field进行判断
-			DbDict dbDict = field.getAnnotation(DbDict.class);
-			if (dbDict != null) {
-				String code = dbDict.value();
-				String nameSuffix = dbDict.nameSuffix();
-				boolean cached = dbDict.cached();
-				// 翻译字典值对应的txt
-				dictIdFieldList.add(new DbDictFieldHolder(code, field, nameSuffix, cached));
+			{
+				DbDict dbDict = field.getAnnotation(DbDict.class);
+				if (dbDict != null) {
+					dbDictFields.add(new BatchDictFieldHolder(dbDict.value(),
+							field, dbDict.nameSuffix(), dbDict.cached()));
+				}
 			}
-			EnumDict enumDict = field.getAnnotation(EnumDict.class);
-			if (enumDict != null) {
-				decorateEnumDict(record, field, fieldValue, enumDict);
+			{
+				EnumDict enumDict = field.getAnnotation(EnumDict.class);
+				if (enumDict != null) {
+					decorateEnumDict(record, field, fieldValue, enumDict);
+				}
 			}
-			TableDict tableDict = field.getAnnotation(TableDict.class);
-			if (tableDict != null) {
-				decorateTableDict(record, field, fieldValue, tableDict);
+			{
+				TableDict tableDict = field.getAnnotation(TableDict.class);
+				if (tableDict != null) {
+					// dbDictFields.add(new BatchDictFieldHolder(tableDict.value(),
+					// 		field, tableDict.nameSuffix(), tableDict.cached()));
+					decorateTableDict(record, field, fieldValue, tableDict);
+				}
+			}
+			{
+				FuncDict funcDict = field.getAnnotation(FuncDict.class);
+				if (funcDict != null) {
+				}
+			}
+			{
+				RemoteDict remoteDict = field.getAnnotation(RemoteDict.class);
+				if (remoteDict != null) {
+				}
 			}
 			DictField dictField = field.getAnnotation(DictField.class);
 			if (dictField != null) {
 				if (dictField.getClass() == record.getClass()) {
-					log.error("DictField添加的属性Class类型和当前类相同将引起StackOverflowError，不予自动装配字典，请手动添加子属性的字典值");
+					log.error("DictField添加的属性Class类型和当前类相同将引起StackOverflowError，" +
+							"不予自动装配字典，请手动添加子属性的字典值");
 					return;
 				}
 				String recordStr = JsonUtil.toJson(fieldValue);
@@ -218,8 +233,8 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 			}
 		}
 		// 翻译数据库字典
-		if (!dictIdFieldList.isEmpty()) {
-			decorateDbDict(record, dictIdFieldList);
+		if (!dbDictFields.isEmpty()) {
+			decorateDbDict(record, dbDictFields);
 		}
 	}
 
@@ -229,10 +244,10 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 	 * @param dictIdFieldList 字典批量操作list
 	 * @param <T>
 	 */
-	private <T> void decorateDbDict(T record, List<DbDictFieldHolder> dictIdFieldList) {
+	private <T> void decorateDbDict(T record, List<BatchDictFieldHolder> dictIdFieldList) {
 		Set<DictValueBO> cacheQuery = new HashSet<>();
 		Set<DictValueBO> noCacheQuery = new HashSet<>();
-		for (DbDictFieldHolder entry : dictIdFieldList) {
+		for (BatchDictFieldHolder entry : dictIdFieldList) {
 			Object fieldValue = ReflectUtil.getFieldValue(record, entry.field.getName());
 			DictValueBO item = new DictValueBO();
 			item.setItemValue(fieldValue);
@@ -260,9 +275,9 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 	 * @param resCached
 	 * @param <T>
 	 */
-	private <T> void wrapDbDictValue2Field(T record, List<DbDictFieldHolder> dictIdFieldList,
+	private <T> void wrapDbDictValue2Field(T record, List<BatchDictFieldHolder> dictIdFieldList,
 										   Map<DictValueBO, String> resCached) {
-		Map<String, List<DbDictFieldHolder>> group = dictIdFieldList.stream().collect(
+		Map<String, List<BatchDictFieldHolder>> group = dictIdFieldList.stream().collect(
 				Collectors.groupingBy(item -> item.dictId)
 		);
 		for (Map.Entry<DictValueBO, String> entry : resCached.entrySet()) {
@@ -271,7 +286,7 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 			if (!group.containsKey(dictId)) {
 				continue;
 			}
-			for (DbDictFieldHolder holder : group.get(dictId)) {
+			for (BatchDictFieldHolder holder : group.get(dictId)) {
 				String name = holder.field.getName();
 				String nameSuffix = holder.nameSuffix;
 				try {
@@ -399,7 +414,7 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 	 * 字典信息
 	 */
 	@AllArgsConstructor
-	private static class DbDictFieldHolder {
+	private static class BatchDictFieldHolder {
 
 		/**
 		 * 字典ID

@@ -7,7 +7,7 @@ import com.bonelf.auth.core.oauth2.granter.mail.MailTokenGranter;
 import com.bonelf.auth.core.oauth2.granter.mobile.MobileTokenGranter;
 import com.bonelf.auth.core.oauth2.granter.openid.OpenIdTokenGranter;
 import com.bonelf.frame.base.property.oauth2.Oauth2JwtProperties;
-import com.bonelf.frame.cloud.service.IdUserDetailsService;
+import com.bonelf.frame.base.service.IdUserDetailsService;
 import com.bonelf.frame.core.auth.service.AuthUserService;
 import com.bonelf.frame.web.security.converter.JwtWithUserInfoAccessTokenConverter;
 import com.google.common.collect.Lists;

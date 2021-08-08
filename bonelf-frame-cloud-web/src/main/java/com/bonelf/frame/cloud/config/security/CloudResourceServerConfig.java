@@ -9,8 +9,8 @@
 package com.bonelf.frame.cloud.config.security;
 
 import com.bonelf.frame.base.property.oauth2.Oauth2Properties;
+import com.bonelf.frame.base.service.IdUserDetailsService;
 import com.bonelf.frame.cloud.security.constant.AuthFeignConstant;
-import com.bonelf.frame.cloud.service.IdUserDetailsService;
 import com.bonelf.frame.web.security.AuthExceptionEntryPoint;
 import com.bonelf.frame.web.security.converter.JwtWithUserInfoAccessTokenConverter;
 import org.springframework.beans.factory.annotation.Autowired;

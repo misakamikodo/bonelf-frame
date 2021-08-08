@@ -1,4 +1,4 @@
-package com.bonelf.frame.cloud.service;
+package com.bonelf.frame.base.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 

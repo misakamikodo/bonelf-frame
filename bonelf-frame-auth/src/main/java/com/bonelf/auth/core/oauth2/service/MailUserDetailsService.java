@@ -13,7 +13,6 @@ import com.bonelf.auth.service.SupportService;
 import com.bonelf.frame.core.auth.constant.VerifyCodeTypeEnum;
 import com.bonelf.frame.core.auth.domain.User;
 import com.bonelf.frame.core.constant.UsernameType;
-import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.core.exception.BonelfException;
 import com.bonelf.frame.web.security.domain.AuthUser;
 import lombok.Setter;
@@ -57,7 +56,7 @@ public class MailUserDetailsService extends CustomUserDetailsService {
 				throw be;
 			}
 		}
-		String codeResult = supportService.getVerifyMail(user.getMail(), VerifyCodeTypeEnum.LOGIN);
+		user.setVerifyCode(supportService.getVerifyPhone(user.getMail(), VerifyCodeTypeEnum.LOGIN));
 		log.debug("load user by mail:{}", user.toString());
 		// 如果为mail模式，从短信服务中获取验证码（动态密码） 其实可以去了加密
 		//String credentials = userClient.getSmsCode(uniqueId, "LOGIN");

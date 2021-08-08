@@ -2,11 +2,9 @@ package com.bonelf.support.web.controller;
 
 import com.bonelf.cicada.util.EnumUtil;
 import com.bonelf.frame.base.util.redis.RedisUtil;
+import com.bonelf.frame.core.auth.constant.VerifyCodeTypeEnum;
 import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
-import com.bonelf.support.constant.CacheConstant;
-import com.bonelf.frame.core.auth.constant.VerifyCodeTypeEnum;
-import com.bonelf.support.constant.exception.SupportExceptionEnum;
 import com.bonelf.support.web.domain.dto.VerifyCodeDTO;
 import com.bonelf.support.web.service.MailService;
 import com.bonelf.support.web.service.SmsService;
@@ -58,28 +56,6 @@ public class SmsController {
 	@ApiOperation("获取验证码")
 	@GetMapping(value = "/v1/getVerify")
 	public Result<String> getVerify(VerifyCodeDTO accountLoginDto) {
-		VerifyCodeTypeEnum codeType = EnumUtil.getByCode(accountLoginDto.getBusinessType(), VerifyCodeTypeEnum.class);
-		String target;
-		if (accountLoginDto.getMail() != null) {
-			target = accountLoginDto.getMail();
-		} else if (accountLoginDto.getPhone() != null) {
-			target = accountLoginDto.getPhone();
-		} else {
-			return Result.error(CommonBizExceptionEnum.REQUEST_INVALIDATE);
-		}
-		String key = String.format(CacheConstant.VERIFY_CODE, accountLoginDto.getBusinessType(), target);
-		String code = (String)redisUtil.get(key);
-		switch (codeType) {
-			case LOGIN:
-				if (code != null) {
-					redisUtil.del(key);
-				}
-				break;
-			default:
-		}
-		if (code == null) {
-			return Result.error(SupportExceptionEnum.VERIFY_CODE_EXPIRE);
-		}
-		return Result.ok(code);
+		return Result.ok(smsService.getVertify(accountLoginDto));
 	}
 }

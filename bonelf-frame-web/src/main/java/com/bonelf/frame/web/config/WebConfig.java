@@ -33,7 +33,7 @@ public class WebConfig {
 	 * 使用restTemplate进行Http调用
 	 * </p>
 	 */
-	@Bean
+	@Bean("defaultRestTemplate")
 	public RestTemplate restTemplate() {
 		return RestTemplateBuilder.build();
 	}

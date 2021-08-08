@@ -152,7 +152,7 @@ public class LoginController extends BaseController {
 			url = "http://localhost:" + port + "/" + ctxPath + "/oauth/token";
 		}
 		HttpHeaders headers = new HttpHeaders();
-		headers.set(AuthFeignConstant.AUTH_HEADER, AuthFeignConstant.FEIGN_REQ_FLAG_PREFIX + " -");
+		headers.set(AuthFeignConstant.AUTH_HEADER, "-");
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
 		paramMap.accept(params);

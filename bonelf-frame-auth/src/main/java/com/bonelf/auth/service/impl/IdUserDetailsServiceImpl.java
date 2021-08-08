@@ -9,6 +9,7 @@
 package com.bonelf.auth.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.bonelf.frame.cloud.service.IdUserDetailsService;
 import com.bonelf.frame.core.auth.domain.Role;
 import com.bonelf.frame.core.auth.domain.User;
 import com.bonelf.frame.core.auth.service.AuthRoleService;
@@ -20,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +35,8 @@ import java.util.stream.Collectors;
  * @since 2020/11/19 13:10
  */
 @Slf4j
-@Service("idUserDetailsService")
-public class IdUserDetailsServiceImpl implements UserDetailsService {
+@Service("defaultIdUserDetailsService")
+public class IdUserDetailsServiceImpl implements IdUserDetailsService {
 	@Autowired
 	protected AuthUserService userService;
 	@Autowired

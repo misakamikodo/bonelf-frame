@@ -10,15 +10,14 @@ package com.bonelf.frame.cloud.config.security;
 
 import com.bonelf.frame.base.property.oauth2.Oauth2Properties;
 import com.bonelf.frame.cloud.security.constant.AuthFeignConstant;
+import com.bonelf.frame.cloud.service.IdUserDetailsService;
 import com.bonelf.frame.web.security.AuthExceptionEntryPoint;
 import com.bonelf.frame.web.security.converter.JwtWithUserInfoAccessTokenConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -34,7 +33,7 @@ import java.security.KeyPair;
 /**
  * <p>
  * 令牌认证 拿到access_token后调用接口的配置
- * TODO 可以考虑abstract 如果后续扩展
+ * 可以考虑abstract 如果后续扩展
  * </p>
  * @author bonelf
  * @since 2020/11/19 17:36
@@ -45,8 +44,7 @@ public class CloudResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Autowired
 	private Oauth2Properties oauth2Properties;
 	@Autowired(required = false)
-	@Qualifier("idUserDetailsService")
-	private UserDetailsService userDetailsService;
+	private IdUserDetailsService userDetailsService;
 
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resourceServerSecurityConfigurer) {

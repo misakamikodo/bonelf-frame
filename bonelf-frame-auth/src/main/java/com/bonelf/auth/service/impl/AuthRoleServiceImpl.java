@@ -1,15 +1,11 @@
 package com.bonelf.auth.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.bonelf.frame.core.auth.domain.Role;
 import com.bonelf.frame.core.auth.service.AuthRoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class AuthRoleServiceImpl implements AuthRoleService {

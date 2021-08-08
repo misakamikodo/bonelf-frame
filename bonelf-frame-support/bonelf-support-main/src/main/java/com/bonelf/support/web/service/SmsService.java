@@ -2,6 +2,7 @@ package com.bonelf.support.web.service;
 
 
 import com.bonelf.frame.core.auth.constant.VerifyCodeTypeEnum;
+import com.bonelf.support.web.domain.dto.VerifyCodeDTO;
 
 public interface SmsService{
 	/**
@@ -11,4 +12,6 @@ public interface SmsService{
 	 * @return
 	 */
 	String sendVerify(String username, VerifyCodeTypeEnum bizType);
+
+	String getVertify(VerifyCodeDTO accountLoginDto);
 }

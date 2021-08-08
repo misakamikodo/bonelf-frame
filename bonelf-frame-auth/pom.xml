@@ -72,5 +72,11 @@
             <artifactId>feign-okhttp</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!-- support -->
+        <dependency>
+            <groupId>com.bonelf</groupId>
+            <artifactId>bonelf-support-main</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

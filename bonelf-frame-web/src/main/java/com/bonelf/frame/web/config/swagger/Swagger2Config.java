@@ -97,7 +97,7 @@ public class Swagger2Config implements WebMvcConfigurer {
 				// 描述
 				.description("后台API接口")
 				// 作者
-				.contact(new Contact("Bonelf", "http://www.bonelf.com", "ccykirito@163.com"))
+				.contact(new Contact("Bonelf", "http://www.bonelf.com", "bonelfkirito@163.com"))
 				.license("The Apache License, Version 2.0")
 				.licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
 				.build();

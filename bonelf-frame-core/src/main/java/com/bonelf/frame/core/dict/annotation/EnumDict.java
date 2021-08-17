@@ -1,4 +1,6 @@
-package com.bonelf.frame.core.dict.enums;
+package com.bonelf.frame.core.dict.annotation;
+
+import com.bonelf.cicada.enums.CodeValueEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -15,18 +17,13 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RemoteDict {
+public @interface EnumDict {
 	/**
-	 *  地址url 使用restTemplate Bean cloud支持loadBalance
+	 *  枚举类
 	 */
-	String value();
+	Class<? extends CodeValueEnum<?>> value();
 	/**
 	 * 在前端解析时返回对应枚举值 不设置代表不返回
 	 */
 	String nameSuffix() default "Name";
-	/**
-	 * 是否使用定时的缓存
-	 * （不会实时修改，但是能减小数据库服务压力，提高访问速度）
-	 */
-	boolean cached() default true;
 }

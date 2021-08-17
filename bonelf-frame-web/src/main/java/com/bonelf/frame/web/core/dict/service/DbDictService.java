@@ -1,6 +1,6 @@
-package com.bonelf.frame.web.service;
+package com.bonelf.frame.web.core.dict.service;
 
-import com.bonelf.frame.web.domain.bo.DictValueBO;
+import com.bonelf.frame.web.core.dict.domain.DbDictValue;
 
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +36,7 @@ public interface DbDictService {
 	 * @param dictText 字典
 	 * @return key: dictId:value value: itemText
 	 */
-	Map<DictValueBO, String> queryDictTextByKey(Set<DictValueBO> dictText);
+	Map<DbDictValue, String> queryDictTextByKey(Set<DbDictValue> dictText);
 
 
 	/**
@@ -44,5 +44,5 @@ public interface DbDictService {
 	 * @param dictText 字典
 	 * @return key: dictId:value value: itemText
 	 */
-	Map<DictValueBO, String> queryDictTextByKeyNoCache(Set<DictValueBO> dictText);
+	Map<DbDictValue, String> queryDictTextByKeyNoCache(Set<DbDictValue> dictText);
 }

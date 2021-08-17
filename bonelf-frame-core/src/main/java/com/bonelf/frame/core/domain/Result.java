@@ -1,7 +1,7 @@
 package com.bonelf.frame.core.domain;
 
 import com.bonelf.frame.core.constant.BizConstants;
-import com.bonelf.frame.core.dict.enums.DictField;
+import com.bonelf.frame.core.dict.annotation.DictField;
 import com.bonelf.frame.core.exception.AbstractBaseExceptionEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

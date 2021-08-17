@@ -17,7 +17,7 @@
     <select id="selectDictTextByItemValue" resultType="java.lang.String">
       SELECT item_text FROM sys_dict_item WHERE dict_id=#{dictId} AND item_value=#{itemValue}
     </select>
-  <select id="selectDictTextByItemValueBatch" resultType="com.bonelf.frame.web.domain.bo.DictTextBO">
+  <select id="selectDictTextByItemValueBatch" resultType="com.bonelf.frame.web.core.dict.domain.DbDictText">
     SELECT dict_id, item_text, item_value FROM sys_dict_item
     <where>
         <foreach collection="dictText" open="(" close=")" separator=") OR (" item="item">

@@ -1,13 +1,13 @@
-package com.bonelf.frame.web.service.impl;
+package com.bonelf.frame.web.core.dict.service.impl;
 
 import com.bonelf.frame.base.property.enums.ProjectMode;
 import com.bonelf.frame.core.constant.CommonCacheConstant;
 import com.bonelf.frame.core.exception.BonelfException;
 import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
-import com.bonelf.frame.web.domain.bo.DictTextBO;
-import com.bonelf.frame.web.domain.bo.DictValueBO;
+import com.bonelf.frame.web.core.dict.domain.DbDictText;
+import com.bonelf.frame.web.core.dict.domain.DbDictValue;
+import com.bonelf.frame.web.core.dict.service.DbDictService;
 import com.bonelf.frame.web.mapper.SysDictItemMapper;
-import com.bonelf.frame.web.service.DbDictService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -61,10 +61,10 @@ public class LocalDbDictServiceImpl implements DbDictService {
 	}
 
 	@Override
-	public Map<DictValueBO, String> queryDictTextByKey(Set<DictValueBO> dictText) {
-		Set<DictValueBO> query = new HashSet<>();
-		Map<DictValueBO, String> result = new HashMap<>();
-		for (DictValueBO dv : dictText) {
+	public Map<DbDictValue, String> queryDictTextByKey(Set<DbDictValue> dictText) {
+		Set<DbDictValue> query = new HashSet<>();
+		Map<DbDictValue, String> result = new HashMap<>();
+		for (DbDictValue dv : dictText) {
 			String cacheValue = (String)redisTemplate.opsForValue().get(
 					this.getCacheName(dv.getDictId(), String.valueOf(dv.getItemValue())));
 			if (cacheValue == null) {
@@ -73,13 +73,19 @@ public class LocalDbDictServiceImpl implements DbDictService {
 				result.put(dv, cacheValue);
 			}
 		}
-		Set<DictTextBO> texts = sysDictItemMapper.selectDictTextByItemValueBatch(query);
-		result.putAll(texts.stream().collect(Collectors.toMap(item -> new DictValueBO(item.getDictId(), item.getItemValue()), DictTextBO::getItemText)));
-		for (DictTextBO text : texts) {
+		Set<DbDictText> texts = sysDictItemMapper.selectDictTextByItemValueBatch(query);
+		result.putAll(texts.stream().collect(Collectors.toMap(item -> new DbDictValue(item.getDictId(), item.getItemValue()), DbDictText::getItemText)));
+		for (DbDictText text : texts) {
 			redisTemplate.opsForValue().set(this.getCacheName(text.getDictId(), text.getItemValue()),
 					text.getItemText(), CommonCacheConstant.CACHE_NAME_7_DAY_TIME.toDays());
 		}
 		return result;
+	}
+
+	@Override
+	public Map<DbDictValue, String> queryDictTextByKeyNoCache(Set<DbDictValue> dictText) {
+		Set<DbDictText> texts = sysDictItemMapper.selectDictTextByItemValueBatch(dictText);
+		return texts.stream().collect(Collectors.toMap(item -> new DbDictValue(item.getDictId(), item.getItemValue()), DbDictText::getItemText));
 	}
 
 	/**
@@ -91,16 +97,12 @@ public class LocalDbDictServiceImpl implements DbDictService {
 	private Object getCacheName(String dictId, String itemValue) {
 		try {
 			return CommonCacheConstant.DB_DICT +
-					keyGenerator.generate(this, this.getClass().getMethod("queryDictTextByKey", String.class, String.class), dictId, itemValue);
+					keyGenerator.generate(this,
+							this.getClass().getMethod("queryDictTextByKey", String.class, String.class),
+							dictId, itemValue);
 		} catch (NoSuchMethodException e) {
 			log.error("no method found", e);
 			throw new BonelfException(CommonBizExceptionEnum.SERVER_ERROR);
 		}
-	}
-
-	@Override
-	public Map<DictValueBO, String> queryDictTextByKeyNoCache(Set<DictValueBO> dictText) {
-		Set<DictTextBO> texts = sysDictItemMapper.selectDictTextByItemValueBatch(dictText);
-		return texts.stream().collect(Collectors.toMap(item -> new DictValueBO(item.getDictId(), item.getItemValue()), DictTextBO::getItemText));
 	}
 }

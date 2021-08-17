@@ -1,6 +1,6 @@
 package com.bonelf.frame.web.core.condition;
 
-import com.bonelf.frame.web.service.DbDictService;
+import com.bonelf.frame.web.core.dict.service.DbDictService;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;

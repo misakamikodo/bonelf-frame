@@ -1,4 +1,4 @@
-package com.bonelf.frame.core.dict.enums;
+package com.bonelf.frame.core.dict.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -23,6 +23,13 @@ public @interface FuncDict {
 	 *  获取方法
 	 */
 	String method();
+
+	/**
+	 * 参数类型
+	 * @return
+	 */
+	Class<?> methodParamType() default String.class;
+
 	/**
 	 * 在前端解析时返回对应枚举值 不设置代表不返回
 	 */

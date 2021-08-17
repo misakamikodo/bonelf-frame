@@ -4,9 +4,9 @@ import com.bonelf.frame.core.constant.CommonCacheConstant;
 import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.core.exception.BonelfException;
 import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
-import com.bonelf.frame.web.domain.bo.DictTextBO;
-import com.bonelf.frame.web.domain.bo.DictValueBO;
-import com.bonelf.frame.web.service.DbDictService;
+import com.bonelf.frame.web.core.dict.domain.DbDictText;
+import com.bonelf.frame.web.core.dict.domain.DbDictValue;
+import com.bonelf.frame.web.core.dict.service.DbDictService;
 import com.bonelf.support.feign.SupportFeignClient;
 import com.bonelf.support.feign.domain.request.DictValueRequest;
 import com.bonelf.support.feign.domain.response.DictTextResponse;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
  * @since 2020/10/14 13:13
  */
 // @ConditionalOnProperty(prefix = BonelfConstant.PROJECT_NAME, value = "mode", havingValue = "cloud")
+@Primary
 @CacheConfig(cacheNames = CommonCacheConstant.CACHE_NAME_7_DAY)
 @Service("feignDbDictServiceImpl")
 @Slf4j
@@ -66,10 +68,10 @@ public class FeignDbDictServiceImpl implements DbDictService {
 	}
 
 	@Override
-	public Map<DictValueBO, String> queryDictTextByKey(Set<DictValueBO> dictText) {
-		Set<DictValueBO> query = new HashSet<>();
-		Map<DictValueBO, String> result = new HashMap<>();
-		for (DictValueBO dv : dictText) {
+	public Map<DbDictValue, String> queryDictTextByKey(Set<DbDictValue> dictText) {
+		Set<DbDictValue> query = new HashSet<>();
+		Map<DbDictValue, String> result = new HashMap<>();
+		for (DbDictValue dv : dictText) {
 			String cacheValue = (String)redisTemplate.opsForValue().get(
 					this.getCacheName(dv.getDictId(), String.valueOf(dv.getItemValue())));
 			if (cacheValue == null) {
@@ -78,7 +80,7 @@ public class FeignDbDictServiceImpl implements DbDictService {
 				result.put(dv, cacheValue);
 			}
 		}
-		Set<DictTextBO> texts = new HashSet<>();
+		Set<DbDictText> texts = new HashSet<>();
 		if (!query.isEmpty()) {
 			Result<Set<DictTextResponse>> res = supportFeignClient.selectDictTextByItemValueBatch(query.stream().map(item -> {
 				DictValueRequest req = new DictValueRequest();
@@ -88,7 +90,7 @@ public class FeignDbDictServiceImpl implements DbDictService {
 			}).collect(Collectors.toSet()));
 			if (res.getSuccess()) {
 				texts = res.getResult().stream().map(item -> {
-					DictTextBO req = new DictTextBO();
+					DbDictText req = new DbDictText();
 					req.setDictId(item.getDictId());
 					req.setItemText(item.getItemText());
 					req.setItemValue(item.getItemValue());
@@ -97,8 +99,8 @@ public class FeignDbDictServiceImpl implements DbDictService {
 			}
 		}
 		result.putAll(texts.stream().collect(Collectors.toMap(
-				item -> new DictValueBO(item.getDictId(), item.getItemValue()), DictTextBO::getItemText)));
-		for (DictTextBO text : texts) {
+				item -> new DbDictValue(item.getDictId(), item.getItemValue()), DbDictText::getItemText)));
+		for (DbDictText text : texts) {
 			redisTemplate.opsForValue().set(this.getCacheName(text.getDictId(), text.getItemValue()),
 					text.getItemText(), CommonCacheConstant.CACHE_NAME_7_DAY_TIME);
 		}
@@ -106,7 +108,7 @@ public class FeignDbDictServiceImpl implements DbDictService {
 	}
 
 	@Override
-	public Map<DictValueBO, String> queryDictTextByKeyNoCache(Set<DictValueBO> dictText) {
+	public Map<DbDictValue, String> queryDictTextByKeyNoCache(Set<DbDictValue> dictText) {
 		Result<Set<DictTextResponse>> res = supportFeignClient.selectDictTextByItemValueBatch(dictText.stream().map(item -> {
 			DictValueRequest req = new DictValueRequest();
 			req.setDictId(item.getDictId());
@@ -115,7 +117,7 @@ public class FeignDbDictServiceImpl implements DbDictService {
 		}).collect(Collectors.toSet()));
 		if (res.getSuccess()) {
 			return res.getResult().stream().collect(Collectors.toMap(
-					item -> new DictValueBO(item.getDictId(), item.getItemValue()), DictTextResponse::getItemText));
+					item -> new DbDictValue(item.getDictId(), item.getItemValue()), DictTextResponse::getItemText));
 		} else {
 			return new HashMap<>();
 		}

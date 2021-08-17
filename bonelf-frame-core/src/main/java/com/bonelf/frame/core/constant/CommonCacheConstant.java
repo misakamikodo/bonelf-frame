@@ -54,6 +54,7 @@ public interface CommonCacheConstant {
 	 */
 	String DB_DICT = BonelfConstant.PROJECT_NAME + ":dbDict";
 	String TABLE_DICT = BonelfConstant.PROJECT_NAME + ":tableDict";
+	String REMOTE_DICT = BonelfConstant.PROJECT_NAME + ":remoteDict";
 
 	/*===========================common===========================*/
 	/**

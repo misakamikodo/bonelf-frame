@@ -1,4 +1,4 @@
-package com.bonelf.frame.core.dict.enums;
+package com.bonelf.frame.core.dict.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,12 +7,13 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * 子属性是否支持字典扩展；主要为了提高效率，从而没必要判断所有field
+ * 用于支持 Map、泛型 等不确定类型的字段翻译
  * </p>
  * @author bonelf
  * @since 2020/10/11 17:45
  */
-@Target(ElementType.FIELD)
+@Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DictField {
+public @interface DictWrappers {
+	DictWrapper[] value();
 }

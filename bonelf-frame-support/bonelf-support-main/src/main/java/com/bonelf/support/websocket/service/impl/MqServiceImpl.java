@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * 适配mq未引入下的 mq service接口
- * @author ccy
+ * @author bonelf
  * @date 2021/8/4 10:34
  */
 @Service

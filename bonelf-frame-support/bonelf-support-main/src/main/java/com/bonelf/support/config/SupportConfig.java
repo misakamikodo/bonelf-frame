@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 
 /**
  * Auth 配置
- * @author ccy
+ * @author bonelf
  * @date 2021/8/6 0:02
  */
 @Configuration

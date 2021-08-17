@@ -1,7 +1,7 @@
 package com.bonelf.support.web.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bonelf.frame.web.domain.bo.DictValueBO;
+import com.bonelf.frame.web.core.dict.domain.DbDictValue;
 import com.bonelf.frame.web.domain.entity.SysDictItem;
 import com.bonelf.frame.web.mapper.SysDictItemMapper;
 import com.bonelf.support.feign.domain.request.DictValueRequest;
@@ -23,7 +23,7 @@ public class DictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDictI
 	@Override
 	public Set<DictTextResponse> getTextByValueBatch(Set<DictValueRequest> query) {
 		return baseMapper.selectDictTextByItemValueBatch(query.stream().map(item -> {
-			DictValueBO dictValue = new DictValueBO();
+			DbDictValue dictValue = new DbDictValue();
 			dictValue.setDictId(item.getDictId());
 			dictValue.setItemValue(item.getItemValue());
 			return dictValue;

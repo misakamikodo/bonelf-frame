@@ -20,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 		"com.bonelf.frame.web.core.handler",
 		"com.bonelf.frame.web.core",
 		"com.bonelf.frame.web.security",
-		"com.bonelf.frame.web.service.impl",
+		"com.bonelf.frame.web.core.dict.service.impl",
 		"com.bonelf.frame.web.util",
 })
 @Import({

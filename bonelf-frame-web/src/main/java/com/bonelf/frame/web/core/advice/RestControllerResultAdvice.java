@@ -4,28 +4,24 @@
 
 package com.bonelf.frame.web.core.advice;
 
-import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.bonelf.cicada.util.EnumUtil;
 import com.bonelf.frame.base.util.JsonUtil;
 import com.bonelf.frame.base.util.SpringContextUtils;
-import com.bonelf.frame.core.constant.CommonCacheConstant;
-import com.bonelf.frame.core.dict.enums.*;
+import com.bonelf.frame.core.dict.annotation.*;
 import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.web.constant.ResultCostAttr;
+import com.bonelf.frame.web.core.dict.decorator.*;
+import com.bonelf.frame.web.core.dict.domain.BatchDictFieldHolder;
+import com.bonelf.frame.web.core.dict.service.DbDictService;
+import com.bonelf.frame.web.core.dict.service.RemoteDictService;
+import com.bonelf.frame.web.core.dict.service.TableDictService;
+import com.bonelf.frame.web.core.dict.service.impl.LocalDbDictServiceImpl;
 import com.bonelf.frame.web.domain.SimplePageInfo;
-import com.bonelf.frame.web.domain.bo.DictValueBO;
-import com.bonelf.frame.web.mapper.SqlMapper;
 import com.bonelf.frame.web.mapper.SysDictItemMapper;
-import com.bonelf.frame.web.service.DbDictService;
-import com.bonelf.frame.web.service.impl.LocalDbDictServiceImpl;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,7 +31,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.NonNull;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -43,9 +38,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -76,7 +74,9 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 	@Autowired(required = false)
 	private DbDictService dbDictService;
 	@Autowired(required = false)
-	private SqlMapper sqlMapper;
+	private TableDictService tableDictService;
+	@Autowired(required = false)
+	private RemoteDictService remoteDictService;
 
 	@PostConstruct
 	public void initDbDictService() {
@@ -134,7 +134,27 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 		long time2 = System.currentTimeMillis();
 		//log.debug("supportFeignClient获取数据 耗时：" + (time2 - time1) + "ms");
 		long start = System.currentTimeMillis();
-		this.parseDictText(result);
+		// 存储需要装饰的Field索引 如果遇到列表、分页对象 则遍历取同一字段（只取确定类型的列表List<?>和Map不支持注解翻译）
+		List<BatchDictFieldHolder<RemoteDict>> remoteFields = new ArrayList<>();
+		List<BatchDictFieldHolder<TableDict>> tableFields = new ArrayList<>();
+		List<BatchDictFieldHolder<DbDict>> dbDictFields = new ArrayList<>();
+		List<BatchDictFieldHolder<Annotation>> wrapperFields = new ArrayList<>();
+		this.parseDictText(result, remoteFields, tableFields, dbDictFields, wrapperFields);
+		// 翻译数据库字典
+		if (!dbDictFields.isEmpty()) {
+			new DbDictDecorator(dbDictService, dbDictFields).decorate();
+		}
+		if (!tableFields.isEmpty()) {
+			new TableDictDecorator(tableDictService, tableFields).decorate();
+		}
+		if (!remoteFields.isEmpty()) {
+			new RemoteDictDecorator(remoteDictService, remoteFields).decorate();
+		}
+		if (!wrapperFields.isEmpty()) {
+			new DictWrapperDictDecorator(dbDictService,
+					tableDictService,
+					remoteDictService, wrapperFields).decorate();
+		}
 		long end = System.currentTimeMillis();
 		return result;
 	}
@@ -145,52 +165,58 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 	 * 例输入当前返回值的就会多出一个sex_{nameSuffix}字段
 	 * @param record
 	 */
-	private <T> void parseDictText(@NonNull T record) {
+	private <T> void parseDictText(@NonNull T record,
+								   List<BatchDictFieldHolder<RemoteDict>> remoteFields,
+								   List<BatchDictFieldHolder<TableDict>> tableFields,
+								   List<BatchDictFieldHolder<DbDict>> dbDictFields,
+								   List<BatchDictFieldHolder<Annotation>> wrapperFields) {
 		//对POJO解析
 		Field[] fields = ReflectUtil.getFields(record.getClass());
 		if (ArrayUtil.isEmpty(fields)) {
 			return;
 		}
-		List<BatchDictFieldHolder> remoteFields = new ArrayList<>();
-		List<BatchDictFieldHolder> tableFields = new ArrayList<>();
-		List<BatchDictFieldHolder> dbDictFields = new ArrayList<>();
 		for (Field field : fields) {
 			Object fieldValue = ReflectUtil.getFieldValue(record, field.getName());
 			if (fieldValue == null) {
 				continue;
 			}
-			// 对每个field进行判断
-			{
+			String recordStr = JsonUtil.toJson(fieldValue);
+			// 是否是简单对象
+			boolean pojoAndClt = JsonUtil.isJsonObj(recordStr) || JsonUtil.isJsonArray(recordStr);
+			// 如果被字典对象注释，则record 视为序列化的对象 不可序列化的报错
+			if (!pojoAndClt) {
 				DbDict dbDict = field.getAnnotation(DbDict.class);
 				if (dbDict != null) {
-					dbDictFields.add(new BatchDictFieldHolder(dbDict.value(),
-							field, dbDict.nameSuffix(), dbDict.cached()));
+					dbDictFields.add(new BatchDictFieldHolder<>(record, field, dbDict));
 				}
-			}
-			{
 				EnumDict enumDict = field.getAnnotation(EnumDict.class);
 				if (enumDict != null) {
-					decorateEnumDict(record, field, fieldValue, enumDict);
+					new EnumDictDecorator(record, field, enumDict).decorate();
 				}
-			}
-			{
 				TableDict tableDict = field.getAnnotation(TableDict.class);
 				if (tableDict != null) {
-					// dbDictFields.add(new BatchDictFieldHolder(tableDict.value(),
-					// 		field, tableDict.nameSuffix(), tableDict.cached()));
-					decorateTableDict(record, field, fieldValue, tableDict);
+					tableFields.add(new BatchDictFieldHolder<>(record, field, tableDict));
 				}
-			}
-			{
 				FuncDict funcDict = field.getAnnotation(FuncDict.class);
 				if (funcDict != null) {
+					new FuncDictDecorator(record, field, funcDict).decorate();
 				}
-			}
-			{
 				RemoteDict remoteDict = field.getAnnotation(RemoteDict.class);
 				if (remoteDict != null) {
+					remoteFields.add(new BatchDictFieldHolder<>(record, field, remoteDict));
+				}
+			} else {
+				// 被此注解注释的为 Map Collection<?> 对象，使用协议化字符串判断
+				DictWrappers dictWrappers = field.getAnnotation(DictWrappers.class);
+				if (dictWrappers != null) {
+					wrapperFields.add(new BatchDictFieldHolder<>(record, field, dictWrappers));
+				}
+				DictWrapper dictWrapper = field.getAnnotation(DictWrapper.class);
+				if (dictWrapper != null) {
+					wrapperFields.add(new BatchDictFieldHolder<>(record, field, dictWrapper));
 				}
 			}
+			// 被此注解标记的为复杂对象和列表分页对象（分页对象也可作为列表对象处理，这里简化操作进行特殊化）
 			DictField dictField = field.getAnnotation(DictField.class);
 			if (dictField != null) {
 				if (dictField.getClass() == record.getClass()) {
@@ -198,242 +224,41 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 							"不予自动装配字典，请手动添加子属性的字典值");
 					return;
 				}
-				String recordStr = JsonUtil.toJson(fieldValue);
-				if (!JsonUtil.isJsonObj(recordStr)) {
-					//不解析String、int等等非POJO对象
+				if (!pojoAndClt) {
+					// 不解析String、int等等非 POJO
 					return;
 				}
 				if (fieldValue instanceof Collection) {
 					Collection<?> collection = (Collection<?>)fieldValue;
 					for (Object c : collection) {
-						parseDictText(c);
+						parseDictText(c, remoteFields, tableFields, dbDictFields, wrapperFields);
 					}
 					return;
 				} else if (fieldValue.getClass().isArray()) {
 					Object[] objects = (Object[])fieldValue;
 					for (Object c : objects) {
-						parseDictText(c);
+						parseDictText(c, remoteFields, tableFields, dbDictFields, wrapperFields);
 					}
 					return;
 				} else if (fieldValue instanceof IPage) {
 					IPage<?> page = (IPage<?>)fieldValue;
 					for (Object c : page.getRecords()) {
-						parseDictText(c);
+						parseDictText(c, remoteFields, tableFields, dbDictFields, wrapperFields);
 					}
 					return;
 				} else if (fieldValue instanceof SimplePageInfo) {
 					SimplePageInfo<?> page = (SimplePageInfo<?>)fieldValue;
 					for (Object c : page.getRecords()) {
-						parseDictText(c);
+						parseDictText(c, remoteFields, tableFields, dbDictFields, wrapperFields);
 					}
 					return;
+				} else if (fieldValue instanceof Map) {
+					// Map 跳过
 				} else {
-					parseDictText(fieldValue);
+					// 简单对象
+					parseDictText(fieldValue, remoteFields, tableFields, dbDictFields, wrapperFields);
 				}
 			}
 		}
-		// 翻译数据库字典
-		if (!dbDictFields.isEmpty()) {
-			decorateDbDict(record, dbDictFields);
-		}
-	}
-
-	/**
-	 * 字典表字典
-	 * @param record
-	 * @param dictIdFieldList 字典批量操作list
-	 * @param <T>
-	 */
-	private <T> void decorateDbDict(T record, List<BatchDictFieldHolder> dictIdFieldList) {
-		Set<DictValueBO> cacheQuery = new HashSet<>();
-		Set<DictValueBO> noCacheQuery = new HashSet<>();
-		for (BatchDictFieldHolder entry : dictIdFieldList) {
-			Object fieldValue = ReflectUtil.getFieldValue(record, entry.field.getName());
-			DictValueBO item = new DictValueBO();
-			item.setItemValue(fieldValue);
-			item.setDictId(entry.dictId);
-			if (entry.cached) {
-				cacheQuery.add(item);
-			} else {
-				noCacheQuery.add(item);
-			}
-		}
-		if (!noCacheQuery.isEmpty()) {
-			Map<DictValueBO, String> resNoCached = dbDictService.queryDictTextByKeyNoCache(noCacheQuery);
-			wrapDbDictValue2Field(record, dictIdFieldList, resNoCached);
-		}
-		if (!cacheQuery.isEmpty()) {
-			Map<DictValueBO, String> resCached = dbDictService.queryDictTextByKey(cacheQuery);
-			wrapDbDictValue2Field(record, dictIdFieldList, resCached);
-		}
-	}
-
-	/**
-	 * 封装字典信息到对象
-	 * @param record
-	 * @param dictIdFieldList
-	 * @param resCached
-	 * @param <T>
-	 */
-	private <T> void wrapDbDictValue2Field(T record, List<BatchDictFieldHolder> dictIdFieldList,
-										   Map<DictValueBO, String> resCached) {
-		Map<String, List<BatchDictFieldHolder>> group = dictIdFieldList.stream().collect(
-				Collectors.groupingBy(item -> item.dictId)
-		);
-		for (Map.Entry<DictValueBO, String> entry : resCached.entrySet()) {
-			String textValue = entry.getValue();
-			String dictId = entry.getKey().getDictId();
-			if (!group.containsKey(dictId)) {
-				continue;
-			}
-			for (BatchDictFieldHolder holder : group.get(dictId)) {
-				String name = holder.field.getName();
-				String nameSuffix = holder.nameSuffix;
-				try {
-					ReflectUtil.setFieldValue(record,
-							name + nameSuffix,
-							textValue);
-				} catch (UtilException | IllegalArgumentException e) {
-					log.warn("对象需要转字典的对应Field找不到：{}", name + nameSuffix);
-				}
-			}
-		}
-	}
-
-	/**
-	 * 表字典
-	 * @param record
-	 * @param field
-	 * @param fieldValue
-	 * @param tableDict
-	 * @param <T>
-	 */
-	private <T> void decorateTableDict(T record, Field field, Object fieldValue, TableDict tableDict) {
-		String nameSuffix = tableDict.nameSuffix();
-		TableName tableName = tableDict.value().getAnnotation(TableName.class);
-		String textValue = "-";
-		if (tableName != null) {
-			//翻译字典值对应的txt
-			textValue = translateTableDictVal(fieldValue, tableDict, tableName, tableDict.cached());
-		}
-		try {
-			ReflectUtil.setFieldValue(record, field.getName() + nameSuffix, textValue);
-		} catch (UtilException | IllegalArgumentException e) {
-			log.warn("对象需要转字典的对应Field找不到：{}，请检查类型名称是否正确和类型是否为String", field.getName() + nameSuffix);
-		}
-	}
-
-	/**
-	 * 枚举字典
-	 * @param record
-	 * @param field
-	 * @param fieldValue
-	 * @param enumDict
-	 * @param <T>
-	 */
-	private <T> void decorateEnumDict(@NonNull T record, Field field, Object fieldValue, EnumDict enumDict) {
-		String nameSuffix = enumDict.nameSuffix();
-		//翻译字典值对应的txt
-		String textValue = EnumUtil.getEnumString(fieldValue, enumDict.value());
-		try {
-			ReflectUtil.setFieldValue(record, field.getName() + nameSuffix, textValue);
-		} catch (UtilException | IllegalArgumentException e) {
-			log.warn("对象需要转字典的对应Field找不到：{}，请检查类型名称是否正确和类型是否为String", field.getName() + nameSuffix);
-		}
-	}
-
-	/**
-	 * 翻译表字典文本
-	 * @param fieldValue
-	 * @param tableDict
-	 * @param tableName
-	 * @param cached
-	 * @return
-	 */
-	private String translateTableDictVal(Object fieldValue, TableDict tableDict, TableName tableName, boolean cached) {
-		if (sqlMapper == null) {
-			throw new UnsupportedOperationException("you can't use @TableDict this project, because mybatis is not enable");
-		}
-		String textValue;
-		Map<String, Object> result =
-				cached ? getTableDictValCache(fieldValue, tableDict, tableName) :
-						getTableDictValNoCache(fieldValue, tableDict, tableName);
-		textValue = String.valueOf(result.get(tableDict.val()));
-		return textValue;
-	}
-
-	public Map<String, Object> getTableDictValNoCache(Object fieldValue, TableDict tableDict, TableName tableName) {
-		return sqlMapper.dynamicsQuery("SELECT " + tableDict.val() + " FROM " + tableName.value() +
-				" WHERE " + tableDict.key() + " = " + fieldValue);
-	}
-
-	@Cacheable(value = CommonCacheConstant.TABLE_DICT, condition = "!#result == null")
-	public Map<String, Object> getTableDictValCache(Object fieldValue, TableDict tableDict, TableName tableName) {
-		return getTableDictValNoCache(fieldValue, tableDict, tableName);
-	}
-
-	/**
-	 * 翻译字典文本
-	 * @param code
-	 * @param key
-	 * @return
-	 */
-	@Deprecated
-	private String translateDictValue(String code, Object key, boolean cache) {
-		String keyStr = JsonUtil.toJson(key);
-		if (!StringUtils.hasText(keyStr)) {
-			return null;
-		}
-		if (JsonUtil.isJsonObj(keyStr)) {
-			log.warn("对象需要转字典的对应类型不能为对象");
-			return null;
-		}
-		if (JsonUtil.isJsonArray(keyStr)) {
-			log.warn("对象需要转字典的对应类型不能为可迭代对象");
-			return null;
-		}
-		StringBuilder textValue = new StringBuilder();
-		String[] keys = keyStr.split(",");
-		for (String k : keys) {
-			String tmpValue;
-			if (k.trim().length() == 0) {
-				continue; //跳过循环
-			}
-			tmpValue = cache ? dbDictService.queryDictTextByKey(code, k.trim()) : dbDictService.queryDictTextByKeyNoCache(code, k.trim());
-			if (tmpValue != null) {
-				if (!"".equals(textValue.toString())) {
-					textValue.append(",");
-				}
-				textValue.append(tmpValue);
-			}
-		}
-		return textValue.toString();
-	}
-
-	/**
-	 * 字典信息
-	 */
-	@AllArgsConstructor
-	private static class BatchDictFieldHolder {
-
-		/**
-		 * 字典ID
-		 */
-		private final String dictId;
-
-		/**
-		 * field
-		 */
-		private final Field field;
-
-		/**
-		 * 值后缀
-		 */
-		private final String nameSuffix;
-
-		/**
-		 * 是否缓存
-		 */
-		private final boolean cached;
 	}
 }

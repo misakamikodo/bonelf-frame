@@ -63,6 +63,7 @@ public class RedisAutoConfig extends CachingConfigurerSupport {
 			@Override
 			public Object generate(Object target, Method method, Object... params) {
 				StringBuilder redisKey = new StringBuilder();
+				// 这个类名很长
 				redisKey.append(target.getClass().getName()).append("#");
 				redisKey.append(method.getName());
 				if (params.length > 0) {

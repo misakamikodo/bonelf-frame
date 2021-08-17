@@ -1,4 +1,4 @@
-package com.bonelf.frame.core.dict.enums;
+package com.bonelf.frame.core.dict.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -20,6 +20,7 @@ public @interface DbDict {
 	 *  数据code
 	 */
 	String value();
+
 	/**
 	 * 是否使用定时的缓存
 	 * （不会实时修改，但是能减小数据库服务压力，提高访问速度）

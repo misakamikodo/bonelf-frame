@@ -1,8 +1,8 @@
 package com.bonelf.frame.web.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bonelf.frame.web.domain.bo.DictTextBO;
-import com.bonelf.frame.web.domain.bo.DictValueBO;
+import com.bonelf.frame.web.core.dict.domain.DbDictText;
+import com.bonelf.frame.web.core.dict.domain.DbDictValue;
 import com.bonelf.frame.web.domain.entity.SysDictItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -24,5 +24,5 @@ public interface SysDictItemMapper extends BaseMapper<SysDictItem> {
 	 * @param dictText
 	 * @return
 	 */
-	Set<DictTextBO> selectDictTextByItemValueBatch(@Param("dictText") Set<DictValueBO> dictText);
+	Set<DbDictText> selectDictTextByItemValueBatch(@Param("dictText") Set<DbDictValue> dictText);
 }

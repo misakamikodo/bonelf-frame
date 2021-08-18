@@ -3,7 +3,6 @@ package com.bonelf.frame.web.core.dict.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
 import com.bonelf.cicada.util.Md5CryptUtil;
 import com.bonelf.frame.base.util.JsonUtil;
 import com.bonelf.frame.core.constant.CommonCacheConstant;
@@ -90,10 +89,10 @@ public class RemoteDictServiceImpl implements RemoteDictService {
 																	  Set<Object> itemValues) {
 		// List<Map<String, Object>> map = ;
 		String url = addr.replace("{values}", itemValues.stream().map(String::valueOf).collect(Collectors.joining(",")));
-		ResponseEntity<JSONObject> resp = restTemplate.getForEntity(url, JSONObject.class);
+		ResponseEntity<String> resp = restTemplate.getForEntity(url, String.class);
 		String respString;
 		if (resp.getStatusCode().is2xxSuccessful()) {
-			respString = resp.getBody().toString();
+			respString = resp.getBody();
 		} else {
 			throw new BonelfException(String.format("请求%s出错", url));
 		}
@@ -108,7 +107,6 @@ public class RemoteDictServiceImpl implements RemoteDictService {
 				data = new HashMap<>();
 			}
 		} else {
-			// TODO String？？
 			Result<?> respResult = JsonUtil.parse(respString, Result.class);
 			if (respResult == null) {
 				data = JsonUtil.toMap(respString);

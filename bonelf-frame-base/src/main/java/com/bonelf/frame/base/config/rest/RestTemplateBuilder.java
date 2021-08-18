@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO edit desc
+ * RestTemplateBuilder
  * @author bonelf
  * @date 2021/8/3 23:33
  */
@@ -48,6 +48,7 @@ public class RestTemplateBuilder {
 		// 添加响应数据格式，不匹配会报401
 		stringMediaTypes.add(MediaType.TEXT_PLAIN);
 		stringMediaTypes.add(MediaType.TEXT_HTML);
+		stringMediaTypes.add(MediaType.APPLICATION_JSON);
 		stringConverter.setSupportedMediaTypes(stringMediaTypes);
 		messageConverters.add(stringConverter);
 		// json

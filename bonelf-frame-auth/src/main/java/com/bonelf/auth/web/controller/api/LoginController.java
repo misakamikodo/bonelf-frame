@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -41,6 +42,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -56,6 +58,8 @@ import java.util.function.Consumer;
 public class LoginController extends BaseController {
 	@Autowired
 	private Oauth2Properties oauth2Properties;
+	@Autowired
+	private ApplicationContext applicationContext;
 	@Autowired
 	private RestTemplate restTemplate;
 	@Value("${server.servlet.context-path:}")
@@ -139,13 +143,14 @@ public class LoginController extends BaseController {
 	 * @see org.springframework.security.oauth2.provider.endpoint.TokenEndpoint
 	 */
 	private Result<?> createOauthLoginReq(Consumer<MultiValueMap<String, Object>> paramMap) {
-		// SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-		// requestFactory.setOutputStreaming(false);
-		// RestTemplate restTemplate = new RestTemplate(requestFactory);
 		String url;
 		try {
 			// 微服务下使用 laodBalance 请求 nacos 服务
-			ClassLoader.getSystemClassLoader().loadClass("com.bonelf.frame.cloud.config.CloudConfig");
+			// 这个使用docker部署后莫名其妙微服务下抛出ClassNotFoundException
+			// ClassLoader.getSystemClassLoader().loadClass("com.bonelf.frame.cloud.config.CloudConfig");
+			// 此类属于spring-cloud-security 以此来判断
+			Objects.requireNonNull(applicationContext.getClassLoader()).loadClass(
+					"com.bonelf.frame.cloud.config.CloudConfig");
 			url = "http://auth/" + ctxPath + "/oauth/token";
 		} catch (ClassNotFoundException e) {
 			// 直接调本地

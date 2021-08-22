@@ -1,10 +1,10 @@
 package com.bonelf.frame.base.property;
 
-import com.sun.javafx.UnmodifiableArrayList;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,5 +20,5 @@ public class BonelfProperties {
 	private String appName = "bonelf经验总结项目";
 
 	@Deprecated
-	private List<String> permitPath = new UnmodifiableArrayList<String>(new String[]{}, 0);
+	private List<String> permitPath = new ArrayList<>();
 }

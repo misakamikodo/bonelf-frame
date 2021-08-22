@@ -145,8 +145,8 @@ public class LoginController extends BaseController {
 	private Result<?> createOauthLoginReq(Consumer<MultiValueMap<String, Object>> paramMap) {
 		String url;
 		try {
-			// 微服务下使用 laodBalance 请求 nacos 服务
-			// 这个使用docker部署后莫名其妙微服务下抛出ClassNotFoundException
+			// 微服务下使用 loadBalance 请求 nacos 服务
+			// 这个使用docker部署后莫名其妙微服务（docker）下抛出ClassNotFoundException
 			// ClassLoader.getSystemClassLoader().loadClass("com.bonelf.frame.cloud.config.CloudConfig");
 			// 此类属于spring-cloud-security 以此来判断
 			Objects.requireNonNull(applicationContext.getClassLoader()).loadClass(

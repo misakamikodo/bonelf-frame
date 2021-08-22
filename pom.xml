@@ -18,7 +18,7 @@
     <artifactId>bonelf-frame</artifactId>
     <groupId>com.bonelf</groupId>
     <name>bonelf-frame</name>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <description>框架包</description>
     <packaging>pom</packaging>
 
@@ -31,7 +31,7 @@
         <module>bonelf-frame-cloud</module>
         <module>bonelf-frame-mq</module>
         <module>bonelf-frame-websocket</module>
-        <!--<module>bonelf-frame-auth</module>-->
+        <module>bonelf-frame-auth</module>
         <module>bonelf-frame-support</module>
         <module>bonelf-frame-cloud-web</module>
     </modules>
@@ -295,4 +295,16 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>release</name>
+            <url>http://192.168.31.60:8199/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>snapshots</name>
+            <url>http://192.168.31.60:8199/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

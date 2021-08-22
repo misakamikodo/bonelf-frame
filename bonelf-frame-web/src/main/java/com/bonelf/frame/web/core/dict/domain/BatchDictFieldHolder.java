@@ -2,6 +2,7 @@ package com.bonelf.frame.web.core.dict.domain;
 
 import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.util.ReflectUtil;
+import com.bonelf.frame.base.config.rest.RestTemplateBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

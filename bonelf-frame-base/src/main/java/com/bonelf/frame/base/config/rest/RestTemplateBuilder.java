@@ -1,6 +1,10 @@
 package com.bonelf.frame.base.config.rest;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -28,6 +32,13 @@ public class RestTemplateBuilder {
 		RestTemplate restTemplate = new RestTemplate(getFactory());
 		// 这个地方需要配置消息转换器，不然收到消息后转换会出现异常
 		restTemplate.setMessageConverters(getConverters());
+		// 支持302重定向
+		final HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+		final HttpClient httpClient = HttpClientBuilder.create()
+				.setRedirectStrategy(new LaxRedirectStrategy())
+				.build();
+		factory.setHttpClient(httpClient);
+		restTemplate.setRequestFactory(factory);
 		return restTemplate;
 	}
 
@@ -61,6 +72,7 @@ public class RestTemplateBuilder {
 		FormHttpMessageConverter formConverter = new FormHttpMessageConverter();
 		List<MediaType> formMediaTypes = new ArrayList<>();
 		formMediaTypes.add(MediaType.APPLICATION_FORM_URLENCODED);
+		formMediaTypes.add(MediaType.MULTIPART_FORM_DATA);
 		formConverter.setSupportedMediaTypes(formMediaTypes);
 		messageConverters.add(formConverter);
 		return messageConverters;

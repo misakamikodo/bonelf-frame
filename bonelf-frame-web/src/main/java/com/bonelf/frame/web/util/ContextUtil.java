@@ -26,7 +26,7 @@ public class ContextUtil {
 	 * 获得用户
 	 * @return
 	 */
-	protected AuthUser getUser() {
+	public AuthUser getUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
 			throw new BonelfException(AuthExceptionEnum.INVALID_TOKEN);
@@ -39,7 +39,7 @@ public class ContextUtil {
 	 * 获得用户编号
 	 * @return
 	 */
-	protected Long getUserId() {
+	public Long getUserId() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
 			throw new BonelfException(AuthExceptionEnum.INVALID_TOKEN);
@@ -55,7 +55,7 @@ public class ContextUtil {
 	 * 获得用户编号
 	 * @return
 	 */
-	protected Long getUserIdCanNull() {
+	public Long getUserIdCanNull() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
 			return null;

@@ -8,7 +8,9 @@
 
 package com.bonelf.frame.web.config.security;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.bonelf.frame.base.property.oauth2.Oauth2Properties;
+import com.bonelf.frame.base.service.IdUserDetailsService;
 import com.bonelf.frame.web.security.AuthExceptionEntryPoint;
 import com.bonelf.frame.web.security.converter.JwtWithUserInfoAccessTokenConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +47,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Autowired
 	private Oauth2Properties oauth2Properties;
 	@Autowired(required = false)
-	@Qualifier("idUserDetailsService")
-	private UserDetailsService userDetailsService;
+	private IdUserDetailsService userDetailsService;
 
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resourceServerSecurityConfigurer) {
@@ -68,7 +69,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 				.authorizeRequests()
 				// websocket 放权（握手是独立验证）
 				.antMatchers("/wst").permitAll()
-				.antMatchers(oauth2Properties.getPermitPath()).permitAll()
+				.antMatchers(ArrayUtil.addAll(oauth2Properties.getPermitPath(), new String[]{})).permitAll()
 				// .mvcMatchers("/*").permitAll()
 				.anyRequest().authenticated();
 	}

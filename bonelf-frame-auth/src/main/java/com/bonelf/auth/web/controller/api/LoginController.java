@@ -133,6 +133,12 @@ public class LoginController extends BaseController {
 		return result;
 	}
 
+	@ApiOperation(value = "登出 目前无操作")
+	@PostMapping("/logout")
+	public Result<?> logout(String token) {
+		return Result.ok();
+	}
+
 	@Value("${server.port:8809}")
 	private String port;
 

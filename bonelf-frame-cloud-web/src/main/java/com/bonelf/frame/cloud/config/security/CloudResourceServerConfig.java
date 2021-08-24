@@ -8,6 +8,7 @@
 
 package com.bonelf.frame.cloud.config.security;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.bonelf.frame.base.property.oauth2.Oauth2Properties;
 import com.bonelf.frame.base.service.IdUserDetailsService;
 import com.bonelf.frame.cloud.security.constant.AuthFeignConstant;
@@ -74,7 +75,7 @@ public class CloudResourceServerConfig extends ResourceServerConfigurerAdapter {
 				}).permitAll()
 				// 测试全部放权用
 				// .requestMatchers(request -> true).permitAll()
-				.antMatchers(oauth2Properties.getPermitPath()).permitAll()
+				.antMatchers(ArrayUtil.addAll(oauth2Properties.getPermitPath(), new String[]{})).permitAll()
 				// 测试全部放权用
 				// .mvcMatchers("/*").permitAll()
 				.anyRequest().authenticated()

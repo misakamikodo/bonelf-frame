@@ -2,7 +2,7 @@ package com.bonelf.frame.core.dict.enums;
 
 /**
  * 字典类型
- * @author ccy
+ * @author bonelf
  * @date 2021/8/14 20:09
  */
 public enum DictType {

@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
  * 初始化 返回 uploadId，分片上传地址
  * 前端根据上传地址上传对应分片
  * 完成上传后 调用完成上传
- * @author ccy
+ * @author bonelf
  * @date 2021/8/24 22:41
  */
 @ConditionalOnProperty(prefix = "bonelf.upload", value = "type", havingValue = "minio")

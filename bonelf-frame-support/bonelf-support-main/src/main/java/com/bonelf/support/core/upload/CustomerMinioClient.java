@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 支持断点上传
- * @author ccy
+ * @author bonelf
  * @date 2021/8/25 0:31
  */
 public class CustomerMinioClient extends MinioClient {

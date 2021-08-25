@@ -16,7 +16,7 @@ import java.io.IOException;
 
 /**
  * 本地文件上传
- * @author ccy
+ * @author bonelf
  * @date 2021/8/24 22:41
  */
 @ConditionalOnProperty(prefix = "bonelf.upload", value = "type", havingValue = "aliOss")

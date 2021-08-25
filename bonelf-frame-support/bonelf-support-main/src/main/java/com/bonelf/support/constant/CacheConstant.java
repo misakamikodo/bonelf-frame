@@ -11,6 +11,9 @@ package com.bonelf.support.constant;
 import com.bonelf.frame.core.auth.constant.VerifyCodeTypeEnum;
 import com.bonelf.frame.core.constant.BonelfConstant;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+
 public interface CacheConstant {
 
 	/**
@@ -50,4 +53,13 @@ public interface CacheConstant {
 	 * 用户缓存消息:15天
 	 */
 	long SOCKET_MSG_TIME = 15;
+
+	/**
+	 * 文件秒传
+	 */
+	String FILE_MUILT_UPLOAD_MD5 = BonelfConstant.PROJECT_NAME + ":md5:%s";
+	/**
+	 * 文件秒传过期时间
+	 */
+	Duration FILE_MUILT_UPLOAD_EXPIRE = Duration.of(1, ChronoUnit.YEARS);
 }

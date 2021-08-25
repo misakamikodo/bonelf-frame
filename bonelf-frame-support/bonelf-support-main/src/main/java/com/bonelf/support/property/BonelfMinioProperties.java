@@ -23,10 +23,26 @@ public class BonelfMinioProperties {
 	private String secretKey = "bonelf@123";
 	/**
 	 * 节点
+	 * http://minio.bonelf.com
 	 */
-	private String endpoint = "http://minio.bonelf.com";
+	private String endpoint = "http://192.168.31.60:9000";
 	/**
 	 * bucket
 	 */
 	private String bucket = "bonelf";
+
+	/**
+	 * 最大分片数
+	 */
+	private Integer maxPartNum = 10000;
+
+	/**
+	 * 最大分片大小
+	 */
+	private Long maxPartSize = 1024 * 1024 * 5L;
+
+	/**
+	 * 最大文件大小
+	 */
+	private Long maxMultipartPutObjectSize = 1024 * 1024 * 1024 * 5L;
 }

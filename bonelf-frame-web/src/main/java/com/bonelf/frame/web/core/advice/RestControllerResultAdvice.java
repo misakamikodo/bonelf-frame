@@ -26,6 +26,7 @@ import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -114,11 +115,17 @@ public class RestControllerResultAdvice implements ResponseBodyAdvice<Object> {
 								  @NonNull Class<? extends HttpMessageConverter<?>> aClass,
 								  @NonNull ServerHttpRequest request,
 								  @NonNull ServerHttpResponse response) {
-		Result<?> result;
-		if (body instanceof Result) {
-			result = (Result<?>)body;
+		Object bodyValue;
+		if (body instanceof ResponseEntity) {
+			bodyValue = ((ResponseEntity<?>)body).getBody();
 		} else {
-			result = Result.ok(body);
+			bodyValue = body;
+		}
+		Result<?> result;
+		if (bodyValue instanceof Result) {
+			result = (Result<?>)bodyValue;
+		} else {
+			result = Result.ok(bodyValue);
 			ServletRequestAttributes attributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
 			if (attributes != null) {
 				HttpServletRequest servletRequest = attributes.getRequest();

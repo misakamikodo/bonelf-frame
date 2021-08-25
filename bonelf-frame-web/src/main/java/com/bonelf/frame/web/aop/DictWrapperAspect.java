@@ -14,6 +14,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -58,11 +59,17 @@ public class DictWrapperAspect {
 	}
 
 	private void parseDictText(Object result, Annotation dictWrapper) {
-		List<BatchDictFieldHolder<Annotation>> wrapperFields = new ArrayList<>();
-		if(result instanceof Result){
-			wrapperFields.add(new BatchDictFieldHolder<>(((Result<?>)result).getResult(), dictWrapper));
+		Object resultValue;
+		if (result instanceof ResponseEntity) {
+			resultValue = ((ResponseEntity<?>)result).getBody();
 		} else {
-			wrapperFields.add(new BatchDictFieldHolder<>(result, dictWrapper));
+			resultValue = result;
+		}
+		List<BatchDictFieldHolder<Annotation>> wrapperFields = new ArrayList<>();
+		if(resultValue instanceof Result){
+			wrapperFields.add(new BatchDictFieldHolder<>(((Result<?>)resultValue).getResult(), dictWrapper));
+		} else {
+			wrapperFields.add(new BatchDictFieldHolder<>(resultValue, dictWrapper));
 		}
 		new DictWrapperDictDecorator(dbDictService,
 				tableDictService,

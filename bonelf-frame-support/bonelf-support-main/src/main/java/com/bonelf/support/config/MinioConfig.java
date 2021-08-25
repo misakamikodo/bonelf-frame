@@ -8,6 +8,7 @@
 
 package com.bonelf.support.config;
 
+import com.bonelf.support.core.upload.CustomerMinioClient;
 import com.bonelf.support.property.BonelfMinioProperties;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +29,14 @@ public class MinioConfig {
 
 	/**
 	 * 获取 MinioClient
-	 *
 	 * @return
 	 */
 	@Bean
-	public MinioClient minioClient() {
-		return new MinioClient
+	public CustomerMinioClient minioClient() {
+		return new CustomerMinioClient(new MinioClient
 				.Builder()
 				.endpoint(bonelfMinioProperties.getEndpoint())
 				.credentials(bonelfMinioProperties.getAccessKey(), bonelfMinioProperties.getSecretKey())
-				.build();
+				.build());
 	}
 }

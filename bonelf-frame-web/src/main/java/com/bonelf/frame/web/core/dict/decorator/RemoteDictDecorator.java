@@ -7,11 +7,11 @@ import com.bonelf.frame.web.core.dict.domain.BatchDictFieldHolder;
 import com.bonelf.frame.web.core.dict.domain.RemoteDictValue;
 import com.bonelf.frame.web.core.dict.service.RemoteDictService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.common.TemplateParserContext;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -80,6 +80,11 @@ public class RemoteDictDecorator extends BaseBatchDictDecorator<RemoteDict> {
 	private String getAddrFromAnnotation(RemoteDict remoteDict, Map<String, Object> annotationValues) {
 		String url = remoteDict == null ? (String)annotationValues.get("value") :
 				remoteDict.value();
+		// ExpressionParser parser = new SpelExpressionParser();
+		// TemplateParserContext parserContext = new TemplateParserContext();
+		// Map<String, Object> params = new HashMap<>();
+		// params.put("url", url);
+		// String content = parser.parseExpression(DEFAULT_ADDR, parserContext).getValue(params, String.class);
 		return DEFAULT_ADDR
 				.replace("{url}", url)
 				.replace("{conn}", url.contains("?") ? "&" : "?")

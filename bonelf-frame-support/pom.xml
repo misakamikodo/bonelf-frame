@@ -12,11 +12,10 @@
     <artifactId>bonelf-frame-support</artifactId>
     <packaging>pom</packaging>
     <description>微服务 support</description>
-    <!--FIXME ${bonelf.cloud.services}yml读取失败，application-common.yml读取失败-->
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <support.version>${project.version}</support.version>
     </properties>
 
     <modules>
@@ -26,32 +25,9 @@
         <module>bonelf-support-provider-domain</module>
     </modules>
 
-    <dependencies>
-    </dependencies>
-
+    <!-- 不在这管理 所有模块-->
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.bonelf</groupId>
-                <artifactId>bonelf-support-feign</artifactId>
-                <version>${support.version}</version>
-            </dependency>
-            <!--domain 理论上应该不需要这些，哪里配置不对-->
-            <dependency>
-                <groupId>com.bonelf</groupId>
-                <artifactId>bonelf-support-feign-domain</artifactId>
-                <version>${support.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bonelf</groupId>
-                <artifactId>bonelf-support-provider-domain</artifactId>
-                <version>${support.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bonelf</groupId>
-                <artifactId>bonelf-support-main</artifactId>
-                <version>${support.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

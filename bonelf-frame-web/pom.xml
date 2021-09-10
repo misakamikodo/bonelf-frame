@@ -50,6 +50,10 @@
             <scope>provided</scope>
         </dependency>
         <!-- 数据库 End -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+        </dependency>
     </dependencies>
 
 

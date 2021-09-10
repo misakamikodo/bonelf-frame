@@ -44,12 +44,12 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class RestObjectMapper extends ObjectMapper {
 	public RestObjectMapper() {
-		//pretty format
+		// pretty format
 		//this.writerWithDefaultPrettyPrinter();
 		this.setDateFormat(new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN));
-		//序列化两边接受方字段不足 不报UnrecognizedPropertyException，只解析对应的
+		// 序列化两边接受方字段不足 不报UnrecognizedPropertyException，只解析对应的
 		this.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		//驼峰转下划线
+		// 驼峰转下划线
 		//this.setPropertyNamingStrategy(com.fasterxml.jackson.databind.PropertyNamingStrategy.SNAKE_CASE);
 		// 字段和值都加引号
 		//this.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
@@ -65,15 +65,15 @@ public class RestObjectMapper extends ObjectMapper {
 		//simpleModule.addSerializer(Double.TYPE, ToStringSerializer.instance);
 		//simpleModule.addSerializer(Double.class, ToStringSerializer.instance);
 		simpleModule.addSerializer(BigDecimal.class, ToStringSerializer.instance);
-		//旧：DateTimeFormatter.ISO_DATE_TIME
+		// 旧：DateTimeFormatter.ISO_DATE_TIME
 		simpleModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_PATTERN)));
 		simpleModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_PATTERN)));
-		//旧：DateTimeFormatter.ISO_DATE
+		// 旧：DateTimeFormatter.ISO_DATE
 		//simpleModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN)));
-		//旧：DateTimeFormatter.ISO_TIME
+		// 旧：DateTimeFormatter.ISO_TIME
 		simpleModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_TIME_PATTERN)));
 		simpleModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DatePattern.NORM_TIME_PATTERN)));
-		//空转null
+		// 空转null
 		JsonDeserializer<String> serializer = new StdDeserializer<String>(String.class) {
 			@Override
 			public String deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {

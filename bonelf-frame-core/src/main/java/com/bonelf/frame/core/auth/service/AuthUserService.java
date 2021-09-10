@@ -3,7 +3,6 @@ package com.bonelf.frame.core.auth.service;
 import com.bonelf.frame.core.auth.domain.RegisterUserAO;
 import com.bonelf.frame.core.auth.domain.User;
 import com.bonelf.frame.core.constant.UsernameType;
-import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -14,9 +13,12 @@ import org.springframework.stereotype.Service;
  */
 public interface AuthUserService {
 
+	User getById(String userId);
+
     /**
      * 根据用户唯一标识获取用户信息
      * @param uniqueId
+     * @param idType
      * @return
      */
 	User getByUniqueId(String uniqueId, UsernameType idType);

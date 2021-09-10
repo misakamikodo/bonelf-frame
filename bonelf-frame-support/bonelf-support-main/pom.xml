@@ -12,28 +12,7 @@
     <artifactId>bonelf-support-main</artifactId>
 
     <properties>
-        <aliyun-oss.version>2.8.3</aliyun-oss.version>
-        <kaptcha.version>2.3.2</kaptcha.version>
-        <qrcode.version>3.3.0</qrcode.version>
-        <mime-util.version>2.1</mime-util.version>
-        <minio.version>8.0.3</minio.version>
-        <ftp.version>3.6</ftp.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.minio</groupId>
-                <artifactId>minio</artifactId>
-                <version>${minio.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-net</groupId>
-                <artifactId>commons-net</artifactId>
-                <version>${ftp.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <!-- 使用 loadBalance restTemplate调用-->
@@ -70,21 +49,6 @@
         <dependency>
             <groupId>eu.medsea.mimeutil</groupId>
             <artifactId>mime-util</artifactId>
-            <version>${mime-util.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.bonelf</groupId>
@@ -128,18 +92,15 @@
         <dependency>
             <groupId>com.github.penggle</groupId>
             <artifactId>kaptcha</artifactId>
-            <version>${kaptcha.version}</version>
         </dependency>
         <!--二维码生成依赖-->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
-            <version>${qrcode.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
-            <version>${qrcode.version}</version>
         </dependency>
         <!-- minio -->
         <dependency>
@@ -168,6 +129,17 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+        <!-- 工作流 -->
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter-basic</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-engine</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

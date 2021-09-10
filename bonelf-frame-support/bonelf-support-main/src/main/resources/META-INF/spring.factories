@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.bonelf.support.config.SupportConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.bonelf.support.config.SupportConfig,com.bonelf.support.config.FlowableAutoConfig

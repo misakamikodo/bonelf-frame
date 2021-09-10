@@ -108,7 +108,8 @@ public class RedisAutoConfig extends CachingConfigurerSupport {
 	@Bean
 	public RedisSerializer<Object> jackson2JsonRedisSerializer() {
 		Jackson2JsonRedisSerializer<Object> j = new Jackson2JsonRedisSerializer<>(Object.class);
-		//ObjectMapper om = new ObjectMapper();
+		// ObjectMapper om = new ObjectMapper();
+		// 不适用Bean，因为有小改会导致json参数接受异常
 		ObjectMapper om = new RestObjectMapper();
 		j.setObjectMapper(om);
 		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);

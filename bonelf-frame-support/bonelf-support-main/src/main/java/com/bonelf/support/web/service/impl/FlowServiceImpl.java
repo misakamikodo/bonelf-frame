@@ -18,9 +18,11 @@ import org.flowable.engine.runtime.ActivityInstance;
 import org.flowable.engine.runtime.Execution;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.image.ProcessDiagramGenerator;
+import org.flowable.spring.boot.actuate.info.FlowableInfoAutoConfiguration;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,7 @@ import java.util.stream.Collectors;
  * @date 2021/9/9 14:19
  */
 @Slf4j
+@ConditionalOnClass({FlowableInfoAutoConfiguration.class})
 @Service
 public class FlowServiceImpl implements FlowService {
 	@Autowired

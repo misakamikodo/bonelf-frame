@@ -8,7 +8,9 @@ import com.bonelf.support.web.service.FlowService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.flowable.spring.boot.actuate.info.FlowableInfoAutoConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import java.util.List;
  * @date 2021年9月9日
  **/
 @Slf4j
+@ConditionalOnClass({FlowableInfoAutoConfiguration.class})
 @RestController
 @Api(value = "工作流接口", tags = {"工作流"})
 @RequestMapping("/flow")

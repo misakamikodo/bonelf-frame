@@ -45,6 +45,7 @@
         <springboot.version>2.2.5.RELEASE</springboot.version>
 
         <frame.version>${project.version}</frame.version>
+        <!-- 这些都要是同一个版本号，不然在打包时任意的模块因为依赖的版本在 仓库服务器 上找不到而报错，要一起更新版本-->
         <bonelf-cicada.version>${frame.version}</bonelf-cicada.version>
         <bonelf-frame-base.version>${frame.version}</bonelf-frame-base.version>
         <bonelf-frame-web.version>${frame.version}</bonelf-frame-web.version>

@@ -3,11 +3,18 @@ package com.bonelf.frame.web.core.argresolver.databinder;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bonelf.frame.base.util.JsonUtil;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
 import lombok.Data;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.ServletRequestDataBinder;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -123,6 +130,7 @@ public class QueryWrapperDataBinder extends ServletRequestDataBinder {
 	 */
 	@Data
 	private static class QueryArg {
+		@JsonDeserialize(using = ToUnderlineCaseDeserializer.class)
 		private String field;
 		private String op;
 		private String value;
@@ -163,10 +171,6 @@ public class QueryWrapperDataBinder extends ServletRequestDataBinder {
 			}
 
 		}
-
-		public void setField(String field) {
-			this.field = StrUtil.toUnderlineCase(field);
-		}
 	}
 
 	/**
@@ -177,12 +181,9 @@ public class QueryWrapperDataBinder extends ServletRequestDataBinder {
 		private static String ASC = "asc";
 		private static String DESC = "desc";
 
+		@JsonDeserialize(using = ToUnderlineCaseDeserializer.class)
 		private String field;
 		private String sort;
-
-		public void setField(String field) {
-			this.field = StrUtil.toUnderlineCase(field);
-		}
 	}
 
 	/**
@@ -190,10 +191,15 @@ public class QueryWrapperDataBinder extends ServletRequestDataBinder {
 	 */
 	@Data
 	private static class SelectArg {
+		@JsonDeserialize(using = ToUnderlineCaseDeserializer.class)
 		private String field;
+	}
 
-		public void setField(String field) {
-			this.field = StrUtil.toUnderlineCase(field);
+	private static class ToUnderlineCaseDeserializer extends JsonDeserializer<String> {
+		@Override
+		public String deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+			String value = StringDeserializer.instance.deserialize(p, ctxt);
+			return StrUtil.toUnderlineCase(value);
 		}
 	}
 }

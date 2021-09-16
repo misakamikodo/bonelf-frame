@@ -164,6 +164,9 @@ public class QueryWrapperDataBinder extends ServletRequestDataBinder {
 
 		}
 
+		public void setField(String field) {
+			this.field = StrUtil.toUnderlineCase(field);
+		}
 	}
 
 	/**
@@ -176,6 +179,10 @@ public class QueryWrapperDataBinder extends ServletRequestDataBinder {
 
 		private String field;
 		private String sort;
+
+		public void setField(String field) {
+			this.field = StrUtil.toUnderlineCase(field);
+		}
 	}
 
 	/**
@@ -184,5 +191,9 @@ public class QueryWrapperDataBinder extends ServletRequestDataBinder {
 	@Data
 	private static class SelectArg {
 		private String field;
+
+		public void setField(String field) {
+			this.field = StrUtil.toUnderlineCase(field);
+		}
 	}
 }

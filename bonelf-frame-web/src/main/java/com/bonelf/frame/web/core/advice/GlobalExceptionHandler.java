@@ -2,13 +2,15 @@ package com.bonelf.frame.web.core.advice;
 
 import cn.hutool.core.util.StrUtil;
 import com.bonelf.frame.core.constant.BizConstants;
+import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.core.exception.BonelfException;
 import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
-import com.bonelf.frame.core.domain.Result;
+import com.bonelf.frame.core.exception.enums.DataAccessExceptionEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -31,7 +33,6 @@ import java.util.stream.Collectors;
 /**
  * <p>
  * 异常处理
- * TODO 处理 MySQL MyBatis 数据库异常封装
  * </p>
  * @author Chenyuan
  * @since 2021/2/2 11:51
@@ -42,7 +43,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
 	/**
-	 * ServiceException
+	 * BonelfException API异常
 	 * @param e
 	 * @return
 	 */
@@ -139,14 +140,28 @@ public class GlobalExceptionHandler {
 	}
 
 	/**
+	 * 数据库异常
+	 * 可以使用instanceOf 记录详细信息
+	 * XXX 数据库日志添加
+	 * @param e
+	 * @return
+	 */
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(value = DataAccessException.class)
+	public Result<?> dbException(DataAccessException e) {
+		e.printStackTrace();
+		return Result.builder().enums(DataAccessExceptionEnum.COMMON).devMsgF(e.getMessage()).build();
+	}
+
+	/**
 	 * 全局异常捕捉处理
+	 * XXX 数据库日志添加
 	 * @param e
 	 * @return
 	 */
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value = Exception.class)
 	public Result<?> errorHandler(Exception e) {
-		//便于调试
 		e.printStackTrace();
 		return Result.builder().enums(CommonBizExceptionEnum.SERVER_ERROR).devMsgF(e.getMessage()).build();
 	}

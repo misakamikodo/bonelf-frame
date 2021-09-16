@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * 动态查询参数适配
+ * 动态查询参数适配（不建议使用，因为这相当于注入SQL，不过受限制）
  * query=[{field:name, op:=, value:ok}...]&order=[{field:name,sort:asc}]&select=[{field:name}]
  * @author bonelf
  * @date 2021/9/16 10:00
@@ -20,16 +20,10 @@ import java.util.Locale;
 public class QueryWrapperDataBinder extends ServletRequestDataBinder {
 
 	private static final String PARAM_QUERY_DIR = "query";
-	private static final String PARAM_QUERY_FIELD = "field";
-	private static final String PARAM_QUERY_OP = "op";
-	private static final String PARAM_QUERY_VALUE = "value";
 
 	private static final String PARAM_ORDER_DIR = "order";
-	private static final String PARAM_ORDER_FIELD = "field";
-	private static final String PARAM_ORDER_SORT = "sort";
 
 	private static final String PARAM_SELECT_DIR = "select";
-	private static final String PARAM_SELECT_FIELD = "field";
 
 	public QueryWrapperDataBinder(Object target) {
 		super(target);
@@ -147,7 +141,7 @@ public class QueryWrapperDataBinder extends ServletRequestDataBinder {
 			LESS("<"),
 			LESS_OR_EQUAL("<="),
 			IN("in"),
-			BETWEEN("[]");;
+			BETWEEN("[]");
 
 			private final String value;
 

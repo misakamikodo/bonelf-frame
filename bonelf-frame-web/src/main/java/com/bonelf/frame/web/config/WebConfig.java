@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 @Import({
 		ResourceServerConfig.class,
 		Swagger2Config.class,
+		WebMvcConfig.class,
 })
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 public class WebConfig {

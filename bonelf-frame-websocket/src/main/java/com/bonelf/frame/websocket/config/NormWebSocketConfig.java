@@ -1,6 +1,7 @@
 package com.bonelf.frame.websocket.config;
 
 import com.bonelf.frame.websocket.interceptor.NormWebSocketInterceptor;
+import com.bonelf.frame.websocket.property.NormWebsocketProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -24,11 +25,13 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 public class NormWebSocketConfig implements WebSocketConfigurer {
 	@Autowired
 	private WebSocketHandler webSocketHandler;
+	@Autowired
+	private NormWebsocketProperties normWebsocketProperties;
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		///{userId}
-		registry.addHandler(webSocketHandler, "/wst")
+		registry.addHandler(webSocketHandler, normWebsocketProperties.getEndpoint())
 				.setAllowedOrigins("*").addInterceptors(webSocketInterceptor());
 	}
 

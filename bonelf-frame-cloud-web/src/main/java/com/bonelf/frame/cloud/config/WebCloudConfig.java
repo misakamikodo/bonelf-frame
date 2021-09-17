@@ -13,9 +13,11 @@ import org.springframework.context.annotation.Import;
 @Import({
 		CloudWebMvcConfig.class,
 		CloudResourceServerConfig.class,
+		SwaggerCloudConfig.class,
 })
 @ComponentScan(basePackages = {
-		"com.bonelf.frame.cloud.service.impl"
+		"com.bonelf.frame.cloud.service.impl",
+		"com.bonelf.frame.cloud.swagger"
 })
 @Configuration
 public class WebCloudConfig {

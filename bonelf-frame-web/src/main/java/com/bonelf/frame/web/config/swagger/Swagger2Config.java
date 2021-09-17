@@ -1,12 +1,10 @@
 package com.bonelf.frame.web.config.swagger;
 
-import com.bonelf.frame.cloud.swagger.SwaggerCloudPathProvider;
 import com.bonelf.frame.core.constant.AuthConstant;
 import com.bonelf.frame.core.constant.BonelfConstant;
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,8 +35,6 @@ import java.util.List;
 @EnableOpenApi
 @ConditionalOnProperty(prefix = BonelfConstant.PROJECT_NAME + "swagger", value = "enable", havingValue = "true")
 public class Swagger2Config implements WebMvcConfigurer {
-	@Autowired
-	private SwaggerCloudPathProvider pathProvider;
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -66,11 +62,9 @@ public class Swagger2Config implements WebMvcConfigurer {
 	 */
 	@Bean
 	@DependsOn("swaggerCloudPathProvider")
-	public Docket createRestApi() {
+	public Docket swaggerDocket() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.apiInfo(apiInfo())
-				// 修改添加服务名称 如果想不启动网关调试并使用swagger调试要注释这个
-				.pathProvider(pathProvider)
 				.select()
 				//此包路径下的类，才生成接口文档
 				//.apis(RequestHandlerSelectors.basePackage("com.bonelf.testservice.controller"))
@@ -97,7 +91,7 @@ public class Swagger2Config implements WebMvcConfigurer {
 				// 描述
 				.description("后台API接口")
 				// 作者
-				.contact(new Contact("Bonelf", "http://www.bonelf.com", "bonelfkirito@163.com"))
+				.contact(new Contact("Bonelf", "http://www.bonelf.com", "ccykirito@163.com"))
 				.license("The Apache License, Version 2.0")
 				.licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
 				.build();
@@ -115,6 +109,18 @@ public class Swagger2Config implements WebMvcConfigurer {
 	}
 
 	/**
+	 * 新增 securityContexts 保持登录状态
+	 */
+	private List<SecurityContext> securityContexts() {
+		return new ArrayList<>(
+				Collections.singleton(SecurityContext.builder()
+						.securityReferences(defaultAuth())
+						.forPaths(PathSelectors.regex("^(?!auth).*$"))
+						.build())
+		);
+	}
+
+	/**
 	 * JWT token
 	 * @return
 	 */
@@ -125,18 +131,6 @@ public class Swagger2Config implements WebMvcConfigurer {
 		tokenPar.name(AuthConstant.HEADER).description("token").required(false).build();
 		pars.add(tokenPar.build());
 		return pars;
-	}
-
-	/**
-	 * 新增 securityContexts 保持登录状态
-	 */
-	private List<SecurityContext> securityContexts() {
-		return new ArrayList<>(
-				Collections.singleton(SecurityContext.builder()
-						.securityReferences(defaultAuth())
-						.forPaths(PathSelectors.regex("^(?!auth).*$"))
-						.build())
-		);
 	}
 
 	private List<SecurityReference> defaultAuth() {

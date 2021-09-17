@@ -1,4 +1,4 @@
-package com.bonelf.frame.web.core.swagger;
+package com.bonelf.frame.cloud.swagger;
 
 import com.bonelf.cicada.util.StringUtil;
 import org.springframework.beans.factory.annotation.Value;

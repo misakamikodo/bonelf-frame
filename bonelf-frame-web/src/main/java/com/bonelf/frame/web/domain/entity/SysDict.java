@@ -1,6 +1,7 @@
 package com.bonelf.frame.web.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.bonelf.frame.web.domain.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@TableName("sys_dict")
 public class SysDict extends BaseEntity {
     @TableId
     private String dictId;

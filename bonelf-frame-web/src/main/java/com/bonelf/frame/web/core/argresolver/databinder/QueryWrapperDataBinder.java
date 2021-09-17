@@ -80,7 +80,7 @@ public class QueryWrapperDataBinder extends ServletRequestDataBinder {
 					case BEGIN_WITH:
 						q.likeLeft(queryArg.getField(), queryArg.getValue());
 						break;
-					case ENDWITH:
+					case END_WITH:
 						q.likeRight(queryArg.getField(), queryArg.getValue());
 						break;
 					case GREATER:
@@ -143,7 +143,7 @@ public class QueryWrapperDataBinder extends ServletRequestDataBinder {
 			NOT_EQUAL("!="),
 			CONTAINS("*="),
 			BEGIN_WITH("^="),
-			ENDWITH("$="),
+			END_WITH("$="),
 			GREATER(">"),
 			GREATER_OR_EQUAL(">="),
 			LESS("<"),

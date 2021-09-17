@@ -36,7 +36,7 @@ public class PageDataBinder extends ServletRequestDataBinder {
 	protected void doBind(@NonNull MutablePropertyValues mpvs) {
 		// String page = (String)mpvs.get("page");
 		// String current = (String)mpvs.get("current");
-		//
+
 		// String size = (String)mpvs.get("size");
 		// String pageSize = (String)mpvs.get("pageSize");
 		// String limit = (String)mpvs.get("limit");

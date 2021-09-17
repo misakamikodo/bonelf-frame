@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * web服务配置
@@ -63,7 +64,14 @@ public abstract class AbstractWebMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
 		resolvers.add(new PageArgResolver(defaultPageSize, currentPageArgs, sizePageArgs));
-		resolvers.add(new QueryWrapperArgResolver());
+		try {
+			if (Objects.requireNonNull(applicationContext.getClassLoader())
+					.loadClass("com.baomidou.mybatisplus.extension.plugins.pagination.Page") != null) {
+				resolvers.add(new QueryWrapperArgResolver());
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

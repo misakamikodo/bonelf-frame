@@ -33,7 +33,7 @@ import java.util.List;
 @Configuration
 @EnableSwaggerBootstrapUI
 @EnableOpenApi
-@ConditionalOnProperty(prefix = BonelfConstant.PROJECT_NAME + "swagger", value = "enable", havingValue = "true")
+@ConditionalOnProperty(prefix = BonelfConstant.PROJECT_NAME + ".swagger", value = "enable", havingValue = "true", matchIfMissing = true)
 public class Swagger2Config implements WebMvcConfigurer {
 
 	@Override

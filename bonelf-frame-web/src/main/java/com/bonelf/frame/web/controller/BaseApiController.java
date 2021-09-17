@@ -60,10 +60,27 @@ public abstract class BaseApiController<S extends IService<E>, E> extends BaseCo
 		return Result.ok(service.list(new QueryWrapper<E>(data)));
 	}
 
-	@ApiOperation("分页查询")
-	@GetMapping("/page")
+	@ApiOperation("全量列表2")
+	@GetMapping("/list")
+	public Result<List<E>> find(QueryWrapper<E> data) {
+		return Result.ok(service.list(data));
+	}
+
+	@Deprecated
 	public Result<Page<E>> findPage(E entity) {
 		return Result.ok(service.page(defaultPage(), new QueryWrapper<E>(entity)));
+	}
+
+	@ApiOperation("分页查询")
+	@GetMapping("/page")
+	public Result<Page<E>> findPage(Page<E> page, E entity) {
+		return Result.ok(service.page(defaultPage(), new QueryWrapper<E>(entity)));
+	}
+
+	@ApiOperation("分页查询2")
+	@GetMapping("/page")
+	public Result<Page<E>> findPage(Page<E> page, QueryWrapper<E> data) {
+		return Result.ok(service.page(defaultPage(), data));
 	}
 
 	@ApiOperation("批量更新、添加")

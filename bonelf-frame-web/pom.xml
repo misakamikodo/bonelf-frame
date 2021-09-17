@@ -49,6 +49,11 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!--liquibase 数据库表版本更新-->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
         <!-- 数据库 End -->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>

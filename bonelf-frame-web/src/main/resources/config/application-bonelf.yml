@@ -1,4 +1,18 @@
+server:
+  servlet:
+    # cloud配置前请对应看 frame-GateWay 的 GlobalAccessFilter
+    context-path: /bonelf
+    encoding:
+      charset: utf-8
+#  tomcat:
+#    # 防止linux上传过时，目录被删除
+#    basedir: /home/tomcat/spring/temp
+
 spring:
+  profiles:
+    include:
+      - third
+
   datasource:
     druid:
       stat-view-servlet:
@@ -33,6 +47,55 @@ spring:
         filters: stat,wall,slf4j
         # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
         connection-properties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
+
+  liquibase:
+    enabled: true
+    change-log: classpath:liquibase/root.xml
+    drop-first: false
+    contexts: application
+
+logging:
+  #  默认
+  config: classpath:logback-spring.xml
+  level:
+    org:
+      mybatis: debug
+
+bonelf:
+  base-url: http://127.0.0.1:9999
+  app-name: bonelf经验总结项目
+  oauth2:
+    client-id: app_client
+    client-secret: app_secret
+    jwt:
+      # 可指定classpath:
+      keystore: /tls/example.p12
+      password: =bonelf=
+      alias: bonelf
+    no-auth-path:
+      # swagger
+      - /v2/api-docs
+      # 下载页面
+      - /download.html
+      # 测试
+      - /test/**
+      - /noAuth/**
+      # 验证码 verificationCode
+      - /vcode/**
+      # 二维码
+      - /qrcode/**
+
+  swagger:
+    enable: true
+  # 缓存
+  cache:
+    # 设置spring缓存方式 默认 redis
+    strategy: redis
+
+  mail:
+    password: XXX
+    smtp: smtp.ym.163.com
+    username: me@chenchengyuan.com
 
 # mybatis-plus 配置
 mybatis-plus:

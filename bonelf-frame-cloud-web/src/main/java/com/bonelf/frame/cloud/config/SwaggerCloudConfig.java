@@ -8,7 +8,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 /**
  * Swagger 微服务配置
- * @author ccy
+ * @author bonelf
  * @date 2021/9/17 9:56
  */
 @Configuration

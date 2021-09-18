@@ -46,7 +46,7 @@ public @interface TableDictValid {
 	/**
 	 * 异常信息
 	 */
-	String message() default "{*.validation.constraint.TableDict.message}";
+	String message() default "{com.bonelf.frame.web.core.validator.annotation.TableDictValid.message}";
 
 
 	/**

@@ -9,7 +9,7 @@ import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bonelf.frame.base.util.JsonUtil;
 import com.bonelf.frame.base.util.SpringContextUtils;
-import com.bonelf.frame.core.dict.annotation.*;
+import com.bonelf.frame.core.dict.constraints.*;
 import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.web.constant.ResultCostAttr;
 import com.bonelf.frame.web.core.dict.decorator.*;

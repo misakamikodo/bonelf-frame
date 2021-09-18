@@ -1,17 +1,17 @@
 package com.bonelf.frame.web.core.dict.decorator;
 
 import cn.hutool.core.util.StrUtil;
-import com.bonelf.frame.core.dict.annotation.RemoteDict;
+import com.bonelf.frame.core.dict.constraints.RemoteDict;
 import com.bonelf.frame.web.core.dict.decorator.base.BaseBatchDictDecorator;
 import com.bonelf.frame.web.core.dict.domain.BatchDictFieldHolder;
 import com.bonelf.frame.web.core.dict.domain.RemoteDictValue;
 import com.bonelf.frame.web.core.dict.service.RemoteDictService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.common.TemplateParserContext;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**

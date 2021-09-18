@@ -6,9 +6,9 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.bonelf.frame.web.core.validator.annotation;
+package com.bonelf.frame.core.validator.constraints;
 
-import com.bonelf.frame.web.core.validator.DbDictValidator;
+import com.bonelf.frame.core.validator.EnumValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -22,17 +22,17 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * <p>
- * 数据库字典入参校验（因为@Constraint无法方core包）
- * 微服务下徐调用support服务，没必要一个验证走远程请求，并且core包放不了，feign包就无法使用所以不支持微服务
+ * DTO枚举校验注解
+ * 在controller上加@Validated 生效，或者加载DTO上（需要能获得枚举）
  * </p>
  * @author bonelf
  * @since 2020/7/9 9:20
  */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
-@Repeatable(DbDictValid.List.class)
-@Constraint(validatedBy = {DbDictValidator.class})
-public @interface DbDictValid {
+@Repeatable(EnumValid.List.class)
+@Constraint(validatedBy = {EnumValidator.class})
+public @interface EnumValid {
 	/**
 	 * valid的参数
 	 */
@@ -46,13 +46,24 @@ public @interface DbDictValid {
 	/**
 	 * 异常信息
 	 */
-	String message() default "{com.bonelf.frame.web.core.validator.annotation.DbDictValid.message}";
+	String message() default "{com.bonelf.frame.core.validator.annotation.EnumValid.message}";
 
 
 	/**
-	 * 字典类型（主表）
+	 * 枚举类 枚举类和合法值二选一
 	 */
-	String dictId();
+	Class<?> clazz() default void.class;
+
+	/**
+	 * 合法值 枚举类和合法值二选一
+	 * @return
+	 */
+	String[] permitCode() default "";
+
+	/**
+	 * 枚举唯一的code
+	 */
+	String method() default "getCode";
 
 	/**
 	 * Defines several {@link Enum} annotations on the same element.
@@ -61,7 +72,7 @@ public @interface DbDictValid {
 	@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 	@Retention(RUNTIME)
 	@interface List {
-		DbDictValid[] value();
+		EnumValid[] value();
 	}
 }
 

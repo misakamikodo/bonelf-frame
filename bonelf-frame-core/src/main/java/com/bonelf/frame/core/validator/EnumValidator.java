@@ -1,6 +1,6 @@
 package com.bonelf.frame.core.validator;
 
-import com.bonelf.frame.core.validator.annotation.EnumValid;
+import com.bonelf.frame.core.validator.constraints.EnumValid;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

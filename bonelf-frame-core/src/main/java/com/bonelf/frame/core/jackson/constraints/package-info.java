@@ -6,4 +6,4 @@
  * @author bonelf
  * @since 2020/10/4 23:02
  */
-package com.bonelf.frame.core.jackson.annotation;
+package com.bonelf.frame.core.jackson.constraints;

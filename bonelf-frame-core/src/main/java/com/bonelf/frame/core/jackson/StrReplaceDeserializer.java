@@ -8,7 +8,7 @@
 
 package com.bonelf.frame.core.jackson;
 
-import com.bonelf.frame.core.jackson.annotation.StrReplace;
+import com.bonelf.frame.core.jackson.constraints.StrReplace;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;

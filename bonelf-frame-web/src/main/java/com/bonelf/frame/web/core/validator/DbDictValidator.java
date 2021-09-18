@@ -1,7 +1,7 @@
 package com.bonelf.frame.web.core.validator;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.bonelf.frame.web.core.validator.annotation.DbDictValid;
+import com.bonelf.frame.web.core.validator.constraints.DbDictValid;
 import com.bonelf.frame.web.domain.entity.SysDictItem;
 import com.bonelf.frame.web.mapper.SysDictItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;

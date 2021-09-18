@@ -1,4 +1,4 @@
-package com.bonelf.frame.core.dict.annotation;
+package com.bonelf.frame.core.dict.constraints;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,33 +8,18 @@ import java.lang.annotation.Target;
 /**
  * <p>
  * 数据库字典
+ * 通常如“退款原因”这类 用户可能修改，而代码很少使用其值 的存到数据库字典，并搭配缓存使用
  * </p>
  * @author bonelf
  * @since 2020/10/11 17:44
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TableDict {
+public @interface DbDict {
 	/**
-	 *  tableEntityClass extends BaseEntity
+	 *  数据code
 	 */
-	Class<?> value() default void.class;
-
-	/**
-	 * 翻译前的名称
-	 */
-	String key() default "id";
-
-	/**
-	 * 翻译后的名称
-	 */
-	String val() default "name";
-
-	/**
-	 * 当设置了sql table、key、val 都会失效而取sql
-	 * example: SELECT id `key`, name `val` FROM example WHERE id IN (:values)
-	 */
-	String sql() default "";
+	String value();
 
 	/**
 	 * 是否使用定时的缓存

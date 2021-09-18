@@ -2,7 +2,7 @@ package com.bonelf.frame.web.core.dict.decorator;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bonelf.frame.core.dict.annotation.TableDict;
+import com.bonelf.frame.core.dict.constraints.TableDict;
 import com.bonelf.frame.core.exception.BonelfException;
 import com.bonelf.frame.web.core.dict.decorator.base.BaseBatchDictDecorator;
 import com.bonelf.frame.web.core.dict.domain.BatchDictFieldHolder;

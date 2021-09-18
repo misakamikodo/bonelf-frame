@@ -1,10 +1,10 @@
 package com.bonelf.frame.web.aop;
 
+import com.bonelf.frame.base.util.redis.RedisLock;
 import com.bonelf.frame.core.constant.CommonCacheConstant;
 import com.bonelf.frame.core.exception.BonelfException;
 import com.bonelf.frame.core.exception.enums.CommonBizExceptionEnum;
-import com.bonelf.frame.base.util.redis.RedisLock;
-import com.bonelf.frame.web.aop.annotation.NoRepeatSubmit;
+import com.bonelf.frame.web.aop.constraints.NoRepeatSubmit;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

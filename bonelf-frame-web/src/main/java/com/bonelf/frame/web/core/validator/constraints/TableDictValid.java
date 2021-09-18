@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.bonelf.frame.web.core.validator.annotation;
+package com.bonelf.frame.web.core.validator.constraints;
 
 import com.bonelf.frame.web.core.validator.TableDictValidator;
 

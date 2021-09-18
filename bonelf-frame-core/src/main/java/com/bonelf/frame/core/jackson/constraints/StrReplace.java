@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.bonelf.frame.core.jackson.annotation;
+package com.bonelf.frame.core.jackson.constraints;
 
 import com.bonelf.frame.core.jackson.StrReplaceDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

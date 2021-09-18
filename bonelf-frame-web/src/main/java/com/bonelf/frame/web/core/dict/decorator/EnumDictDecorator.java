@@ -2,7 +2,7 @@ package com.bonelf.frame.web.core.dict.decorator;
 
 import com.bonelf.cicada.enums.CodeValueEnum;
 import com.bonelf.cicada.util.EnumUtil;
-import com.bonelf.frame.core.dict.annotation.EnumDict;
+import com.bonelf.frame.core.dict.constraints.EnumDict;
 import com.bonelf.frame.core.exception.BonelfException;
 import com.bonelf.frame.web.core.dict.decorator.base.BaseDictDecorator;
 import lombok.Getter;

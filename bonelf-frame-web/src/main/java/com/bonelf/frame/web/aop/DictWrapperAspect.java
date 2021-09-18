@@ -1,7 +1,7 @@
 package com.bonelf.frame.web.aop;
 
-import com.bonelf.frame.core.dict.annotation.DictWrapper;
-import com.bonelf.frame.core.dict.annotation.DictWrappers;
+import com.bonelf.frame.core.dict.constraints.DictWrapper;
+import com.bonelf.frame.core.dict.constraints.DictWrappers;
 import com.bonelf.frame.core.domain.Result;
 import com.bonelf.frame.web.core.dict.decorator.DictWrapperDictDecorator;
 import com.bonelf.frame.web.core.dict.domain.BatchDictFieldHolder;

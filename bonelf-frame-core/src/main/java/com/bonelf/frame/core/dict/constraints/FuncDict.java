@@ -1,6 +1,4 @@
-package com.bonelf.frame.core.dict.annotation;
-
-import com.bonelf.cicada.enums.CodeValueEnum;
+package com.bonelf.frame.core.dict.constraints;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,19 +7,29 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * 枚举字典
- * 通常如“订单状态”这类 用户不关心，而代码经常使用其值 的存到枚举字典
+ * 静态方法字典
  * </p>
  * @author bonelf
  * @since 2020/10/11 17:45
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EnumDict {
+public @interface FuncDict {
 	/**
-	 *  枚举类
+	 *  静态方法工具类
 	 */
-	Class<? extends CodeValueEnum<?>> value();
+	Class<?> value();
+	/**
+	 *  获取方法
+	 */
+	String method();
+
+	/**
+	 * 参数类型
+	 * @return
+	 */
+	Class<?> methodParamType() default String.class;
+
 	/**
 	 * 在前端解析时返回对应枚举值 不设置代表不返回
 	 */

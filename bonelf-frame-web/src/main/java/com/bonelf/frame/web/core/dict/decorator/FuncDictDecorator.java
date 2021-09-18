@@ -1,7 +1,7 @@
 package com.bonelf.frame.web.core.dict.decorator;
 
 import cn.hutool.core.util.ReflectUtil;
-import com.bonelf.frame.core.dict.annotation.FuncDict;
+import com.bonelf.frame.core.dict.constraints.FuncDict;
 import com.bonelf.frame.core.exception.BonelfException;
 import com.bonelf.frame.web.core.dict.decorator.base.BaseDictDecorator;
 import lombok.Getter;

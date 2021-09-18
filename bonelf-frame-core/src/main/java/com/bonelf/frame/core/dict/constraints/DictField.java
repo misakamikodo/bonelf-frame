@@ -1,4 +1,4 @@
-package com.bonelf.frame.core.dict.annotation;
+package com.bonelf.frame.core.dict.constraints;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

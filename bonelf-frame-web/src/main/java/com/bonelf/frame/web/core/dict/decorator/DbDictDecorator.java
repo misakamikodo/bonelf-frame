@@ -1,7 +1,7 @@
 package com.bonelf.frame.web.core.dict.decorator;
 
 
-import com.bonelf.frame.core.dict.annotation.DbDict;
+import com.bonelf.frame.core.dict.constraints.DbDict;
 import com.bonelf.frame.web.core.dict.decorator.base.BaseBatchDictDecorator;
 import com.bonelf.frame.web.core.dict.domain.BatchDictFieldHolder;
 import com.bonelf.frame.web.core.dict.domain.DbDictValue;

@@ -1,4 +1,4 @@
-package com.bonelf.frame.web.aop.annotation;
+package com.bonelf.frame.web.aop.constraints;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

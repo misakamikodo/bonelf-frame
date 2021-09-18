@@ -3,7 +3,7 @@ package com.bonelf.frame.web.core.validator;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bonelf.frame.web.core.validator.annotation.TableDictValid;
+import com.bonelf.frame.web.core.validator.constraints.TableDictValid;
 import com.bonelf.frame.web.mapper.SqlMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

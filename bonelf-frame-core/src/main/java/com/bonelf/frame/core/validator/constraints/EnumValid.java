@@ -46,7 +46,7 @@ public @interface EnumValid {
 	/**
 	 * 异常信息
 	 */
-	String message() default "{com.bonelf.frame.core.validator.annotation.EnumValid.message}";
+	String message() default "{com.bonelf.frame.core.validator.constraints.EnumValid.message}";
 
 
 	/**

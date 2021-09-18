@@ -46,7 +46,7 @@ public @interface DbDictValid {
 	/**
 	 * 异常信息
 	 */
-	String message() default "{com.bonelf.frame.web.core.validator.annotation.DbDictValid.message}";
+	String message() default "{com.bonelf.frame.web.core.validator.constraints.DbDictValid.message}";
 
 
 	/**

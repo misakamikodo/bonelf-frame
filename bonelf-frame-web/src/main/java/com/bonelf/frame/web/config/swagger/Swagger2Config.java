@@ -61,7 +61,6 @@ public class Swagger2Config implements WebMvcConfigurer {
 	 * @return Docket
 	 */
 	@Bean
-	@DependsOn("swaggerCloudPathProvider")
 	public Docket swaggerDocket() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.apiInfo(apiInfo())

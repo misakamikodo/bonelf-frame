@@ -31,3 +31,13 @@ third:
       access-key-id: ??
       access-secret: ??
       sign-name: ??
+    # ============AI 机器人============
+    chatbot:
+      access-key-id:
+      access-secret:
+      region: cn-shanghai
+      product: Chatbot
+      pop-domain: chatbot.cn-shanghai.aliyuncs.com
+      action: Chat
+      sys-version: 2017-10-11
+      default-instance-id:

@@ -102,7 +102,7 @@ public class RequestBuilder {
 
 	/*===========================请求===========================*/
 
-	public <RES> Result<RES> send(@NonNull String url,
+	public <RES> Result<RES> sendInternal(@NonNull String url,
 								  ParameterizedTypeReference<Result<RES>> reference,
 								  Object... urlParams) {
 		if (formEntity == null) {
@@ -123,12 +123,39 @@ public class RequestBuilder {
 		}
 	}
 
-	public <RES> Result<RES> post(String url, ParameterizedTypeReference<Result<RES>> reference) {
+	public <RES> Result<RES> postInternal(String url, ParameterizedTypeReference<Result<RES>> reference) {
+		this.method = HttpMethod.POST;
+		return sendInternal(url, reference);
+	}
+
+	public <RES> Result<RES> getInternal(String url, ParameterizedTypeReference<Result<RES>> reference, Object... urlParams) {
+		this.method = HttpMethod.GET;
+		return sendInternal(url, reference, urlParams);
+	}
+
+	public <RES> RES send(@NonNull String url,
+								  ParameterizedTypeReference<RES> reference,
+								  Object... urlParams) {
+		if (formEntity == null) {
+			noData();
+		}
+		ResponseEntity<RES> data = restTemplate.exchange(
+				getSpecificUrl(url),
+				method,
+				formEntity,
+				reference,
+				urlParams
+		);
+		RES res = data.getBody();
+		return Optional.ofNullable(res).orElseThrow(() -> new BonelfException(CommonBizExceptionEnum.REQUEST_INVALIDATE));
+	}
+
+	public <RES> RES post(String url, ParameterizedTypeReference<RES> reference) {
 		this.method = HttpMethod.POST;
 		return send(url, reference);
 	}
 
-	public <RES> Result<RES> get(String url, ParameterizedTypeReference<Result<RES>> reference, Object... urlParams) {
+	public <RES> RES get(String url, ParameterizedTypeReference<RES> reference, Object... urlParams) {
 		this.method = HttpMethod.GET;
 		return send(url, reference, urlParams);
 	}

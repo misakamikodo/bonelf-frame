@@ -25,8 +25,6 @@ public class RequestBuilder {
 	private ObjectMapper objectMapper = new ObjectMapper();
 	private RestTemplate restTemplate = new RestTemplate();
 
-	private ProjectUrlEnum projectUrl = ProjectUrlEnum.WMS;
-
 	private HttpMethod method = HttpMethod.GET;
 	/**
 	 * 请求流数据
@@ -39,36 +37,10 @@ public class RequestBuilder {
 	private HttpEntity<?> formEntity = new HttpEntity<>(
 			null, new HttpHeaders());
 
-	/**
-	 * 地址配置枚举
-	 */
-	public enum ProjectUrlEnum {
-		/**
-		 * 业务系统
-		 */
-		WMS("oh.wms.url"),
-		;
-
-		ProjectUrlEnum(String configKey) {
-			this.configKey = configKey;
-		}
-
-		private final String configKey;
-
-		public String getUrl() {
-			return configKey;
-		}
-	}
-
 	/*===========================构造===========================*/
 
 	public RequestBuilder restTemplate(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
-		return this;
-	}
-
-	public RequestBuilder projectUrl(ProjectUrlEnum projectUrl) {
-		this.projectUrl = projectUrl;
 		return this;
 	}
 

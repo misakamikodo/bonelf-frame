@@ -80,7 +80,7 @@ public class RequestBuilder {
 	}
 
 	public RequestBuilder data(Object data) {
-		HttpHeaders headers = formEntity.getHeaders();
+		HttpHeaders headers = new HttpHeaders();
 		if (!stream) {
 			headers.add("Accept", MediaType.APPLICATION_JSON.toString());
 		}

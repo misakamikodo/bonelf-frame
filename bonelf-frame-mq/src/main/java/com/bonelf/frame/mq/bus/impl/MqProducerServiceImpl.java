@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  * 自己的服务名称作为topic
  * 发送的内容类型作为tag
  * </p>
- * @author Chenyuan
+ * @author bonelf
  * @since 2021/1/3 18:00
  */
 @Slf4j

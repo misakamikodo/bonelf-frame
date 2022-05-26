@@ -16,7 +16,7 @@ import java.util.Map;
  * <p>
  * websocket拦截器
  * </p>
- * @author Chenyuan
+ * @author bonelf
  * @since 2021/2/17 15:30
  */
 @Slf4j

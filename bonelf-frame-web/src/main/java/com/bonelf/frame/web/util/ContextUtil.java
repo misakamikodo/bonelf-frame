@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * 账号管理
  * </p>
  * @see com.bonelf.frame.web.security.converter.JwtWithUserInfoAccessTokenConverter 添加更多信息到principal
- * @author Chenyuan
+ * @author bonelf
  * @since 2020/12/31 16:32
  */
 @Component

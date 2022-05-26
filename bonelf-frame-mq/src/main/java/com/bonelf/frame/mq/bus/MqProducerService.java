@@ -8,7 +8,7 @@ package com.bonelf.frame.mq.bus;
  * <p>
  *     mq消息发送
  * </p>
- * @author Chenyuan
+ * @author bonelf
  * @since 2021/1/3 18:00
  */
 public interface MqProducerService {

@@ -43,9 +43,9 @@ public abstract class AbstractWebMvcConfig implements WebMvcConfigurer {
 	private ApplicationContext applicationContext;
 	@Value("${bonelf.page.default-size:10}")
 	private Long defaultPageSize;
-	@Value("${bonelf.page.default-size:current,page}")
+	@Value("${bonelf.page.default-params:current,page}")
 	private String[] currentPageArgs;
-	@Value("${bonelf.page.default-size:size,pageSize,limit,rows}")
+	@Value("${bonelf.page.default-resp:size,pageSize,limit,rows}")
 	private String[] sizePageArgs;
 
 	/**

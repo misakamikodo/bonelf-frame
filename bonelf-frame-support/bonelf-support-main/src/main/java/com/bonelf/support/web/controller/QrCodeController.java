@@ -73,31 +73,12 @@ public class QrCodeController {
 	}
 
 	/**
-	 * @deprecated 后端不宜生成二维码
+	 * 可以前端自己拼
 	 */
-	@Deprecated
-	@GetMapping("/show")
-	@ApiOperation(value = "获取二维码")
-	public void show(HttpServletResponse response, QrCodeShowDTO qrCodeShowDto) throws Exception {
-		response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE);
-		BitMatrix bitMatrix = getBitMatrix(qrCodeShowDto);
-		MatrixToImageWriter.writeToStream(bitMatrix, "PNG", response.getOutputStream());
-	}
-
-	@Deprecated
-	@GetMapping("/base64")
-	@ResponseBody
-	@ApiOperation(value = "获取Base64二维码")
-	public Result<Map<String, Object>> base64(QrCodeShowDTO qrCodeShowDto) throws Exception {
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		BitMatrix bitMatrix = getBitMatrix(qrCodeShowDto);
-		MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
-		// 将图片转换成base64字符串
-		String base64 = Base64.getEncoder().encodeToString(outputStream.toByteArray());
-		Map<String, Object> map = new HashMap<>(2);
-		map.put("image", "data:image/png;base64," + base64);
-		// 缓存到Redis
-		return Result.ok(map);
+	@GetMapping("/msg")
+	@ApiOperation(value = "获取二维码内容数据")
+	public String msg(QrCodeShowDTO qrCodeShowDto) throws Exception {
+		return bonelfProperties.getBaseUrl() + ctxPath + "/support/qrcode/data/" + qrCodeShowDto.getTicket();
 	}
 
 	@GetMapping("/data/{code}")
@@ -136,6 +117,34 @@ public class QrCodeController {
 			result = reqByUri(uri, params);
 		}
 		response.getWriter().print(JsonUtil.toJson(result));
+	}
+
+	/**
+	 * @deprecated 后端不宜生成二维码
+	 */
+	@Deprecated
+	@GetMapping("/show")
+	@ApiOperation(value = "获取二维码")
+	public void show(HttpServletResponse response, QrCodeShowDTO qrCodeShowDto) throws Exception {
+		response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE);
+		BitMatrix bitMatrix = getBitMatrix(qrCodeShowDto);
+		MatrixToImageWriter.writeToStream(bitMatrix, "PNG", response.getOutputStream());
+	}
+
+	@Deprecated
+	@GetMapping("/base64")
+	@ResponseBody
+	@ApiOperation(value = "获取Base64二维码")
+	public Result<Map<String, Object>> base64(QrCodeShowDTO qrCodeShowDto) throws Exception {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		BitMatrix bitMatrix = getBitMatrix(qrCodeShowDto);
+		MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
+		// 将图片转换成base64字符串
+		String base64 = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+		Map<String, Object> map = new HashMap<>(2);
+		map.put("image", "data:image/png;base64," + base64);
+		// 缓存到Redis
+		return Result.ok(map);
 	}
 
 	/**

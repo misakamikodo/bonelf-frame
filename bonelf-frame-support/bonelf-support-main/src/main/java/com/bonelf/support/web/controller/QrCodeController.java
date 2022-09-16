@@ -72,6 +72,10 @@ public class QrCodeController {
 		System.out.println(CipherCryptUtil.encrypt("user/shop?lat=30.00%26lng=120.001", AuthConstant.FRONTEND_PASSWORD_CRYPTO, AuthConstant.FRONTEND_SALT_CRYPTO));
 	}
 
+	/**
+	 * @deprecated 后端不宜生成二维码
+	 */
+	@Deprecated
 	@GetMapping("/show")
 	@ApiOperation(value = "获取二维码")
 	public void show(HttpServletResponse response, QrCodeShowDTO qrCodeShowDto) throws Exception {
@@ -80,6 +84,7 @@ public class QrCodeController {
 		MatrixToImageWriter.writeToStream(bitMatrix, "PNG", response.getOutputStream());
 	}
 
+	@Deprecated
 	@GetMapping("/base64")
 	@ResponseBody
 	@ApiOperation(value = "获取Base64二维码")
